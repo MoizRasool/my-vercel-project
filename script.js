@@ -1,1 +1,1 @@
-console.log("PetCare Website Loaded 🐶");
+console.log("PetCare Pro 2026 Loaded 🚀");
