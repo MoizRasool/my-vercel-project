@@ -10,7 +10,7 @@ jobs:
 
     steps:
       - name: checkout code
-      - uses: actions/checkout@v4
+        uses: actions/checkout@v4
 
       - name: install node
         uses: actions/setup-node@v4
@@ -22,6 +22,6 @@ jobs:
 
       - name: deploy to vercel
         run: |
-          vercel deploy --prod --token=${{ secrets.VERSEL_TOKEN }}
+          vercel deploy --prod --token=${{ secrets.VERCEL_TOKEN }}
       
   
