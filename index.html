@@ -1019,7 +1019,7 @@ function handleSubmit(btn) {
         throw new Error("Failed to save data");
       }
     } catch (err) {
-      alert("Error: Database connect nahi ho raha. Check karein Vercel par variables add hain?");
+      alert("Error: Database Connection Failed. Check karein Vercel par variables add hain?");
       btn.textContent = 'Try Again';
       btn.disabled = false;
     }
