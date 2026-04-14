@@ -972,13 +972,57 @@ function handleSubmit(btn) {
   });
 
   // Form submit function ko update karna
-  window.handleSubmit = function(btn) {
+  // Firebase wale script tag ke andar isay update karein:
+  window.handleSubmit = async function(btn) {
     if (!window.isUserLoggedIn) {
-      alert("LOGIN REQUIRED!");
+      alert("Bhai, pehle Google se login toh kar lo!");
       return;
     }
+
+    // Input fields se data uthana (Placeholder ke zariye)
+    const nameInput = document.querySelector('input[placeholder="Your Name"]');
+    const emailInput = document.querySelector('input[placeholder="Your Email"]');
+    const messageInput = document.querySelector('textarea');
+
+    const formData = {
+      name: nameInput ? nameInput.value : '',
+      email: emailInput ? emailInput.value : '',
+      message: messageInput ? messageInput.value : ''
+    };
+
     btn.textContent = 'Sending...';
-    setTimeout(() => { btn.textContent = '✓ Sent'; }, 1500);
+    btn.disabled = true;
+
+    try {
+      // Yeh line aapka data Vercel/MongoDB tak le jayegi
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+
+      if (response.ok) {
+        btn.textContent = '✓ Message Sent!';
+        btn.style.background = '#2e7d32';
+        
+        // Form khali kar dena
+        if(nameInput) nameInput.value = '';
+        if(emailInput) emailInput.value = '';
+        if(messageInput) messageInput.value = '';
+
+        setTimeout(() => {
+          btn.textContent = 'Send Message →';
+          btn.disabled = false;
+          btn.style.background = '';
+        }, 3000);
+      } else {
+        throw new Error("Failed to save data");
+      }
+    } catch (err) {
+      alert("Error: Database connect nahi ho raha. Check karein Vercel par variables add hain?");
+      btn.textContent = 'Try Again';
+      btn.disabled = false;
+    }
   };
 </script>
 </body>
