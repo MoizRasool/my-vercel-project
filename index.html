@@ -195,7 +195,7 @@ footer{padding:32px 56px;background:#111;display:flex;justify-content:space-betw
 .chat-send{width:38px;height:38px;background:var(--sage-dark);border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;color:white;font-size:14px}
 .chat-send:hover{background:var(--dark);transform:scale(1.05)}
 
-/* MODAL */
+/* APPOINTMENT MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:800;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
 .modal-overlay.open{opacity:1;pointer-events:all}
 .modal{background:white;border-radius:28px;padding:48px;width:520px;max-width:92vw;position:relative;transform:translateY(20px);transition:transform .3s ease;max-height:90vh;overflow-y:auto}
@@ -206,6 +206,42 @@ footer{padding:32px 56px;background:#111;display:flex;justify-content:space-betw
 .modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .modal-submit{width:100%;padding:16px;background:var(--dark);color:white;border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;transition:all .3s;margin-top:4px}
 .modal-submit:hover{background:var(--sage-dark)}
+
+/* LOGIN MODAL (AUTH CARD) */
+.auth-modal-overlay{position:fixed;inset:0;background:rgba(26,26,24,0.75);backdrop-filter:blur(8px);z-index:2000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s ease}
+.auth-modal-overlay.open{opacity:1;pointer-events:all}
+.auth-card{background:#FFFFFF;border-radius:42px;box-shadow:0 32px 64px rgba(26,26,24,0.2);width:100%;max-width:500px;overflow:hidden;position:relative;transform:scale(0.95) translateY(20px);transition:transform .4s cubic-bezier(0.2,0.9,0.4,1.1);border:1px solid rgba(26,26,24,0.06)}
+.auth-modal-overlay.open .auth-card{transform:scale(1) translateY(0)}
+.card-accent{height:6px;background:linear-gradient(90deg,#7A9E7E,#A8C5AC,#E8A87C);width:100%}
+.card-inner{padding:40px 36px 44px}
+.logo-area{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:24px}
+.logo-icon{font-size:32px;background:#F8F4EE;width:56px;height:56px;display:flex;align-items:center;justify-content:center;border-radius:24px}
+.logo-text{font-family:'Playfair Display',serif;font-size:28px;font-weight:800;letter-spacing:-0.8px;color:#1A1A18}
+.logo-text span{color:#7A9E7E}
+.auth-card h2{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;letter-spacing:-0.8px;text-align:center;margin-bottom:8px;color:#1A1A18}
+.auth-sub{text-align:center;font-size:14px;color:#6B6B60;margin-bottom:4px}
+.toggle-buttons{display:flex;gap:14px;background:#F8F4EE;padding:6px;border-radius:80px;margin:28px 0 20px;border:1px solid rgba(26,26,24,0.08)}
+.toggle-btn{flex:1;text-align:center;padding:12px 0;border-radius:60px;font-weight:500;font-size:16px;cursor:pointer;transition:all 0.3s;background:transparent;color:#6B6B60;border:none}
+.toggle-btn.active{background:white;color:#4A6F4E;box-shadow:0 4px 12px rgba(0,0,0,0.05);font-weight:600}
+.full-name-row{display:flex;gap:12px}
+.full-name-row .form-group{flex:1}
+.checkbox-group{display:flex;align-items:center;gap:12px;margin:16px 0 24px}
+.checkbox-group input{width:18px;height:18px;accent-color:#7A9E7E}
+.checkbox-group label{font-size:13px;color:#6B6B60;margin-bottom:0}
+.action-btn{width:100%;background:#1A1A18;color:#F8F4EE;border:none;border-radius:44px;padding:14px 20px;font-weight:600;font-size:16px;cursor:pointer;transition:all 0.3s;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px}
+.action-btn:hover{background:#4A6F4E;transform:translateY(-2px)}
+.google-btn{background:transparent;border:1.5px solid rgba(26,26,24,0.15);color:#1A1A18;margin-top:16px}
+.google-btn:hover{background:#F8F4EE;border-color:#7A9E7E}
+.divider{display:flex;align-items:center;gap:12px;margin:24px 0 16px;color:#B2B2A8;font-size:12px}
+.divider-line{flex:1;height:1px;background:rgba(26,26,24,0.12)}
+.auth-error{background:#FDF2F0;border-radius:20px;padding:12px 16px;font-size:13px;color:#C46A5A;margin-bottom:20px;border-left:4px solid #E8A87C;display:none}
+.auth-success{background:#E9F3E6;border-radius:20px;padding:12px 16px;font-size:13px;color:#4A6F4E;margin-bottom:20px;border-left:4px solid #7A9E7E;display:none}
+.forgot-link{text-align:right;margin-top:-10px;margin-bottom:18px}
+.forgot-link a{font-size:12px;color:#7A9E7E;text-decoration:none}
+.auth-close{position:absolute;top:20px;right:20px;background:#F8F4EE;border:none;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.auth-close:hover{background:#E8A87C;color:white}
+@keyframes shakeAnim{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.shake{animation:shakeAnim 0.3s ease-in-out 0s 2}
 
 /* KEYFRAMES */
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
@@ -233,346 +269,4 @@ footer{padding:32px 56px;background:#111;display:flex;justify-content:space-betw
   footer{padding:24px;flex-direction:column;gap:16px;text-align:center}
   .chatbox{width:calc(100vw - 32px);right:16px}
   .modal-grid{grid-template-columns:1fr}
-}
-</style>
-</head>
-<body>
-
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
-
-<!-- NAVBAR -->
-<nav id="navbar">
-  <div class="nav-logo">🐾 PetCare <span>Pro</span></div>
-  <div class="nav-links">
-    <a href="#services">Services</a>
-    <a href="#pets">Pets</a>
-    <a href="#gallery">Gallery</a>
-    <a href="#testimonials">Reviews</a>
-    <a href="#contact">Contact</a>
-    <a href="#" class="nav-cta" onclick="openModal(event)">Book Now</a>
-    <div id="auth-controls" style="display:flex;gap:10px;align-items:center;margin-left:10px">
-      <button class="btn-ghost-nav" id="login-btn">Login</button>
-      <button class="nav-cta" id="signup-btn">Sign Up</button>
-    </div>
-    <div id="user-profile" style="display:none;align-items:center;gap:10px;margin-left:10px">
-      <img id="user-photo" src="" alt="user">
-      <button id="logout-btn">Logout</button>
-    </div>
-  </div>
-</nav>
-
-<!-- HERO -->
-<section class="hero" id="home">
-  <div class="hbc c1"></div><div class="hbc c2"></div>
-  <div class="hero-left">
-    <div class="hero-badge"><span class="bdot"></span>Premium Pet Care 2026</div>
-    <h1>Your Pet<br>Deserves the<br><em>Best Care.</em></h1>
-    <p class="hero-sub">Modern veterinary care, expert grooming, adoption support, and a full pet marketplace — all in one place.</p>
-    <div class="hero-actions">
-      <button class="btn-primary" onclick="openModal()">Book Appointment <span>→</span></button>
-      <button class="btn-ghost" onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'})">Our Services</button>
-    </div>
-    <div class="hero-stats">
-      <div class="stat-item"><div class="stat-num" data-count="4800" data-suffix="+">0</div><div class="stat-label">Happy Pets</div></div>
-      <div class="stat-item"><div class="stat-num" data-count="12" data-suffix="">0</div><div class="stat-label">Expert Vets</div></div>
-      <div class="stat-item"><div class="stat-num" data-count="98" data-suffix="%">0</div><div class="stat-label">Satisfaction</div></div>
-    </div>
-  </div>
-  <div class="hero-right">
-    <div class="hero-img-wrap">
-      <img class="hero-img-main" src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=700&q=80" alt="Happy Golden Retriever">
-      <div class="hfc c1"><span class="fi">🏥</span><div class="ft"><strong>24/7 Emergency</strong><span>Always here for you</span></div></div>
-      <div class="hfc c2"><span class="fi">⭐</span><div class="ft"><strong>4.9 / 5.0 Rating</strong><span>2,400+ reviews</span></div></div>
-    </div>
-  </div>
-</section>
-
-<!-- MARQUEE -->
-<div class="marquee-section" aria-hidden="true">
-  <div class="marquee-track">
-    <span class="mi">Veterinary Care</span><span class="mi">Grooming Studio</span><span class="mi">Pet Adoption</span><span class="mi">Nutrition Plans</span><span class="mi">Emergency Care</span><span class="mi">Pet Marketplace</span><span class="mi">Vaccination</span><span class="mi">Dental Hygiene</span>
-    <span class="mi">Veterinary Care</span><span class="mi">Grooming Studio</span><span class="mi">Pet Adoption</span><span class="mi">Nutrition Plans</span><span class="mi">Emergency Care</span><span class="mi">Pet Marketplace</span><span class="mi">Vaccination</span><span class="mi">Dental Hygiene</span>
-  </div>
-</div>
-
-<!-- SERVICES -->
-<section class="services" id="services">
-  <div class="section-header">
-    <div><div class="section-label">What We Offer</div><div class="section-title">Expert care,<br>every step.</div></div>
-    <p class="section-sub">From routine checkups to emergency surgeries, our team is equipped for everything.</p>
-  </div>
-  <div class="services-grid">
-    <div class="service-card"><div class="sci"><div class="sicon">🩺</div><div class="sname">Health Checkup</div><div class="sdesc">Complete physical exams, blood panels, and wellness assessments tailored for every breed.</div><div class="sarrow">Learn more <span>→</span></div></div></div>
-    <div class="service-card"><div class="sci"><div class="sicon">✂️</div><div class="sname">Grooming Studio</div><div class="sdesc">Professional grooming with breed-specific techniques and luxury spa treatments.</div><div class="sarrow">Learn more <span>→</span></div></div></div>
-    <div class="service-card"><div class="sci"><div class="sicon">🏡</div><div class="sname">Adoption Center</div><div class="sdesc">Find your perfect companion. We match families with the right pets lovingly.</div><div class="sarrow">Learn more <span>→</span></div></div></div>
-    <div class="service-card"><div class="sci"><div class="sicon">🍖</div><div class="sname">Nutrition Plans</div><div class="sdesc">Custom diet planning by veterinary nutritionists for optimal long-term health.</div><div class="sarrow">Learn more <span>→</span></div></div></div>
-    <div class="service-card"><div class="sci"><div class="sicon">🚑</div><div class="sname">Emergency Care</div><div class="sdesc">Round-the-clock emergency services with fully equipped surgical suites and ICU.</div><div class="sarrow">Learn more <span>→</span></div></div></div>
-    <div class="service-card"><div class="sci"><div class="sicon">🛒</div><div class="sname">Pet Store</div><div class="sdesc">Curated selection of premium food, toys, accessories, and vet-approved products.</div><div class="sarrow">Learn more <span>→</span></div></div></div>
-  </div>
-</section>
-
-<!-- PETS -->
-<section class="pets-section" id="pets">
-  <div class="section-header">
-    <div><div class="section-label">We Care For</div><div class="section-title">All your<br>beloved pets.</div></div>
-    <p class="section-sub">Specialists for every species — because every animal deserves expert attention.</p>
-  </div>
-  <div class="pets-scroll">
-    <div class="pet-chip active"><span>🐶</span> Dogs</div>
-    <div class="pet-chip"><span>🐱</span> Cats</div>
-    <div class="pet-chip"><span>🐰</span> Rabbits</div>
-    <div class="pet-chip"><span>🦜</span> Birds</div>
-    <div class="pet-chip"><span>🐠</span> Fish</div>
-    <div class="pet-chip"><span>🐹</span> Hamsters</div>
-    <div class="pet-chip"><span>🦎</span> Reptiles</div>
-    <div class="pet-chip"><span>🐢</span> Turtles</div>
-  </div>
-</section>
-
-<!-- GALLERY -->
-<section class="gallery-section" id="gallery">
-  <div class="section-header">
-    <div><div class="section-label">Our Gallery</div><div class="section-title">Happy moments,<br>happy pets.</div></div>
-    <p class="section-sub">Real moments from our clinic — because seeing is believing.</p>
-  </div>
-  <div class="gallery-grid">
-    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1548681528-6a5c45b66b42?w=800&q=80" alt="Golden Retriever"><div class="gallery-overlay"><span class="gallery-tag">Dogs</span></div></div>
-    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=500&q=80" alt="Cat portrait"><div class="gallery-overlay"><span class="gallery-tag">Cats</span></div></div>
-    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1573865526739-10659fec78a5?w=500&q=80" alt="Tabby cat"><div class="gallery-overlay"><span class="gallery-tag">Clinic</span></div></div>
-    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?w=500&q=80" alt="Dog portrait"><div class="gallery-overlay"><span class="gallery-tag">Grooming</span></div></div>
-    <div class="gallery-item"><img src="https://images.unsplash.com/photo-1495360010541-f48722b34f7d?w=800&q=80" alt="Cat resting"><div class="gallery-overlay"><span class="gallery-tag">Cats</span></div></div>
-  </div>
-</section>
-
-<!-- TESTIMONIALS -->
-<section class="testimonials" id="testimonials">
-  <div class="section-header">
-    <div><div class="section-label">What Owners Say</div><div class="section-title">Loved by pets<br>& their humans.</div></div>
-    <p class="section-sub">Over 2,400 five-star reviews from happy pet owners across the city.</p>
-  </div>
-  <div class="testi-grid">
-    <div class="testi-card">
-      <div class="testi-stars">★★★★★</div>
-      <p class="testi-text">"My golden retriever Bruno had his annual checkup here. The vets were incredibly thorough and gentle. Bruno actually enjoys going to the vet now!"</p>
-      <div class="testi-author"><img class="testi-avatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&q=80" alt="Ahmed"><div><div class="testi-name">Ahmed Raza</div><div class="testi-pet">🐶 Golden Retriever Owner</div></div></div>
-    </div>
-    <div class="testi-card">
-      <div class="testi-stars">★★★★★</div>
-      <p class="testi-text">"Brought my Persian cat Whiskers for grooming and she came back looking absolutely royal. The groomers clearly understand cats. Will never go anywhere else!"</p>
-      <div class="testi-author"><img class="testi-avatar" src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&q=80" alt="Sana"><div><div class="testi-name">Sana Malik</div><div class="testi-pet">🐱 Persian Cat Owner</div></div></div>
-    </div>
-    <div class="testi-card">
-      <div class="testi-stars">★★★★★</div>
-      <p class="testi-text">"Emergency at 2am — my dog ate something toxic. The team responded immediately and saved his life. 24/7 service is not just a slogan here."</p>
-      <div class="testi-author"><img class="testi-avatar" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80" alt="Usman"><div><div class="testi-name">Usman Khan</div><div class="testi-pet">🐕 Labrador Owner</div></div></div>
-    </div>
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section class="contact-section" id="contact">
-  <div class="contact-left">
-    <div class="section-label">Get in Touch</div>
-    <div class="section-title">Ready to give<br>your pet the<br><em style="color:var(--sage-dark);font-style:normal">best care?</em></div>
-    <p class="contact-desc">Book an appointment or reach out with any questions. Our team is always here for you and your pet.</p>
-    <div class="contact-info">
-      <div class="contact-item"><div class="cii">📩</div><span>info@petcarepro.com</span></div>
-      <div class="contact-item"><div class="cii">📍</div><span>123 Pet Lane, Animal District</span></div>
-      <div class="contact-item"><div class="cii">🕐</div><span>24/7 Emergency Support Available</span></div>
-    </div>
-  </div>
-  <div>
-    <div class="contact-form">
-      <div class="form-group"><label>Your Name</label><input type="text" id="f-name" placeholder="e.g. Ahmed Khan"></div>
-      <div class="form-group"><label>Email Address</label><input type="email" id="f-email" placeholder="you@example.com"></div>
-      <div class="form-group"><label>Pet Type</label><input type="text" id="f-pet" placeholder="Dog, Cat, Rabbit..."></div>
-      <div class="form-group"><label>Message</label><textarea id="f-msg" placeholder="Tell us about your pet and what you need..."></textarea></div>
-      <button class="form-submit" onclick="handleContactSubmit(this)">Send Message →</button>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <div class="footer-logo">🐾 PetCare <span>Pro</span></div>
-  <div class="footer-copy">© 2026 PetCare Pro — All Rights Reserved</div>
-  <div class="footer-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Instagram</a></div>
-</footer>
-
-<!-- CHATBOT BUBBLE -->
-<button class="chat-bubble" id="chatBubble" onclick="toggleChat()" aria-label="Open chat">
-  🐾 <div class="chat-notif"></div>
-</button>
-
-<!-- CHATBOX -->
-<div class="chatbox" id="chatbox">
-  <div class="chat-header">
-    <div class="chat-avatar">🐾</div>
-    <div class="chat-header-text"><h4>PetCare Assistant</h4><span>Online — Ask me anything!</span></div>
-    <div class="chat-status-dot"></div>
-    <button class="chat-close" onclick="toggleChat()">×</button>
-  </div>
-  <div class="chat-messages" id="chatMsgs"></div>
-  <div class="chat-suggestions" id="chatSugg">
-    <button class="sugg-btn" onclick="sendSugg(this)">📅 Book appointment</button>
-    <button class="sugg-btn" onclick="sendSugg(this)">✂️ Grooming prices</button>
-    <button class="sugg-btn" onclick="sendSugg(this)">🚨 Emergency care</button>
-    <button class="sugg-btn" onclick="sendSugg(this)">🕐 Opening hours</button>
-  </div>
-  <div class="chat-input-area">
-    <input class="chat-input" id="chatInput" placeholder="Type a message..." onkeydown="if(event.key==='Enter')sendChat()">
-    <button class="chat-send" onclick="sendChat()">➤</button>
-  </div>
-</div>
-
-<!-- APPOINTMENT MODAL -->
-<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal()">×</button>
-    <h3>Book Appointment 🐾</h3>
-    <p class="modal-sub">Fill in the details and we'll confirm your slot within 2 hours.</p>
-    <div class="form-group"><label>Pet Owner Name</label><input type="text" placeholder="Your full name"></div>
-    <div class="modal-grid">
-      <div class="form-group"><label>Pet Type</label><select><option>🐶 Dog</option><option>🐱 Cat</option><option>🐰 Rabbit</option><option>🦜 Bird</option><option>🐠 Fish</option><option>Other</option></select></div>
-      <div class="form-group"><label>Service</label><select><option>Health Checkup</option><option>Grooming</option><option>Vaccination</option><option>Dental Care</option><option>Emergency</option><option>Nutrition Consult</option></select></div>
-    </div>
-    <div class="modal-grid">
-      <div class="form-group"><label>Preferred Date</label><input type="date"></div>
-      <div class="form-group"><label>Preferred Time</label><select><option>9:00 AM</option><option>10:00 AM</option><option>11:00 AM</option><option>12:00 PM</option><option>2:00 PM</option><option>3:00 PM</option><option>4:00 PM</option><option>5:00 PM</option></select></div>
-    </div>
-    <div class="form-group"><label>Phone Number</label><input type="tel" placeholder="+92 300 0000000"></div>
-    <button class="modal-submit" onclick="submitModal(this)">Confirm Appointment →</button>
-  </div>
-</div>
-
-<script>
-// CURSOR
-const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.transform=`translate(${mx-5}px,${my-5}px)`});
-(function ar(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.transform=`translate(${rx-18}px,${ry-18}px)`;requestAnimationFrame(ar)})();
-document.querySelectorAll('button,a,.service-card,.pet-chip,.gallery-item').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{ring.style.opacity='.15';ring.style.width='50px';ring.style.height='50px'});
-  el.addEventListener('mouseleave',()=>{ring.style.opacity='.5';ring.style.width='36px';ring.style.height='36px'});
-});
-
-// NAVBAR
-const nav=document.getElementById('navbar');
-window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>60));
-
-// SCROLL REVEAL
-const rv=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),+e.target.dataset.delay||0)})},{threshold:.12});
-document.querySelectorAll('.service-card').forEach((el,i)=>{el.dataset.delay=i*80;rv.observe(el)});
-document.querySelectorAll('.gallery-item').forEach((el,i)=>{el.dataset.delay=i*100;rv.observe(el)});
-document.querySelectorAll('.testi-card').forEach((el,i)=>{el.dataset.delay=i*100;rv.observe(el)});
-
-// COUNTER
-function animCount(el,t,s){
-  const d=1800,step=ts=>{if(!step.t)step.t=ts;const p=Math.min((ts-step.t)/d,1),e=1-Math.pow(1-p,3);el.textContent=Math.round(e*t).toLocaleString()+s;if(p<1)requestAnimationFrame(step)};
-  requestAnimationFrame(step);
-}
-new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){document.querySelectorAll('[data-count]').forEach(el=>{animCount(el,+el.dataset.count,el.dataset.suffix||'');delete el.dataset.count})}})},{threshold:.5}).observe(document.querySelector('.hero-stats'));
-
-// PET CHIPS
-document.querySelectorAll('.pet-chip').forEach(c=>c.addEventListener('click',()=>{document.querySelectorAll('.pet-chip').forEach(x=>x.classList.remove('active'));c.classList.add('active')}));
-
-// CONTACT FORM
-function handleContactSubmit(btn){
-  const n=document.getElementById('f-name').value.trim(),em=document.getElementById('f-email').value.trim();
-  if(!n||!em){alert('Name & Email Must Required!');return}
-  btn.textContent='Sending...';btn.disabled=true;
-  setTimeout(()=>{
-    btn.textContent='✓ Message Sent!';btn.style.background='#2e7d32';
-    ['f-name','f-email','f-pet','f-msg'].forEach(id=>document.getElementById(id).value='');
-    setTimeout(()=>{btn.textContent='Send Message →';btn.disabled=false;btn.style.background=''},3000);
-  },1200);
-}
-
-// MODAL
-function openModal(e){if(e)e.preventDefault();document.getElementById('modalOverlay').classList.add('open');document.body.style.overflow='hidden'}
-function closeModal(){document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow=''}
-function submitModal(btn){
-  btn.textContent='Booking...';btn.disabled=true;
-  setTimeout(()=>{btn.textContent='✓ Confirmed!';btn.style.background='#2e7d32';setTimeout(()=>{closeModal();btn.textContent='Confirm Appointment →';btn.disabled=false;btn.style.background=''},2000)},1200);
-}
-
-// CHATBOT
-let chatOpen=false;
-const chatbox=document.getElementById('chatbox'),msgs=document.getElementById('chatMsgs'),sugg=document.getElementById('chatSugg');
-
-const R={
-  book:"Appointment book karne ke liye upar 'Book Now' button dabao ya seedha hamain call karo: 📞 +92-300-PetCare\n\nHum 9 AM se 8 PM tak available hain, aur emergencies 24/7! Koi specific time hai?",
-  groom:"Grooming prices:\n• Small dogs/cats: Rs. 800–1,200\n• Medium dogs: Rs. 1,200–2,000\n• Large dogs: Rs. 2,000–3,500\n\nHar session mein bath, haircut aur nail trim shamil hai ✂️",
-  price:"Hamari service fees:\n• Basic checkup: Rs. 500\n• Vaccination: Rs. 800–1,500\n• Grooming: Rs. 800–3,500\n• Dental cleaning: Rs. 2,000\n\nFull list ke liye: info@petcarepro.com 💰",
-  emergency:"🚨 Emergency? Foran call karein:\n📞 +92-300-PETSOS\n\nHamara emergency team 24/7 tayar hai. Apne pet ki jaan hamari pehli priority hai!",
-  hours:"Hamare timings ⏰\n• Weekdays: 9 AM – 8 PM\n• Saturday: 9 AM – 6 PM\n• Sunday: 10 AM – 4 PM\n• Emergency: 24/7 available!",
-  cat:"Cats ke liye hamari services 🐱\n• Vaccination & checkups\n• Cat grooming & bathing\n• Dental care\n• Surgery & emergency\n\nAppointment book karein?",
-  dog:"Dogs ke liye hamari services 🐶\n• Annual health checkups\n• Complete vaccination\n• Professional grooming\n• Nutrition consultation\n• Emergency care\n\nKoi specific service chahiye?",
-  hi:"Assalamu Alaikum! 👋 Main PetCare Pro ka virtual assistant hoon.\n\nAapke pet ke baare mein kuch bhi poochh sakte hain — services, prices, appointments sab! 🐾",
-  def:"Samajh gaya! Kuch aur info chahiye. Hamari team se seedha baat karein:\n📩 info@petcarepro.com\n📞 +92-300-PetCare\n\nMain in topics mein help kar sakta hoon:\nservices · prices · grooming · emergency · appointments 🐾"
-};
-
-function getReply(m){
-  const t=m.toLowerCase();
-  if(/hello|hi|salaam|hey/.test(t)) return R.hi;
-  if(/book|appointment/.test(t)) return R.book;
-  if(/groom/.test(t)) return R.groom;
-  if(/price|cost|fee|kitna|rate/.test(t)) return R.price;
-  if(/emergency|urgent|help|todays|abhi/.test(t)) return R.emergency;
-  if(/hour|time|open|timing|kab/.test(t)) return R.hours;
-  if(/cat|billi|kitten/.test(t)) return R.cat;
-  if(/dog|kutta|puppy|pup/.test(t)) return R.dog;
-  return R.def;
-}
-
-function addMsg(text,who){const d=document.createElement('div');d.className=`msg ${who}`;d.textContent=text;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight}
-function showTyping(){const d=document.createElement('div');d.className='msg bot';d.id='td';d.innerHTML='<div class="typing-dots"><span></span><span></span><span></span></div>';msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;return d}
-
-function sendChat(){
-  const inp=document.getElementById('chatInput'),t=inp.value.trim();if(!t)return;
-  addMsg(t,'user');inp.value='';sugg.style.display='none';
-  const dot=showTyping();
-  setTimeout(()=>{dot.remove();addMsg(getReply(t),'bot')},700+Math.random()*500);
-}
-
-function sendSugg(btn){
-  const t=btn.textContent.replace(/^[^\s]+\s/,''); // strip emoji
-  addMsg(btn.textContent,'user');sugg.style.display='none';
-  const dot=showTyping();
-  setTimeout(()=>{dot.remove();addMsg(getReply(t),'bot')},800);
-}
-
-function toggleChat(){
-  chatOpen=!chatOpen;chatbox.classList.toggle('open',chatOpen);
-  if(chatOpen&&msgs.children.length===0){
-    setTimeout(()=>addMsg('👋 Assalamu Alaikum! Main PetCare Pro Assistant hoon.\n\nAapke pet ke liye kya kar sakta hoon? Neeche se choose karein ya kuch bhi likhen! 🐾','bot'),300);
-    document.querySelector('.chat-notif').style.display='none';
-  }
-}
-</script>
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-const app = initializeApp({
-  apiKey:"AIzaSyBSdAkDzYBgGHg-Iit8KKSAZlrhl2G_cJ4",
-  authDomain:"petcarepro-7a027.firebaseapp.com",
-  projectId:"petcarepro-7a027",
-  storageBucket:"petcarepro-7a027.firebasestorage.app",
-  messagingSenderId:"972163287285",
-  appId:"1:972163287285:web:10579718d1d33c451b9dbc"
-});
-const auth=getAuth(app),provider=new GoogleAuthProvider();
-document.getElementById('login-btn').onclick=()=>signInWithPopup(auth,provider);
-document.getElementById('signup-btn').onclick=()=>signInWithPopup(auth,provider);
-document.getElementById('logout-btn').onclick=()=>signOut(auth);
-onAuthStateChanged(auth,u=>{
-  document.getElementById('auth-controls').style.display=u?'none':'flex';
-  document.getElementById('user-profile').style.display=u?'flex':'none';
-  if(u)document.getElementById('user-photo').src=u.photoURL||'';
-  window.isLoggedIn=!!u;
-});
-</script>
-</body>
-</html>
+  .
