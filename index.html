@@ -480,7 +480,7 @@ document.querySelectorAll('.pet-chip').forEach(c=>c.addEventListener('click',()=
 // CONTACT FORM
 function handleContactSubmit(btn){
   const n=document.getElementById('f-name').value.trim(),em=document.getElementById('f-email').value.trim();
-  if(!n||!em){alert('Naam aur email zaroor bharein!');return}
+  if(!n||!em){alert('Name & Email Must Required!');return}
   btn.textContent='Sending...';btn.disabled=true;
   setTimeout(()=>{
     btn.textContent='✓ Message Sent!';btn.style.background='#2e7d32';
