@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>PetCare Pro | Access Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #F8F4EE;  /* cream background exactly like main site */
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* subtle background elements to match main site elegance */
+    .bg-blob {
+      position: fixed;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(122,158,126,0.12) 0%, rgba(248,244,238,0) 70%);
+      z-index: 0;
+      pointer-events: none;
+    }
+    .blob-1 { width: 550px; height: 550px; top: -150px; right: -120px; }
+    .blob-2 { width: 380px; height: 380px; bottom: -80px; left: -80px; background: radial-gradient(circle, rgba(232,168,124,0.1) 0%, transparent 70%); }
+    .blob-3 { width: 280px; height: 280px; top: 40%; left: 20%; opacity: 0.2; }
+
+    /* main card container */
+    .auth-card {
+      background: #FFFFFF;
+      border-radius: 42px;
+      box-shadow: 0 32px 64px rgba(26, 26, 24, 0.12), 0 12px 28px rgba(0, 0, 0, 0.05);
+      width: 100%;
+      max-width: 500px;
+      overflow: hidden;
+      position: relative;
+      z-index: 10;
+      backdrop-filter: blur(0px);
+      transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1), box-shadow 0.4s ease;
+      border: 1px solid rgba(26, 26, 24, 0.06);
+    }
+
+    .auth-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 40px 80px rgba(74, 111, 78, 0.2);
+    }
+
+    /* decorative top bar */
+    .card-accent {
+      height: 6px;
+      background: linear-gradient(90deg, #7A9E7E, #A8C5AC, #E8A87C);
+      width: 100%;
+    }
+
+    .card-inner {
+      padding: 40px 36px 44px;
+    }
+
+    /* header + logo */
+    .logo-area {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .logo-icon {
+      font-size: 32px;
+      background: #F8F4EE;
+      width: 56px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 24px;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.02);
+    }
+    .logo-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.8px;
+      color: #1A1A18;
+    }
+    .logo-text span {
+      color: #7A9E7E;
+    }
+
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.8px;
+      text-align: center;
+      margin-bottom: 8px;
+      color: #1A1A18;
+    }
+
+    .toggle-buttons {
+      display: flex;
+      gap: 14px;
+      background: #F8F4EE;
+      padding: 6px;
+      border-radius: 80px;
+      margin: 28px 0 20px;
+      border: 1px solid rgba(26, 26, 24, 0.08);
+    }
+
+    .toggle-btn {
+      flex: 1;
+      text-align: center;
+      padding: 12px 0;
+      border-radius: 60px;
+      font-weight: 500;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      background: transparent;
+      color: #6B6B60;
+      font-family: 'DM Sans', sans-serif;
+      border: none;
+    }
+
+    .toggle-btn.active {
+      background: white;
+      color: #4A6F4E;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      font-weight: 600;
+    }
+
+    /* forms */
+    .form-panel {
+      transition: opacity 0.25s ease, transform 0.3s ease;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: #6B6B60;
+      margin-bottom: 8px;
+      letter-spacing: 0.3px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 16px;
+      font-size: 18px;
+      color: #A8C5AC;
+      pointer-events: none;
+    }
+
+    .input-wrapper input {
+      width: 100%;
+      background: #F8F4EE;
+      border: 1px solid rgba(26, 26, 24, 0.1);
+      border-radius: 28px;
+      padding: 14px 16px 14px 48px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      color: #1A1A18;
+      transition: all 0.2s;
+      outline: none;
+    }
+
+    .input-wrapper input:focus {
+      border-color: #7A9E7E;
+      background: #ffffff;
+      box-shadow: 0 0 0 3px rgba(122,158,126,0.2);
+    }
+
+    /* additional fields */
+    .full-name-row {
+      display: flex;
+      gap: 12px;
+    }
+    .full-name-row .form-group {
+      flex: 1;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 16px 0 24px;
+    }
+    .checkbox-group input {
+      width: 18px;
+      height: 18px;
+      accent-color: #7A9E7E;
+    }
+    .checkbox-group label {
+      font-size: 13px;
+      color: #6B6B60;
+      margin-bottom: 0;
+    }
+
+    /* buttons */
+    .action-btn {
+      width: 100%;
+      background: #1A1A18;
+      color: #F8F4EE;
+      border: none;
+      border-radius: 44px;
+      padding: 14px 20px;
+      font-weight: 600;
+      font-size: 16px;
+      font-family: 'DM Sans', sans-serif;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .action-btn:hover {
+      background: #4A6F4E;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(74, 111, 78, 0.3);
+    }
+
+    .google-btn {
+      background: transparent;
+      border: 1.5px solid rgba(26, 26, 24, 0.15);
+      color: #1A1A18;
+      margin-top: 16px;
+      backdrop-filter: blur(2px);
+    }
+
+    .google-btn:hover {
+      background: #F8F4EE;
+      border-color: #7A9E7E;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 24px 0 16px;
+      color: #B2B2A8;
+      font-size: 12px;
+    }
+    .divider-line {
+      flex: 1;
+      height: 1px;
+      background: rgba(26, 26, 24, 0.12);
+    }
+
+    .error-message {
+      background: #FDF2F0;
+      border-radius: 20px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: #C46A5A;
+      margin-bottom: 20px;
+      border-left: 4px solid #E8A87C;
+      font-weight: 400;
+      text-align: center;
+    }
+
+    .success-message {
+      background: #E9F3E6;
+      border-radius: 20px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: #4A6F4E;
+      margin-bottom: 20px;
+      border-left: 4px solid #7A9E7E;
+      text-align: center;
+    }
+
+    .forgot-link {
+      text-align: right;
+      margin-top: -10px;
+      margin-bottom: 18px;
+    }
+    .forgot-link a {
+      font-size: 12px;
+      color: #7A9E7E;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    /* floating animation */
+    @keyframes fadeSlideUp {
+      0% {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .auth-card {
+      animation: fadeSlideUp 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+    }
+
+    /* micro interactions */
+    .shake {
+      animation: shakeAnim 0.3s ease-in-out 0s 2;
+    }
+
+    @keyframes shakeAnim {
+      0%,100% { transform: translateX(0); }
+      25% { transform: translateX(-4px); }
+      75% { transform: translateX(4px); }
+    }
+
+    /* responsiveness */
+    @media (max-width: 520px) {
+      .card-inner { padding: 28px 22px 36px; }
+      .logo-text { font-size: 24px; }
+      h2 { font-size: 28px; }
+      .full-name-row { flex-direction: column; gap: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-blob blob-1"></div>
+<div class="bg-blob blob-2"></div>
+<div class="bg-blob blob-3"></div>
+
+<div class="auth-card" id="authCard">
+  <div class="card-accent"></div>
+  <div class="card-inner">
+    <div class="logo-area">
+      <div class="logo-icon">🐾</div>
+      <div class="logo-text">PetCare <span>Pro</span></div>
+    </div>
+    <h2 id="dynamicTitle">Welcome back</h2>
+    <p style="text-align: center; font-size: 14px; color: #6B6B60; margin-bottom: 4px;">Premium care for your companion</p>
+
+    <!-- toggle buttons -->
+    <div class="toggle-buttons">
+      <button class="toggle-btn active" id="loginTabBtn">🔐 Log in</button>
+      <button class="toggle-btn" id="signupTabBtn">✨ Sign up</button>
+    </div>
+
+    <!-- LOGIN FORM PANEL -->
+    <div id="loginPanel" class="form-panel" style="display: block;">
+      <div id="loginError" class="error-message" style="display: none;"></div>
+      <div id="loginSuccessMsg" class="success-message" style="display: none;"></div>
+      
+      <div class="form-group">
+        <label>Email address</label>
+        <div class="input-wrapper">
+          <span class="input-icon">📧</span>
+          <input type="email" id="loginEmail" placeholder="hello@petlover.com" autocomplete="email">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <div class="input-wrapper">
+          <span class="input-icon">🔒</span>
+          <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
+        </div>
+      </div>
+      <div class="forgot-link">
+        <a href="#" id="forgotPasswordLink">Forgot password?</a>
+      </div>
+      <button class="action-btn" id="loginBtn">Log in →</button>
+      
+      <div class="divider">
+        <div class="divider-line"></div>
+        <span>or continue with</span>
+        <div class="divider-line"></div>
+      </div>
+      <button class="action-btn google-btn" id="googleLoginBtn">
+        <span>🪪</span> Google account
+      </button>
+    </div>
+
+    <!-- SIGNUP FORM PANEL -->
+    <div id="signupPanel" class="form-panel" style="display: none;">
+      <div id="signupError" class="error-message" style="display: none;"></div>
+      <div id="signupSuccessMsg" class="success-message" style="display: none;"></div>
+      
+      <div class="full-name-row">
+        <div class="form-group">
+          <label>First name</label>
+          <div class="input-wrapper">
+            <span class="input-icon">👤</span>
+            <input type="text" id="signupFirstName" placeholder="Ahmed" autocomplete="given-name">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Last name</label>
+          <div class="input-wrapper">
+            <span class="input-icon">✨</span>
+            <input type="text" id="signupLastName" placeholder="Khan" autocomplete="family-name">
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email address</label>
+        <div class="input-wrapper">
+          <span class="input-icon">📧</span>
+          <input type="email" id="signupEmail" placeholder="hello@petcarepro.com" autocomplete="email">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Create password</label>
+        <div class="input-wrapper">
+          <span class="input-icon">🔐</span>
+          <input type="password" id="signupPassword" placeholder="at least 6 characters">
+        </div>
+      </div>
+      <div class="checkbox-group">
+        <input type="checkbox" id="termsCheckbox">
+        <label>I agree to the <strong style="color:#4A6F4E;">Terms of Service</strong> and <strong style="color:#4A6F4E;">Privacy Policy</strong></label>
+      </div>
+      <button class="action-btn" id="signupBtn">Create account →</button>
+      
+      <div class="divider">
+        <div class="divider-line"></div>
+        <span>or sign up with</span>
+        <div class="divider-line"></div>
+      </div>
+      <button class="action-btn google-btn" id="googleSignupBtn">
+        <span>🪪</span> Google account
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ----- elegant UI animations & mock auth (no firebase in this standalone card but matches theme, 
+  // can be integrated with your existing Firebase easily. This is a pure frontend card with demo flow.)
+  // All interactions smooth, design consistent with PetCare Pro 2026.
+  
+  const loginPanel = document.getElementById('loginPanel');
+  const signupPanel = document.getElementById('signupPanel');
+  const loginTab = document.getElementById('loginTabBtn');
+  const signupTab = document.getElementById('signupTabBtn');
+  const dynamicTitle = document.getElementById('dynamicTitle');
+  
+  // error & success containers
+  const loginErrorDiv = document.getElementById('loginError');
+  const loginSuccessDiv = document.getElementById('loginSuccessMsg');
+  const signupErrorDiv = document.getElementById('signupError');
+  const signupSuccessDiv = document.getElementById('signupSuccessMsg');
+  
+  // inputs
+  const loginEmail = document.getElementById('loginEmail');
+  const loginPassword = document.getElementById('loginPassword');
+  const signupFirstName = document.getElementById('signupFirstName');
+  const signupLastName = document.getElementById('signupLastName');
+  const signupEmail = document.getElementById('signupEmail');
+  const signupPassword = document.getElementById('signupPassword');
+  const termsCheckbox = document.getElementById('termsCheckbox');
+  
+  // helper: clear errors & success messages in active panel
+  function clearLoginMessages() {
+    loginErrorDiv.style.display = 'none';
+    loginSuccessDiv.style.display = 'none';
+    loginErrorDiv.innerHTML = '';
+  }
+  function clearSignupMessages() {
+    signupErrorDiv.style.display = 'none';
+    signupSuccessDiv.style.display = 'none';
+    signupErrorDiv.innerHTML = '';
+  }
+  
+  // switch panels with crossfade + animation
+  function setActiveTab(tab) {
+    if (tab === 'login') {
+      loginPanel.style.display = 'block';
+      signupPanel.style.display = 'none';
+      loginTab.classList.add('active');
+      signupTab.classList.remove('active');
+      dynamicTitle.innerText = 'Welcome back';
+      clearLoginMessages();
+      // reset any leftover shake styles
+      document.querySelectorAll('.input-wrapper input').forEach(inp => inp.classList.remove('shake'));
+    } else {
+      loginPanel.style.display = 'none';
+      signupPanel.style.display = 'block';
+      signupTab.classList.add('active');
+      loginTab.classList.remove('active');
+      dynamicTitle.innerText = 'Join the family';
+      clearSignupMessages();
+      document.querySelectorAll('.input-wrapper input').forEach(inp => inp.classList.remove('shake'));
+    }
+  }
+  
+  loginTab.addEventListener('click', () => setActiveTab('login'));
+  signupTab.addEventListener('click', () => setActiveTab('signup'));
+  
+  // ----- helper animations: shake invalid fields
+  function shakeElement(el) {
+    if(!el) return;
+    el.classList.add('shake');
+    setTimeout(() => el.classList.remove('shake'), 500);
+  }
+  
+  // ----- mock login validation (demo with smooth toast, real integration with your firebase can be swapped)
+  function performLogin() {
+    clearLoginMessages();
+    const email = loginEmail.value.trim();
+    const pwd = loginPassword.value.trim();
+    
+    if (!email) {
+      loginErrorDiv.innerText = '🐾 Please enter your email address.';
+      loginErrorDiv.style.display = 'block';
+      shakeElement(loginEmail);
+      return;
+    }
+    if (!pwd) {
+      loginErrorDiv.innerText = '🔒 Password cannot be empty.';
+      loginErrorDiv.style.display = 'block';
+      shakeElement(loginPassword);
+      return;
+    }
+    if (pwd.length < 3) {
+      loginErrorDiv.innerText = 'Password must be at least 3 characters (demo mode).';
+      loginErrorDiv.style.display = 'block';
+      shakeElement(loginPassword);
+      return;
+    }
+    if (!email.includes('@') || !email.includes('.')) {
+      loginErrorDiv.innerText = 'Please provide a valid email address.';
+      loginErrorDiv.style.display = 'block';
+      shakeElement(loginEmail);
+      return;
+    }
+    
+    // Simulate loading effect
+    const loginBtn = document.getElementById('loginBtn');
+    const originalText = loginBtn.innerHTML;
+    loginBtn.innerHTML = '⏳ Authenticating...';
+    loginBtn.disabled = true;
+    
+    setTimeout(() => {
+      // success simulation
+      loginSuccessDiv.innerText = '✅ Welcome back! Redirecting to PetCare Pro dashboard...';
+      loginSuccessDiv.style.display = 'block';
+      loginBtn.innerHTML = '✓ Logged in!';
+      setTimeout(() => {
+        // optional reset for demo
+        loginBtn.innerHTML = originalText;
+        loginBtn.disabled = false;
+        // here you could redirect or show a modal. For demo, we just show success message.
+        alert('🎉 Demo Login Success! (Connect with Firebase in production)\nWelcome ' + email);
+        loginSuccessDiv.style.display = 'none';
+        // optionally clear fields? keep as per preference
+      }, 1500);
+    }, 1000);
+  }
+  
+  // signup logic with validation and animation
+  function performSignup() {
+    clearSignupMessages();
+    const firstName = signupFirstName.value.trim();
+    const lastName = signupLastName.value.trim();
+    const email = signupEmail.value.trim();
+    const password = signupPassword.value.trim();
+    const termsAccepted = termsCheckbox.checked;
+    
+    if (!firstName) {
+      signupErrorDiv.innerText = '✨ First name is required.';
+      signupErrorDiv.style.display = 'block';
+      shakeElement(signupFirstName);
+      return;
+    }
+    if (!lastName) {
+      signupErrorDiv.innerText = '🐕 Last name is required.';
+      signupErrorDiv.style.display = 'block';
+      shakeElement(signupLastName);
+      return;
+    }
+    if (!email) {
+      signupErrorDiv.innerText = '📧 Please enter your email address.';
+      signupErrorDiv.style.display = 'block';
+      shakeElement(signupEmail);
+      return;
+    }
+    if (!email.includes('@') || !email.includes('.')) {
+      signupErrorDiv.innerText = 'Provide a valid email (e.g., name@domain.com).';
+      signupErrorDiv.style.display = 'block';
+      shakeElement(signupEmail);
+      return;
+    }
+    if (!password) {
+      signupErrorDiv.innerText = '🔐 Create a password to secure your account.';
+      signupErrorDiv.style.display = 'block';
+      shakeElement(signupPassword);
+      return;
+    }
+    if (password.length < 6) {
+      signupErrorDiv.innerText = 'Password must be at least 6 characters.';
+      signupErrorDiv.style.display = 'block';
+      shakeElement(signupPassword);
+      return;
+    }
+    if (!termsAccepted) {
+      signupErrorDiv.innerText = 'Please accept the Terms & Privacy policy to continue.';
+      signupErrorDiv.style.display = 'block';
+      shakeElement(termsCheckbox);
+      return;
+    }
+    
+    const signupBtn = document.getElementById('signupBtn');
+    const originalLabel = signupBtn.innerHTML;
+    signupBtn.innerHTML = '🔄 Creating account...';
+    signupBtn.disabled = true;
+    
+    setTimeout(() => {
+      signupSuccessDiv.innerText = `🎉 Welcome ${firstName}! Your account has been created. You can now log in.`;
+      signupSuccessDiv.style.display = 'block';
+      signupBtn.innerHTML = '✓ Account created';
+      setTimeout(() => {
+        signupBtn.innerHTML = originalLabel;
+        signupBtn.disabled = false;
+        // after signup, automatically switch to login panel for better UX
+        setActiveTab('login');
+        // prefill email on login panel
+        loginEmail.value = email;
+        signupSuccessDiv.style.display = 'none';
+        // show sweet message
+        const infoMsg = document.createElement('div');
+        infoMsg.className = 'success-message';
+        infoMsg.innerText = '✨ Signup successful! You can now log in with your credentials.';
+        loginPanel.prepend(infoMsg);
+        setTimeout(() => infoMsg.remove(), 4000);
+        // reset signup fields optionally
+        signupFirstName.value = '';
+        signupLastName.value = '';
+        signupEmail.value = '';
+        signupPassword.value = '';
+        termsCheckbox.checked = false;
+      }, 1600);
+    }, 1100);
+  }
+  
+  // Google mock (simulate social auth)
+  function googleAuthFlow() {
+    // show a nice popup effect matching card
+    const tempMsg = document.createElement('div');
+    tempMsg.className = 'success-message';
+    tempMsg.innerText = '🌐 Google authentication demo — ready to integrate with Firebase Google Provider! 🐾';
+    if (loginPanel.style.display !== 'none') {
+      loginPanel.prepend(tempMsg);
+      setTimeout(() => tempMsg.remove(), 2800);
+    } else {
+      signupPanel.prepend(tempMsg);
+      setTimeout(() => tempMsg.remove(), 2800);
+    }
+    // simulate login success effect
+    const anyBtn = document.querySelector('.google-btn');
+    anyBtn.style.transform = 'scale(0.98)';
+    setTimeout(() => anyBtn.style.transform = '', 200);
+  }
+  
+  // forgot password demo: elegant modal-like alert with animation
+  function forgotPasswordDemo() {
+    const fakeModal = document.createElement('div');
+    fakeModal.style.position = 'fixed';
+    fakeModal.style.top = '0';
+    fakeModal.style.left = '0';
+    fakeModal.style.width = '100%';
+    fakeModal.style.height = '100%';
+    fakeModal.style.backgroundColor = 'rgba(26,26,24,0.5)';
+    fakeModal.style.backdropFilter = 'blur(4px)';
+    fakeModal.style.display = 'flex';
+    fakeModal.style.alignItems = 'center';
+    fakeModal.style.justifyContent = 'center';
+    fakeModal.style.zIndex = '2000';
+    fakeModal.style.opacity = '0';
+    fakeModal.style.transition = 'opacity 0.25s ease';
+    
+    const cardNote = document.createElement('div');
+    cardNote.style.background = 'white';
+    cardNote.style.maxWidth = '320px';
+    cardNote.style.padding = '28px 24px';
+    cardNote.style.borderRadius = '36px';
+    cardNote.style.textAlign = 'center';
+    cardNote.style.fontFamily = "'DM Sans', sans-serif";
+    cardNote.style.boxShadow = '0 30px 50px rgba(0,0,0,0.2)';
+    cardNote.style.border = '1px solid rgba(122,158,126,0.3)';
+    cardNote.style.transform = 'scale(0.92)';
+    cardNote.style.transition = 'transform 0.2s cubic-bezier(0.2,0.9,0.4,1.1)';
+    
+    cardNote.innerHTML = `
+      <div style="font-size: 48px; margin-bottom: 12px;">🔐🐾</div>
+      <h3 style="font-family: 'Playfair Display', serif; font-size: 24px; margin-bottom: 12px;">Reset password</h3>
+      <p style="color:#6B6B60; font-size:14px; margin-bottom: 20px;">Enter your email and we'll send a secure recovery link.</p>
+      <input type="email" id="resetEmailInput" placeholder="your@email.com" style="width:100%; padding:12px 16px; border-radius:60px; border:1px solid #ddd; margin-bottom: 20px; font-family: inherit;">
+      <button id="confirmResetBtn" style="background:#4A6F4E; border:none; padding:12px; width:100%; border-radius:60px; color:white; font-weight:600; cursor:pointer;">Send reset link →</button>
+      <button id="closeResetBtn" style="background:transparent; border:none; margin-top:14px; font-size:12px; color:#aaa; cursor:pointer;">Cancel</button>
+    `;
+    
+    fakeModal.appendChild(cardNote);
+    document.body.appendChild(fakeModal);
+    setTimeout(() => { fakeModal.style.opacity = '1'; cardNote.style.transform = 'scale(1)'; }, 10);
+    
+    const closeReset = () => {
+      fakeModal.style.opacity = '0';
+      setTimeout(() => fakeModal.remove(), 250);
+    };
+    document.getElementById('closeResetBtn')?.addEventListener('click', closeReset);
+    document.getElementById('confirmResetBtn')?.addEventListener('click', () => {
+      const resetEmail = document.getElementById('resetEmailInput').value;
+      if (!resetEmail) {
+        alert('📩 Please provide your email address');
+        return;
+      }
+      alert(`✉️ Password reset link sent to ${resetEmail} (demo mode). Check console for integration.`);
+      closeReset();
+    });
+    fakeModal.addEventListener('click', (e) => { if(e.target === fakeModal) closeReset(); });
+  }
+  
+  // attach event listeners
+  document.getElementById('loginBtn').addEventListener('click', performLogin);
+  document.getElementById('signupBtn').addEventListener('click', performSignup);
+  document.getElementById('googleLoginBtn').addEventListener('click', googleAuthFlow);
+  document.getElementById('googleSignupBtn').addEventListener('click', googleAuthFlow);
+  document.getElementById('forgotPasswordLink').addEventListener('click', (e) => {
+    e.preventDefault();
+    forgotPasswordDemo();
+  });
+  
+  // optional: enter key support
+  const inputsLogin = [loginEmail, loginPassword];
+  inputsLogin.forEach(inp => inp.addEventListener('keypress', (e) => { if(e.key === 'Enter') performLogin(); }));
+  const inputsSignup = [signupFirstName, signupLastName, signupEmail, signupPassword];
+  inputsSignup.forEach(inp => inp.addEventListener('keypress', (e) => { if(e.key === 'Enter') performSignup(); }));
+  
+  // subtle floating card glow
+  const card = document.querySelector('.auth-card');
+  card.style.transition = 'box-shadow 0.35s';
+  
+  // Additional micro animation: hover on input icons etc
+  document.querySelectorAll('.input-wrapper').forEach(wrap => {
+    wrap.addEventListener('mouseenter', () => {
+      wrap.querySelector('.input-icon')?.style.transform = 'scale(1.05)';
+    });
+    wrap.addEventListener('mouseleave', () => {
+      wrap.querySelector('.input-icon')?.style.transform = '';
+    });
+  });
+</script>
+</body>
+</html>
