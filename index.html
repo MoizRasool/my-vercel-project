@@ -446,6 +446,20 @@ footer{padding:32px 56px;background:#111;display:flex;justify-content:space-betw
   </div>
 </div>
 
+
+<div id="force-login-overlay" style="position:fixed; inset:0; background:rgba(26,26,24,0.8); backdrop-filter:blur(15px); z-index:9999; display:flex; align-items:center; justify-content:center;">
+    <div style="background:white; padding:40px; border-radius:28px; width:100%; max-width:400px; box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+        <h2 style="font-family:'Playfair Display',serif; text-align:center; margin-bottom:20px;">Welcome to PetCare</h2>
+        
+        <input type="email" placeholder="Email" style="width:100%; padding:12px; margin-bottom:10px; border-radius:10px; border:1px solid #ddd;">
+        <input type="password" placeholder="Password" style="width:100%; padding:12px; margin-bottom:10px; border-radius:10px; border:1px solid #ddd;">
+        
+        <button onclick="document.getElementById('force-login-overlay').style.display='none'" style="width:100%; padding:15px; background:#4A6F4E; color:white; border:none; border-radius:10px; font-weight:bold; cursor:pointer;">
+            Enter Website →
+        </button>
+    </div>
+</div>
+
 <script>
 // CURSOR
 const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
