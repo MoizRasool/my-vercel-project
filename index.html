@@ -23,7 +23,7 @@
 }
 
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth;font-size:16px}
+html{font-size:16px}
 body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--dark);overflow-x:hidden;line-height:1.6}
 
 /* CUSTOM SCROLLBAR */
@@ -639,8 +639,36 @@ footer{padding:36px 64px;background:var(--dark);display:flex;justify-content:spa
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
 <script>
-// CURSOR
+// ── LENIS SMOOTH SCROLL ──────────────────────────────────────────
+const lenis = new Lenis({
+  duration: 1.4,
+  easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+  smooth: true,
+  smoothTouch: false,
+  touchMultiplier: 1.8,
+});
+function raf(time){ lenis.raf(time); requestAnimationFrame(raf); }
+requestAnimationFrame(raf);
+
+// Scroll-progress bar (sage → gold gradient line at top)
+const progressBar = document.createElement('div');
+progressBar.style.cssText = 'position:fixed;top:0;left:0;height:2.5px;width:0%;background:linear-gradient(90deg,var(--sage),var(--gold));z-index:10000;pointer-events:none;transition:width .06s linear;';
+document.body.appendChild(progressBar);
+lenis.on('scroll', ({ progress }) => { progressBar.style.width = (progress * 100) + '%'; });
+
+// Smooth anchor clicks
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (!target) return;
+    e.preventDefault();
+    lenis.scrollTo(target, { offset: -80, duration: 1.6 });
+  });
+});
+
+// ── CURSOR ───────────────────────────────────────────────────────
 const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
 let mx=0,my=0,rx=0,ry=0;
 document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.transform=`translate(${mx-4}px,${my-4}px)`});
@@ -650,12 +678,12 @@ document.querySelectorAll('button,a,.srv-card,.pet-chip,.gal-item,.blog-card,.bl
   el.addEventListener('mouseleave',()=>ring.classList.remove('hovered'));
 });
 
-// NAVBAR
+// NAVBAR — driven by Lenis scroll event
 const nav=document.getElementById('navbar');
-window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>60));
+lenis.on('scroll', ({ scroll }) => nav.classList.toggle('scrolled', scroll > 60));
 
-// SCROLL REVEAL
-const rv=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),+e.target.dataset.delay||0)})},{threshold:.1});
+// SCROLL REVEAL — synced with Lenis
+const rv=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),+e.target.dataset.delay||0)})},{threshold:.08,rootMargin:'0px 0px -40px 0px'});
 document.querySelectorAll('.srv-card').forEach((el,i)=>{el.dataset.delay=i*90;rv.observe(el)});
 document.querySelectorAll('.gal-item').forEach((el,i)=>{el.dataset.delay=i*110;rv.observe(el)});
 document.querySelectorAll('.testi-card').forEach((el,i)=>{el.dataset.delay=i*110;rv.observe(el)});
@@ -668,6 +696,14 @@ function animCount(el,t,s){
 }
 let counted=false;
 new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting&&!counted){counted=true;document.querySelectorAll('[data-count]').forEach(el=>{animCount(el,+el.dataset.count,el.dataset.suffix||'');delete el.dataset.count})}})},{threshold:.5}).observe(document.querySelector('.hero-trust'));
+
+// PARALLAX — hero blobs drift gently as you scroll
+const blob1 = document.querySelector('.hero-bg-blob.b1');
+const blob2 = document.querySelector('.hero-bg-blob.b2');
+lenis.on('scroll', ({ scroll }) => {
+  if (blob1) blob1.style.transform = `translateY(${scroll * 0.18}px)`;
+  if (blob2) blob2.style.transform = `translateY(${scroll * -0.10}px)`;
+});
 
 // PET CHIPS
 document.querySelectorAll('.pet-chip').forEach(c=>c.addEventListener('click',()=>{document.querySelectorAll('.pet-chip').forEach(x=>x.classList.remove('active'));c.classList.add('active')}));
