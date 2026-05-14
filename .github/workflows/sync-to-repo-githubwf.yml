@@ -1,0 +1,22 @@
+name: Sync to GIT-HUB-FOR-DEVOPS
+
+on:
+  push:
+    branches: [ develop ]
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Push to GIT-HUB-FOR-DEVOPS
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          deploy_key: ${{ secrets.REPO_B_SSH_KEY }}
+          external_repository: MoizRasool/GIT-HUB-FOR-DEVOPS
+          publish_branch: develop
+          publish_dir: ./
+          force_orphan: false
