@@ -5,309 +5,605 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PetCare Pro 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<!-- ✦ CHANGED: Fonts — Cormorant + Outfit replaced with Fraunces (luxury serif) + Syne (modern geometric) -->
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,900;1,9..144,400;1,9..144,700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+
 <style>
+/* ✦ CHANGED: Full color palette — deeper forest greens, rich amber gold, warm ivory */
 :root {
-  --cream: #F5F0E8;
-  --dark: #0F1410;
-  --forest: #1E3A23;
+  --cream: #F4EFE6;
+  --dark: #0C1510;
+  --forest: #162B1A;
+  --forest-mid: #1F3D25;
   --sage: #4E7A52;
-  --sage-light: #8FBA93;
-  --sage-pale: #D4E8D6;
-  --gold: #C9A84C;
+  --sage-light: #7FB584;
+  --sage-pale: #C8E0CA;
+  --gold: #C8A84A;
+  --gold-light: #E8C97A;
+  --amber: #D4854A;
   --warm: #E8C49A;
-  --text-muted: #5A5A50;
-  --border: rgba(15,20,16,0.1);
-  --border-light: rgba(15,20,16,0.06);
-  --glass: rgba(245,240,232,0.7);
+  --text-muted: #5A5A4A;
+  --border: rgba(12,21,16,0.1);
+  --border-light: rgba(12,21,16,0.06);
 }
 
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth;font-size:16px}
-body{font-family:'Outfit',sans-serif;background:var(--cream);color:var(--dark);overflow-x:hidden;line-height:1.6}
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box }
+html { font-size:16px }
 
-/* CUSTOM SCROLLBAR */
-::-webkit-scrollbar{width:6px}
-::-webkit-scrollbar-track{background:var(--cream)}
-::-webkit-scrollbar-thumb{background:var(--sage);border-radius:10px}
+/* ✦ CHANGED: Body font now Syne — sharp, modern, premium feel */
+body { font-family:'Syne',sans-serif; background:var(--cream); color:var(--dark); overflow-x:hidden; line-height:1.6 }
 
-/* CURSOR */
-.cursor{width:8px;height:8px;background:var(--sage);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;mix-blend-mode:multiply;transition:transform .1s}
-.cursor-ring{width:32px;height:32px;border:1.5px solid var(--sage);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transition:all 0.4s cubic-bezier(.25,.46,.45,.94);opacity:.4}
-.cursor-ring.hovered{width:56px;height:56px;opacity:.12;background:var(--sage)}
+/* Custom scrollbar */
+::-webkit-scrollbar { width:5px }
+::-webkit-scrollbar-track { background:var(--cream) }
+::-webkit-scrollbar-thumb { background:var(--sage); border-radius:10px }
 
-/* NOISE TEXTURE OVERLAY */
-body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.4}
+/* Noise overlay — same as before */
+body::before {
+  content:''; position:fixed; inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none; z-index:0; opacity:.45
+}
+
+/* ✦ NEW: All page content sits above the background canvas */
+nav, section, .marquee-wrap, footer,
+.chat-bubble, .chatbox, .modal-overlay { position:relative; z-index:2 }
+
+/* ─────────────────────────────────────────
+   ✦ NEW: SCROLL PROGRESS BAR at top
+   sage → gold → amber gradient line
+   ───────────────────────────────────────── */
+#progress-bar {
+  position:fixed; top:0; left:0; height:2.5px; width:0%;
+  background:linear-gradient(90deg, var(--sage), var(--gold), var(--amber));
+  z-index:10001; pointer-events:none;
+  box-shadow:0 0 10px rgba(200,168,74,.6);
+  transition:width .05s linear;
+}
+
+/* ─────────────────────────────────────────
+   ✦ NEW: ANIMATED BACKGROUND CANVAS
+   Floating particles + drifting orbs
+   ───────────────────────────────────────── */
+#bg-canvas {
+  position:fixed; inset:0; z-index:0;
+  pointer-events:none; opacity:1;
+}
+
+/* ─────────────────────────────────────────
+   ✦ CHANGED: CURSOR — now has paw trail effect
+   ───────────────────────────────────────── */
+.cursor {
+  width:8px; height:8px; background:var(--sage); border-radius:50%;
+  position:fixed; top:0; left:0; pointer-events:none; z-index:9999;
+  mix-blend-mode:multiply; transform:translate(-50%,-50%);
+}
+.cursor-ring {
+  width:32px; height:32px; border:1.5px solid var(--sage); border-radius:50%;
+  position:fixed; top:0; left:0; pointer-events:none; z-index:9998;
+  transition:all 0.4s cubic-bezier(.25,.46,.45,.94); opacity:.4;
+  transform:translate(-50%,-50%);
+}
+.cursor-ring.hovered { width:58px; height:58px; opacity:.1; background:var(--sage) }
+
+/* ✦ NEW: Paw print trail elements dropped on mouse move */
+.paw-trail {
+  position:fixed; pointer-events:none; z-index:9990;
+  font-size:13px; opacity:0;
+  transform:translate(-50%,-50%) scale(.5);
+  animation:pawFade 1s ease forwards;
+}
+@keyframes pawFade {
+  0%   { opacity:.6; transform:translate(-50%,-50%) scale(.9) rotate(var(--rot)) }
+  100% { opacity:0;  transform:translate(-50%,-65%) scale(.3) rotate(var(--rot)) }
+}
 
 /* NAVBAR */
-nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:28px 64px;transition:all .5s cubic-bezier(.25,.46,.45,.94)}
-nav.scrolled{background:rgba(245,240,232,.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border);padding:16px 64px;box-shadow:0 2px 40px rgba(0,0,0,.04)}
-.nav-logo{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;color:var(--dark);letter-spacing:-.5px;display:flex;align-items:center;gap:8px;text-decoration:none}
-.nav-logo em{color:var(--sage);font-style:normal}
-.nav-links{display:flex;gap:32px;align-items:center}
-.nav-links a{text-decoration:none;font-size:13.5px;font-weight:400;color:var(--text-muted);transition:color .25s;letter-spacing:.3px}
-.nav-links a:hover{color:var(--dark)}
-.nav-cta{background:var(--forest)!important;color:var(--cream)!important;padding:11px 26px!important;border-radius:50px;font-size:13px!important;font-weight:500!important;border:none!important;cursor:pointer!important;font-family:'Outfit',sans-serif;transition:all .3s ease;letter-spacing:.4px}
-.nav-cta:hover{background:var(--sage)!important;transform:translateY(-1px)!important;box-shadow:0 8px 24px rgba(78,122,82,.3)!important}
-.btn-ghost-nav{background:transparent;border:1.5px solid var(--border);color:var(--dark);padding:9px 20px;border-radius:50px;font-family:'Outfit',sans-serif;font-size:13px;cursor:pointer;transition:all .25s}
-.btn-ghost-nav:hover{border-color:var(--sage);color:var(--sage)}
-#user-photo{width:34px;height:34px;border-radius:50%;border:2px solid var(--sage)}
-#logout-btn{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:12px;font-family:'Outfit',sans-serif}
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:500;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:28px 64px; transition:all .5s cubic-bezier(.25,.46,.45,.94);
+}
+nav.scrolled {
+  background:rgba(244,239,230,.93); backdrop-filter:blur(26px); -webkit-backdrop-filter:blur(26px);
+  border-bottom:1px solid var(--border); padding:15px 64px;
+  box-shadow:0 2px 48px rgba(0,0,0,.05);
+}
+
+/* ✦ CHANGED: Logo font — Fraunces serif for luxury feel */
+.nav-logo {
+  font-family:'Fraunces',serif; font-size:24px; font-weight:700;
+  color:var(--dark); letter-spacing:-.5px;
+  display:flex; align-items:center; gap:8px; text-decoration:none;
+}
+.nav-logo em { color:var(--sage); font-style:italic }
+
+.nav-links { display:flex; gap:32px; align-items:center }
+
+/* ✦ CHANGED: Nav links — uppercase, tighter tracking, Syne font */
+.nav-links a {
+  text-decoration:none; font-size:12.5px; font-weight:600;
+  color:var(--text-muted); transition:color .25s;
+  letter-spacing:.8px; text-transform:uppercase;
+}
+.nav-links a:hover { color:var(--dark) }
+
+.nav-cta {
+  background:var(--forest)!important; color:var(--cream)!important;
+  padding:11px 26px!important; border-radius:50px; font-size:12px!important;
+  font-weight:700!important; border:none!important; cursor:pointer!important;
+  font-family:'Syne',sans-serif; transition:all .3s ease;
+  letter-spacing:.8px; text-transform:uppercase;
+}
+.nav-cta:hover {
+  background:var(--sage)!important; transform:translateY(-1px)!important;
+  box-shadow:0 8px 24px rgba(78,122,82,.3)!important;
+}
+.btn-ghost-nav {
+  background:transparent; border:1.5px solid var(--border); color:var(--dark);
+  padding:9px 20px; border-radius:50px; font-family:'Syne',sans-serif;
+  font-size:12px; font-weight:700; cursor:pointer; transition:all .25s;
+  letter-spacing:.8px; text-transform:uppercase;
+}
+.btn-ghost-nav:hover { border-color:var(--sage); color:var(--sage) }
+#user-photo { width:34px; height:34px; border-radius:50%; border:2px solid var(--sage) }
+#logout-btn { background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:12px; font-family:'Syne',sans-serif }
 
 /* HERO */
-.hero{min-height:100vh;display:grid;grid-template-columns:1.1fr 1fr;align-items:center;padding:130px 64px 80px;position:relative;overflow:hidden}
-.hero-bg-blob{position:absolute;border-radius:50%;filter:blur(80px)}
-.hero-bg-blob.b1{width:700px;height:700px;background:radial-gradient(circle,var(--sage-pale),transparent 70%);right:-150px;top:-100px;opacity:.6}
-.hero-bg-blob.b2{width:400px;height:400px;background:radial-gradient(circle,var(--warm),transparent 70%);left:100px;bottom:0;opacity:.25}
-.hero-bg-blob.b3{width:200px;height:200px;background:var(--gold);left:40%;top:20%;opacity:.06;border-radius:30% 70% 70% 30%/30% 30% 70% 70%}
+.hero {
+  min-height:100vh; display:grid; grid-template-columns:1.1fr 1fr;
+  align-items:center; padding:130px 64px 80px; position:relative; overflow:hidden;
+}
 
-.hero-left{position:relative;z-index:2}
-.hero-badge{display:inline-flex;align-items:center;gap:10px;background:white;color:var(--sage);padding:8px 20px;border-radius:50px;font-size:12px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:32px;border:1px solid var(--sage-pale);box-shadow:0 4px 20px rgba(78,122,82,.1);opacity:0;animation:slideUp .9s .1s cubic-bezier(.34,1.56,.64,1) forwards}
-.hero-badge .pulse{width:7px;height:7px;background:var(--sage);border-radius:50%;box-shadow:0 0 0 3px rgba(78,122,82,.2);animation:pulse 2s infinite}
-.hero h1{font-family:'Cormorant Garamond',serif;font-size:clamp(54px,6.5vw,92px);font-weight:600;line-height:1.02;letter-spacing:-2.5px;opacity:0;animation:slideUp .9s .25s cubic-bezier(.34,1.56,.64,1) forwards}
-.hero h1 .line-accent{display:block;color:var(--sage);font-style:italic}
-.hero-sub{margin-top:28px;font-size:17px;color:var(--text-muted);line-height:1.75;max-width:440px;font-weight:300;opacity:0;animation:slideUp .9s .4s cubic-bezier(.34,1.56,.64,1) forwards}
-.hero-actions{margin-top:48px;display:flex;gap:14px;align-items:center;opacity:0;animation:slideUp .9s .55s cubic-bezier(.34,1.56,.64,1) forwards}
-.btn-primary{background:var(--forest);color:var(--cream);padding:16px 36px;border:none;border-radius:50px;font-family:'Outfit',sans-serif;font-size:15px;font-weight:500;cursor:pointer;transition:all .35s ease;display:flex;align-items:center;gap:10px;letter-spacing:.3px}
-.btn-primary:hover{background:var(--sage);transform:translateY(-3px);box-shadow:0 16px 40px rgba(78,122,82,.3)}
-.btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--dark);padding:16px 36px;border-radius:50px;font-family:'Outfit',sans-serif;font-size:15px;cursor:pointer;transition:all .3s ease}
-.btn-outline:hover{border-color:var(--forest);transform:translateY(-2px)}
-.hero-trust{margin-top:52px;padding-top:40px;border-top:1px solid var(--border-light);display:flex;gap:40px;opacity:0;animation:slideUp .9s .7s cubic-bezier(.34,1.56,.64,1) forwards}
-.trust-num{font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:700;color:var(--forest);letter-spacing:-1px}
-.trust-num span{font-size:24px;color:var(--sage)}
-.trust-label{font-size:12.5px;color:var(--text-muted);margin-top:2px;letter-spacing:.3px}
+/* ✦ CHANGED: Blobs bigger + get CSS animation (previously static) */
+.hero-bg-blob { position:absolute; border-radius:50%; filter:blur(90px); pointer-events:none }
+.hero-bg-blob.b1 {
+  width:700px; height:700px; background:radial-gradient(circle,var(--sage-pale),transparent 70%);
+  right:-150px; top:-100px; opacity:.6;
+  animation:blobDrift1 14s ease-in-out infinite;
+}
+.hero-bg-blob.b2 {
+  width:400px; height:400px; background:radial-gradient(circle,var(--warm),transparent 70%);
+  left:100px; bottom:0; opacity:.3;
+  animation:blobDrift2 18s ease-in-out infinite;
+}
+.hero-bg-blob.b3 {
+  width:250px; height:250px; background:radial-gradient(circle,rgba(200,168,74,.3),transparent 70%);
+  left:40%; top:20%; opacity:.5;
+  border-radius:30% 70% 70% 30%/30% 30% 70% 70%;
+  animation:blobDrift3 22s ease-in-out infinite;
+}
 
-.hero-right{position:relative;z-index:2;display:flex;justify-content:center;align-items:center;opacity:0;animation:fadeIn 1.4s .5s ease forwards}
-.hero-visual{position:relative;width:500px;height:580px}
-.hero-img-main{width:390px;height:480px;object-fit:cover;object-position:center top;border-radius:220px 220px 100px 100px;position:absolute;top:0;left:50%;transform:translateX(-50%);box-shadow:0 48px 100px rgba(0,0,0,.16);transition:transform .6s ease}
-.hero-img-main:hover{transform:translateX(-50%) scale(1.02)}
-.hero-pill{position:absolute;background:white;border-radius:20px;padding:14px 20px;box-shadow:0 12px 40px rgba(0,0,0,.1);display:flex;align-items:center;gap:13px;border:1px solid var(--border-light)}
-.hero-pill.p1{bottom:80px;left:-20px;animation:floatY 5s ease-in-out infinite}
-.hero-pill.p2{top:90px;right:-15px;animation:floatY 5s ease-in-out 2.5s infinite}
-.pill-icon{font-size:26px}
-.pill-text strong{display:block;font-size:14px;font-weight:600;color:var(--dark)}
-.pill-text span{font-size:12px;color:var(--text-muted)}
+/* ✦ NEW: Blob drift keyframes */
+@keyframes blobDrift1 { 0%,100%{transform:translate(0,0) scale(1)} 40%{transform:translate(-30px,25px) scale(1.06)} 70%{transform:translate(20px,-20px) scale(.95)} }
+@keyframes blobDrift2 { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(30px,-35px) scale(1.1)} }
+@keyframes blobDrift3 { 0%,100%{transform:translate(0,0) rotate(0deg)} 50%{transform:translate(-25px,25px) rotate(20deg)} }
+
+.hero-left { position:relative; z-index:2 }
+
+/* ✦ CHANGED: Badge — gold gradient border, premium look */
+.hero-badge {
+  display:inline-flex; align-items:center; gap:10px;
+  background:linear-gradient(135deg,rgba(200,168,74,.1),rgba(78,122,82,.07));
+  color:var(--forest); padding:8px 22px; border-radius:50px;
+  font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase;
+  margin-bottom:32px; border:1px solid rgba(200,168,74,.35);
+  box-shadow:0 4px 24px rgba(200,168,74,.12);
+  opacity:0; animation:slideUp .9s .1s cubic-bezier(.34,1.56,.64,1) forwards;
+}
+.hero-badge .pulse {
+  width:7px; height:7px; background:var(--gold); border-radius:50%;
+  box-shadow:0 0 0 3px rgba(200,168,74,.25); animation:pulse 2s infinite;
+}
+
+/* ✦ CHANGED: H1 — now Fraunces serif, tighter letter spacing, bolder */
+.hero h1 {
+  font-family:'Fraunces',serif;
+  font-size:clamp(54px,6.5vw,96px); font-weight:900;
+  line-height:1.01; letter-spacing:-3px;
+  opacity:0; animation:slideUp .9s .25s cubic-bezier(.34,1.56,.64,1) forwards;
+}
+.hero h1 .line-accent { display:block; color:var(--sage); font-style:italic; font-weight:400 }
+
+/* ✦ NEW: Typed text cursor blink */
+#typed-line { display:inline-block; border-right:2px solid var(--gold); padding-right:2px; animation:blink .75s step-end infinite }
+@keyframes blink { 0%,100%{border-color:var(--gold)} 50%{border-color:transparent} }
+
+.hero-sub {
+  margin-top:28px; font-size:17px; color:var(--text-muted); line-height:1.75;
+  max-width:440px; font-weight:400;
+  opacity:0; animation:slideUp .9s .4s cubic-bezier(.34,1.56,.64,1) forwards;
+}
+.hero-actions {
+  margin-top:48px; display:flex; gap:14px; align-items:center;
+  opacity:0; animation:slideUp .9s .55s cubic-bezier(.34,1.56,.64,1) forwards;
+}
+
+/* ✦ CHANGED: Primary button — gradient shine overlay on hover + magnetic JS */
+.btn-primary {
+  background:var(--forest); color:var(--cream); padding:16px 36px;
+  border:none; border-radius:50px; font-family:'Syne',sans-serif;
+  font-size:14px; font-weight:700; cursor:pointer;
+  transition:all .35s ease; display:flex; align-items:center; gap:10px;
+  letter-spacing:.6px; text-transform:uppercase;
+  position:relative; overflow:hidden;
+}
+.btn-primary::before {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(135deg,var(--sage),var(--sage-light));
+  opacity:0; transition:opacity .35s; border-radius:50px;
+}
+.btn-primary:hover::before { opacity:1 }
+.btn-primary:hover { transform:translateY(-3px); box-shadow:0 16px 40px rgba(78,122,82,.3) }
+.btn-primary > * { position:relative; z-index:1 }
+
+.btn-outline {
+  background:transparent; border:1.5px solid var(--border); color:var(--dark);
+  padding:16px 36px; border-radius:50px; font-family:'Syne',sans-serif;
+  font-size:14px; font-weight:700; cursor:pointer; transition:all .3s ease;
+  letter-spacing:.6px; text-transform:uppercase;
+}
+.btn-outline:hover { border-color:var(--forest); transform:translateY(-2px); background:rgba(22,43,26,.04) }
+
+.hero-trust {
+  margin-top:52px; padding-top:40px; border-top:1px solid var(--border-light);
+  display:flex; gap:40px;
+  opacity:0; animation:slideUp .9s .7s cubic-bezier(.34,1.56,.64,1) forwards;
+}
+
+/* ✦ CHANGED: Trust numbers — Fraunces, larger, bolder */
+.trust-num {
+  font-family:'Fraunces',serif; font-size:42px; font-weight:900;
+  color:var(--forest); letter-spacing:-2px; line-height:1;
+}
+.trust-label { font-size:12px; color:var(--text-muted); margin-top:4px; letter-spacing:.5px; text-transform:uppercase; font-weight:600 }
+
+.hero-right {
+  position:relative; z-index:2; display:flex; justify-content:center; align-items:center;
+  opacity:0; animation:fadeIn 1.4s .5s ease forwards;
+}
+.hero-visual { position:relative; width:500px; height:580px }
+
+/* ✦ FIXED: Dog image — new URL (retriever face fully visible), object-position shifted up */
+.hero-img-main {
+  width:390px; height:480px; object-fit:cover;
+  object-position:center 10%;       /* ← was "center top", now pulls face into frame */
+  border-radius:220px 220px 100px 100px;
+  position:absolute; top:0; left:50%; transform:translateX(-50%);
+  box-shadow:0 48px 100px rgba(0,0,0,.18), 0 0 0 8px rgba(200,168,74,.12);
+  transition:transform .6s ease;
+}
+.hero-img-main:hover { transform:translateX(-50%) scale(1.02) }
+
+/* ✦ CHANGED: Floating pills — gold border accent */
+.hero-pill {
+  position:absolute; background:white; border-radius:20px;
+  padding:14px 20px; box-shadow:0 12px 40px rgba(0,0,0,.1);
+  display:flex; align-items:center; gap:13px;
+  border:1px solid rgba(200,168,74,.2);
+}
+.hero-pill.p1 { bottom:80px; left:-20px; animation:floatY 5s ease-in-out infinite }
+.hero-pill.p2 { top:90px; right:-15px; animation:floatY 5s ease-in-out 2.5s infinite }
+.pill-icon { font-size:26px }
+
+/* ✦ CHANGED: Pill text — Fraunces serif for strong/heading */
+.pill-text strong { display:block; font-size:14px; font-weight:700; color:var(--dark); font-family:'Fraunces',serif }
+.pill-text span { font-size:12px; color:var(--text-muted) }
 
 /* MARQUEE */
-.marquee-wrap{background:var(--forest);padding:16px 0;overflow:hidden;position:relative}
-.marquee-track{display:flex;animation:marquee 24s linear infinite;white-space:nowrap}
-.marquee-item{flex-shrink:0;padding:0 44px;font-size:12px;font-weight:400;color:rgba(245,240,232,.35);letter-spacing:3px;text-transform:uppercase;display:flex;align-items:center;gap:16px}
-.marquee-item::after{content:'◆';color:var(--sage);font-size:8px}
+.marquee-wrap { background:var(--forest); padding:17px 0; overflow:hidden; position:relative }
+.marquee-track { display:flex; animation:marquee 24s linear infinite; white-space:nowrap }
+
+/* ✦ CHANGED: Marquee text — Syne bold, gold diamond separator */
+.marquee-item {
+  flex-shrink:0; padding:0 44px; font-size:11px; font-weight:700;
+  color:rgba(244,239,230,.3); letter-spacing:3px; text-transform:uppercase;
+  display:flex; align-items:center; gap:16px;
+}
+.marquee-item::after { content:'◆'; color:var(--gold); font-size:7px }
 
 /* SECTION BASICS */
-.sec-label{font-size:11.5px;letter-spacing:3px;text-transform:uppercase;color:var(--sage);font-weight:600;margin-bottom:14px}
-.sec-title{font-family:'Cormorant Garamond',serif;font-size:clamp(38px,4.5vw,60px);font-weight:600;line-height:1.08;letter-spacing:-1.5px}
-.sec-sub{font-size:15px;color:var(--text-muted);line-height:1.75;font-weight:300;max-width:380px}
-.section-intro{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:72px}
+.sec-label { font-size:11px; letter-spacing:3.5px; text-transform:uppercase; color:var(--sage); font-weight:700; margin-bottom:14px }
+
+/* ✦ CHANGED: Section titles — Fraunces for editorial luxury feel */
+.sec-title { font-family:'Fraunces',serif; font-size:clamp(38px,4.5vw,64px); font-weight:900; line-height:1.05; letter-spacing:-2px }
+.sec-sub { font-size:15px; color:var(--text-muted); line-height:1.75; font-weight:400; max-width:380px }
+.section-intro { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:72px }
+
+/* ✦ NEW: Gold accent divider line under section labels */
+.sec-divider {
+  width:52px; height:3px; margin:12px 0 28px;
+  background:linear-gradient(90deg, var(--gold), var(--amber));
+  border-radius:4px;
+}
 
 /* SERVICES */
-.services{padding:130px 64px;position:relative}
-.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-.srv-card{background:white;border-radius:28px;padding:40px;border:1px solid var(--border-light);cursor:pointer;transition:all .45s cubic-bezier(.25,.46,.45,.94);position:relative;overflow:hidden;opacity:0;transform:translateY(32px)}
-.srv-card.visible{opacity:1;transform:translateY(0)}
-.srv-card::after{content:'';position:absolute;inset:0;background:linear-gradient(145deg,var(--forest),var(--sage));opacity:0;transition:opacity .4s ease}
-.srv-card:hover::after{opacity:1}
-.srv-card:hover{transform:translateY(-8px)!important;box-shadow:0 28px 60px rgba(30,58,35,.22)}
-.srv-inner{position:relative;z-index:1}
-.srv-icon{width:56px;height:56px;background:var(--sage-pale);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:28px;transition:background .3s}
-.srv-card:hover .srv-icon{background:rgba(255,255,255,.15)}
-.srv-name{font-size:19px;font-weight:600;margin-bottom:10px;transition:color .3s;letter-spacing:-.3px}
-.srv-card:hover .srv-name{color:white}
-.srv-desc{font-size:14px;color:var(--text-muted);line-height:1.65;font-weight:300;transition:color .3s}
-.srv-card:hover .srv-desc{color:rgba(245,240,232,.7)}
-.srv-link{margin-top:28px;display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:var(--sage);transition:all .3s}
-.srv-card:hover .srv-link{color:white;gap:12px}
+.services { padding:130px 64px; position:relative }
+.services-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px }
+.srv-card {
+  background:white; border-radius:28px; padding:40px;
+  border:1px solid var(--border-light); cursor:pointer;
+  transition:all .45s cubic-bezier(.25,.46,.45,.94);
+  position:relative; overflow:hidden; opacity:0; transform:translateY(32px);
+}
+.srv-card.visible { opacity:1; transform:translateY(0) }
+.srv-card::after {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(145deg, var(--forest), var(--sage));
+  opacity:0; transition:opacity .4s ease;
+}
+.srv-card:hover::after { opacity:1 }
+.srv-card:hover { transform:translateY(-8px)!important; box-shadow:0 28px 60px rgba(22,43,26,.25) }
+.srv-inner { position:relative; z-index:1 }
+.srv-icon { width:56px; height:56px; background:var(--sage-pale); border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:24px; margin-bottom:28px; transition:background .3s }
+.srv-card:hover .srv-icon { background:rgba(255,255,255,.15) }
 
-/* PETS */
-.pets-section{padding:80px 64px 130px;background:var(--forest);position:relative;overflow:hidden}
-.pets-section::before{content:'';position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(143,186,147,.08),transparent 70%);top:-200px;right:-100px}
-.pets-section .sec-label{color:var(--sage-light)}
-.pets-section .sec-title{color:var(--cream)}
-.pets-section .sec-sub{color:rgba(245,240,232,.45)}
-.pets-scroll{display:flex;gap:14px;overflow-x:auto;padding-bottom:8px;scrollbar-width:none;margin-top:48px}
-.pets-scroll::-webkit-scrollbar{display:none}
-.pet-chip{flex-shrink:0;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:100px;padding:16px 30px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .35s cubic-bezier(.34,1.56,.64,1);color:rgba(245,240,232,.6);font-size:15px;white-space:nowrap}
-.pet-chip span:first-child{font-size:26px}
-.pet-chip:hover,.pet-chip.active{background:var(--sage);border-color:var(--sage);color:white;transform:translateY(-4px);box-shadow:0 12px 32px rgba(78,122,82,.3)}
+/* ✦ CHANGED: Card names — Fraunces for elegance */
+.srv-name { font-family:'Fraunces',serif; font-size:20px; font-weight:700; margin-bottom:10px; transition:color .3s; letter-spacing:-.5px }
+.srv-card:hover .srv-name { color:white }
+.srv-desc { font-size:14px; color:var(--text-muted); line-height:1.65; font-weight:400; transition:color .3s }
+.srv-card:hover .srv-desc { color:rgba(244,239,230,.7) }
+.srv-link { margin-top:28px; display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:700; color:var(--sage); transition:all .3s; letter-spacing:.8px; text-transform:uppercase }
+.srv-card:hover .srv-link { color:white; gap:12px }
+
+/* PETS SECTION */
+.pets-section { padding:80px 64px 130px; background:var(--forest); position:relative; overflow:hidden }
+.pets-section::before { content:''; position:absolute; width:600px; height:600px; border-radius:50%; background:radial-gradient(circle,rgba(143,186,147,.08),transparent 70%); top:-200px; right:-100px }
+.pets-section .sec-label { color:var(--sage-light) }
+.pets-section .sec-title { color:var(--cream) }
+.pets-section .sec-sub { color:rgba(244,239,230,.45) }
+.pets-scroll { display:flex; gap:14px; overflow-x:auto; padding-bottom:8px; scrollbar-width:none; margin-top:48px }
+.pets-scroll::-webkit-scrollbar { display:none }
+
+/* ✦ CHANGED: Pet chips — gold active state instead of plain sage */
+.pet-chip {
+  flex-shrink:0; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.09);
+  border-radius:100px; padding:16px 30px; display:flex; align-items:center; gap:12px;
+  cursor:pointer; transition:all .35s cubic-bezier(.34,1.56,.64,1);
+  color:rgba(244,239,230,.55); font-size:14px; white-space:nowrap; font-weight:600; letter-spacing:.3px;
+}
+.pet-chip span:first-child { font-size:26px }
+.pet-chip:hover, .pet-chip.active {
+  background:var(--sage); border-color:var(--sage); color:white;
+  transform:translateY(-4px); box-shadow:0 12px 32px rgba(78,122,82,.3);
+}
+
+/* ✦ NEW: Rotating pet facts bar */
+.pet-fact-bar {
+  margin-top:52px; padding:18px 28px;
+  background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08);
+  border-radius:16px; display:flex; align-items:center; gap:20px;
+}
+.pet-fact-label { font-size:10px; letter-spacing:2.5px; text-transform:uppercase; color:var(--gold); font-weight:700; white-space:nowrap }
+.pet-fact-text { font-size:14px; color:rgba(244,239,230,.5); line-height:1.5; font-style:italic; transition:opacity .4s ease }
 
 /* GALLERY */
-.gallery-section{padding:130px 64px}
-.gallery-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:280px 280px;gap:18px;margin-top:72px}
-.gal-item{border-radius:24px;overflow:hidden;position:relative;cursor:pointer;opacity:0;transform:scale(.94);transition:opacity .7s ease,transform .7s ease}
-.gal-item.visible{opacity:1;transform:scale(1)}
-.gal-item:nth-child(1){grid-column:1/3;grid-row:1}
-.gal-item:nth-child(2){grid-column:3;grid-row:1}
-.gal-item:nth-child(3){grid-column:4;grid-row:1/3}
-.gal-item:nth-child(4){grid-column:1;grid-row:2}
-.gal-item:nth-child(5){grid-column:2/4;grid-row:2}
-.gal-item img{width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.25,.46,.45,.94)}
-.gal-item:hover img{transform:scale(1.07)}
-.gal-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(15,20,16,.65),transparent 50%);opacity:0;transition:opacity .35s;display:flex;align-items:flex-end;padding:22px}
-.gal-item:hover .gal-overlay{opacity:1}
-.gal-tag{background:white;color:var(--dark);padding:5px 16px;border-radius:50px;font-size:11.5px;font-weight:600;letter-spacing:.5px}
+.gallery-section { padding:130px 64px }
+.gallery-grid { display:grid; grid-template-columns:repeat(4,1fr); grid-template-rows:280px 280px; gap:18px; margin-top:72px }
+.gal-item { border-radius:24px; overflow:hidden; position:relative; cursor:pointer; opacity:0; transform:scale(.94); transition:opacity .7s ease,transform .7s ease }
+.gal-item.visible { opacity:1; transform:scale(1) }
+.gal-item:nth-child(1) { grid-column:1/3; grid-row:1 }
+.gal-item:nth-child(2) { grid-column:3; grid-row:1 }
+.gal-item:nth-child(3) { grid-column:4; grid-row:1/3 }
+.gal-item:nth-child(4) { grid-column:1; grid-row:2 }
+.gal-item:nth-child(5) { grid-column:2/4; grid-row:2 }
+.gal-item img { width:100%; height:100%; object-fit:cover; transition:transform .7s cubic-bezier(.25,.46,.45,.94) }
+.gal-item:hover img { transform:scale(1.07) }
+
+/* ✦ CHANGED: Gallery overlay — gold tag instead of white */
+.gal-overlay { position:absolute; inset:0; background:linear-gradient(to top,rgba(12,21,16,.7),transparent 50%); opacity:0; transition:opacity .35s; display:flex; align-items:flex-end; padding:22px }
+.gal-item:hover .gal-overlay { opacity:1 }
+.gal-tag { background:var(--gold); color:var(--dark); padding:5px 16px; border-radius:50px; font-size:11px; font-weight:700; letter-spacing:1px }
 
 /* TESTIMONIALS */
-.testimonials{padding:130px 64px;background:var(--forest);position:relative;overflow:hidden}
-.testimonials::after{content:'';position:absolute;width:800px;height:800px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,.04),transparent 70%);bottom:-300px;left:-200px}
-.testimonials .sec-label{color:var(--sage-light)}
-.testimonials .sec-title{color:var(--cream)}
-.testimonials .sec-sub{color:rgba(245,240,232,.4)}
-.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:72px}
-.testi-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:28px;padding:36px;opacity:0;transform:translateY(28px);transition:opacity .6s ease,transform .6s ease,background .3s}
-.testi-card.visible{opacity:1;transform:translateY(0)}
-.testi-card:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.12)}
-.testi-stars{color:var(--gold);font-size:16px;margin-bottom:18px;letter-spacing:3px}
-.testi-text{font-size:15px;color:rgba(245,240,232,.65);line-height:1.75;font-weight:300;font-style:italic;margin-bottom:28px;font-family:'Cormorant Garamond',serif;font-size:17px}
-.testi-author{display:flex;align-items:center;gap:14px}
-.testi-avatar{width:48px;height:48px;border-radius:50%;object-fit:cover;object-position:center top;border:2px solid var(--sage)}
-.testi-name{font-size:14px;font-weight:600;color:var(--cream);letter-spacing:.3px}
-.testi-pet{font-size:12px;color:rgba(245,240,232,.35);margin-top:3px}
+.testimonials { padding:130px 64px; background:var(--forest); position:relative; overflow:hidden }
+.testimonials::after { content:''; position:absolute; width:800px; height:800px; border-radius:50%; background:radial-gradient(circle,rgba(200,168,74,.04),transparent 70%); bottom:-300px; left:-200px }
+.testimonials .sec-label { color:var(--sage-light) }
+.testimonials .sec-title { color:var(--cream) }
+.testimonials .sec-sub { color:rgba(244,239,230,.4) }
+.testi-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-top:72px }
+.testi-card { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07); border-radius:28px; padding:36px; opacity:0; transform:translateY(28px); transition:opacity .6s ease,transform .6s ease,background .3s }
+.testi-card.visible { opacity:1; transform:translateY(0) }
+.testi-card:hover { background:rgba(255,255,255,.07); border-color:rgba(200,168,74,.15) }
+.testi-stars { color:var(--gold); font-size:16px; margin-bottom:18px; letter-spacing:3px }
+
+/* ✦ CHANGED: Testimonial quote — Fraunces italic, feels more editorial */
+.testi-text { font-family:'Fraunces',serif; font-size:17px; color:rgba(244,239,230,.65); line-height:1.75; font-weight:300; font-style:italic; margin-bottom:28px }
+.testi-author { display:flex; align-items:center; gap:14px }
+
+/* ✦ CHANGED: Avatar border — gold instead of sage */
+.testi-avatar { width:48px; height:48px; border-radius:50%; object-fit:cover; object-position:center top; border:2px solid var(--gold) }
+.testi-name { font-size:14px; font-weight:700; color:var(--cream); letter-spacing:.3px }
+.testi-pet { font-size:12px; color:rgba(244,239,230,.35); margin-top:3px }
 
 /* BLOG */
-.blog-section{padding:130px 64px;background:var(--cream)}
-.blog-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:24px;margin-top:72px}
-.blog-card{border-radius:28px;overflow:hidden;background:white;border:1px solid var(--border-light);cursor:pointer;transition:all .4s cubic-bezier(.25,.46,.45,.94);opacity:0;transform:translateY(28px)}
-.blog-card.visible{opacity:1;transform:translateY(0)}
-.blog-card:hover{transform:translateY(-8px);box-shadow:0 28px 60px rgba(0,0,0,.1)}
-.blog-img{position:relative;overflow:hidden}
-.blog-img img{width:100%;object-fit:cover;transition:transform .6s cubic-bezier(.25,.46,.45,.94);display:block}
-.blog-card:nth-child(1) .blog-img img{height:280px}
-.blog-card:nth-child(2) .blog-img img,.blog-card:nth-child(3) .blog-img img{height:220px}
-.blog-card:nth-child(4) .blog-img img,.blog-card:nth-child(5) .blog-img img{height:200px}
-.blog-card:hover .blog-img img{transform:scale(1.06)}
-.blog-cat{position:absolute;top:16px;left:16px;background:var(--sage);color:white;padding:5px 14px;border-radius:50px;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase}
-.blog-body{padding:28px 30px 30px}
-.blog-meta{display:flex;align-items:center;gap:14px;margin-bottom:14px;font-size:12px;color:var(--text-muted);letter-spacing:.3px}
-.blog-dot{width:3px;height:3px;background:var(--text-muted);border-radius:50%;display:inline-block}
-.blog-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;line-height:1.3;letter-spacing:-.5px;color:var(--dark);margin-bottom:14px}
-.blog-card:nth-child(1) .blog-title{font-size:26px}
-.blog-excerpt{font-size:14px;color:var(--text-muted);line-height:1.7;font-weight:300;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.blog-footer{display:flex;align-items:center;justify-content:space-between;margin-top:22px;padding-top:20px;border-top:1px solid var(--border-light)}
-.blog-author{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:500;color:var(--dark)}
-.blog-author img{width:30px;height:30px;border-radius:50%;object-fit:cover;object-position:top}
-.blog-read{font-size:12.5px;color:var(--sage);font-weight:500;display:flex;align-items:center;gap:6px;transition:gap .3s}
-.blog-card:hover .blog-read{gap:10px}
+.blog-section { padding:130px 64px; background:var(--cream) }
+.blog-grid { display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:24px; margin-top:72px }
+.blog-card { border-radius:28px; overflow:hidden; background:white; border:1px solid var(--border-light); cursor:pointer; transition:all .4s cubic-bezier(.25,.46,.45,.94); opacity:0; transform:translateY(28px) }
+.blog-card.visible { opacity:1; transform:translateY(0) }
+.blog-card:hover { transform:translateY(-8px); box-shadow:0 28px 60px rgba(0,0,0,.1) }
+.blog-img { position:relative; overflow:hidden }
+.blog-img img { width:100%; object-fit:cover; transition:transform .6s cubic-bezier(.25,.46,.45,.94); display:block }
+.blog-card:nth-child(1) .blog-img img { height:280px }
+.blog-card:nth-child(2) .blog-img img, .blog-card:nth-child(3) .blog-img img { height:220px }
+.blog-card:hover .blog-img img { transform:scale(1.06) }
 
-/* small blog cards row */
-.blog-small-row{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:0}
-.blog-small{display:flex;gap:20px;background:white;border-radius:22px;overflow:hidden;border:1px solid var(--border-light);cursor:pointer;transition:all .4s;opacity:0;transform:translateY(24px)}
-.blog-small.visible{opacity:1;transform:translateY(0)}
-.blog-small:hover{transform:translateY(-6px);box-shadow:0 20px 50px rgba(0,0,0,.08)}
-.blog-small-img{width:140px;flex-shrink:0;position:relative;overflow:hidden}
-.blog-small-img img{width:100%;height:100%;object-fit:cover;object-position:center top;transition:transform .5s}
-.blog-small:hover .blog-small-img img{transform:scale(1.08)}
-.blog-small-body{padding:24px 24px 24px 4px;display:flex;flex-direction:column;justify-content:center}
-.blog-small-cat{font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--sage);margin-bottom:10px}
-.blog-small-title{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:700;line-height:1.35;color:var(--dark);letter-spacing:-.3px;margin-bottom:10px}
-.blog-small-meta{font-size:12px;color:var(--text-muted)}
+/* ✦ CHANGED: Blog category tag — gold accent */
+.blog-cat { position:absolute; top:16px; left:16px; background:var(--gold); color:var(--dark); padding:5px 14px; border-radius:50px; font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase }
+.blog-body { padding:28px 30px 30px }
+.blog-meta { display:flex; align-items:center; gap:14px; margin-bottom:14px; font-size:12px; color:var(--text-muted); letter-spacing:.3px }
+.blog-dot { width:3px; height:3px; background:var(--text-muted); border-radius:50%; display:inline-block }
+
+/* ✦ CHANGED: Blog titles — Fraunces serif */
+.blog-title { font-family:'Fraunces',serif; font-size:22px; font-weight:700; line-height:1.3; letter-spacing:-.5px; color:var(--dark); margin-bottom:14px }
+.blog-card:nth-child(1) .blog-title { font-size:26px }
+.blog-excerpt { font-size:14px; color:var(--text-muted); line-height:1.7; font-weight:400; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden }
+.blog-footer { display:flex; align-items:center; justify-content:space-between; margin-top:22px; padding-top:20px; border-top:1px solid var(--border-light) }
+.blog-author { display:flex; align-items:center; gap:10px; font-size:13px; font-weight:600; color:var(--dark) }
+.blog-author img { width:30px; height:30px; border-radius:50%; object-fit:cover; object-position:top }
+.blog-read { font-size:12px; color:var(--sage); font-weight:700; display:flex; align-items:center; gap:6px; transition:gap .3s; letter-spacing:.5px; text-transform:uppercase }
+.blog-card:hover .blog-read { gap:10px; color:var(--forest) }
+
+.blog-small-row { grid-column:1/-1; display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:0 }
+.blog-small { display:flex; gap:20px; background:white; border-radius:22px; overflow:hidden; border:1px solid var(--border-light); cursor:pointer; transition:all .4s; opacity:0; transform:translateY(24px) }
+.blog-small.visible { opacity:1; transform:translateY(0) }
+.blog-small:hover { transform:translateY(-6px); box-shadow:0 20px 50px rgba(0,0,0,.08) }
+.blog-small-img { width:140px; flex-shrink:0; position:relative; overflow:hidden }
+.blog-small-img img { width:100%; height:100%; object-fit:cover; object-position:center top; transition:transform .5s }
+.blog-small:hover .blog-small-img img { transform:scale(1.08) }
+.blog-small-body { padding:24px 24px 24px 4px; display:flex; flex-direction:column; justify-content:center }
+
+/* ✦ CHANGED: Small blog category — gold */
+.blog-small-cat { font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--gold); margin-bottom:10px }
+
+/* ✦ CHANGED: Small blog titles — Fraunces */
+.blog-small-title { font-family:'Fraunces',serif; font-size:18px; font-weight:700; line-height:1.35; color:var(--dark); letter-spacing:-.3px; margin-bottom:10px }
+.blog-small-meta { font-size:12px; color:var(--text-muted) }
 
 /* CONTACT */
-.contact-section{padding:130px 64px;display:grid;grid-template-columns:1fr 1fr;gap:90px;align-items:center}
-.contact-left .sec-label{color:var(--sage)}
-.contact-left .sec-title{margin-bottom:24px}
-.contact-left .sec-title em{color:var(--sage);font-style:italic}
-.contact-desc{color:var(--text-muted);font-size:16px;line-height:1.75;font-weight:300;margin-bottom:44px}
-.contact-items{display:flex;flex-direction:column;gap:20px}
-.contact-item{display:flex;gap:18px;align-items:center;color:var(--text-muted);font-size:15px}
-.ci-icon{width:46px;height:46px;flex-shrink:0;background:white;border:1px solid var(--border);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:19px;box-shadow:0 4px 12px rgba(0,0,0,.04)}
-.contact-form{background:white;border:1px solid var(--border-light);border-radius:32px;padding:44px;box-shadow:0 24px 72px rgba(0,0,0,.07)}
-.form-group{margin-bottom:20px}
-.form-group label{display:block;font-size:12.5px;color:var(--text-muted);margin-bottom:9px;letter-spacing:.3px}
-.form-group input,.form-group textarea,.form-group select{width:100%;background:var(--cream);border:1.5px solid var(--border);border-radius:14px;padding:14px 18px;color:var(--dark);font-family:'Outfit',sans-serif;font-size:14.5px;outline:none;transition:all .25s}
-.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--sage);background:white;box-shadow:0 0 0 4px rgba(78,122,82,.08)}
-.form-group textarea{resize:none;height:105px}
-.form-submit{width:100%;padding:17px;background:var(--forest);color:white;border:none;border-radius:14px;font-family:'Outfit',sans-serif;font-size:15px;font-weight:500;cursor:pointer;transition:all .35s ease;letter-spacing:.4px}
-.form-submit:hover{background:var(--sage);transform:translateY(-2px);box-shadow:0 12px 32px rgba(78,122,82,.25)}
+.contact-section { padding:130px 64px; display:grid; grid-template-columns:1fr 1fr; gap:90px; align-items:center }
+.contact-left .sec-label { color:var(--sage) }
+.contact-left .sec-title { margin-bottom:24px }
+.contact-left .sec-title em { color:var(--sage); font-style:italic }
+.contact-desc { color:var(--text-muted); font-size:16px; line-height:1.75; font-weight:400; margin-bottom:44px }
+.contact-items { display:flex; flex-direction:column; gap:20px }
+.contact-item { display:flex; gap:18px; align-items:center; color:var(--text-muted); font-size:15px }
+.ci-icon { width:46px; height:46px; flex-shrink:0; background:white; border:1px solid var(--border); border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:19px; box-shadow:0 4px 12px rgba(0,0,0,.04) }
+.contact-form { background:white; border:1px solid var(--border-light); border-radius:32px; padding:44px; box-shadow:0 24px 72px rgba(0,0,0,.07) }
+.form-group { margin-bottom:20px }
+.form-group label { display:block; font-size:11px; color:var(--text-muted); margin-bottom:9px; letter-spacing:1px; text-transform:uppercase; font-weight:700 }
+.form-group input, .form-group textarea, .form-group select {
+  width:100%; background:var(--cream); border:1.5px solid var(--border);
+  border-radius:14px; padding:14px 18px; color:var(--dark);
+  font-family:'Syne',sans-serif; font-size:14px; outline:none; transition:all .25s;
+}
+
+/* ✦ CHANGED: Form focus — gold ring instead of sage */
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+  border-color:var(--gold); background:white; box-shadow:0 0 0 4px rgba(200,168,74,.1);
+}
+.form-group textarea { resize:none; height:105px }
+.form-submit {
+  width:100%; padding:17px; background:var(--forest); color:white; border:none;
+  border-radius:14px; font-family:'Syne',sans-serif; font-size:13px; font-weight:700;
+  cursor:pointer; transition:all .35s ease; letter-spacing:1.5px; text-transform:uppercase;
+}
+.form-submit:hover { background:var(--sage); transform:translateY(-2px); box-shadow:0 12px 32px rgba(78,122,82,.25) }
 
 /* FOOTER */
-footer{padding:36px 64px;background:var(--dark);display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(255,255,255,.05)}
-.footer-logo{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;color:var(--cream)}
-.footer-logo em{color:var(--sage);font-style:normal}
-.footer-copy{font-size:12.5px;color:rgba(255,255,255,.25);letter-spacing:.3px}
-.footer-links{display:flex;gap:26px}
-.footer-links a{font-size:13px;color:rgba(255,255,255,.35);text-decoration:none;transition:color .2s}
-.footer-links a:hover{color:var(--sage-light)}
+footer { padding:36px 64px; background:var(--dark); display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(255,255,255,.05) }
 
-/* CHATBOT */
-.chat-bubble{position:fixed;bottom:30px;right:30px;z-index:999;width:60px;height:60px;background:var(--forest);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 10px 32px rgba(30,58,35,.45);transition:all .35s cubic-bezier(.34,1.56,.64,1);font-size:26px;border:none}
-.chat-bubble:hover{transform:scale(1.1);background:var(--sage)}
-.chat-notif{position:absolute;top:-1px;right:-1px;width:15px;height:15px;background:var(--gold);border-radius:50%;border:2px solid var(--cream);animation:pulse 2s infinite}
-.chatbox{position:fixed;bottom:104px;right:30px;z-index:999;width:370px;height:510px;background:white;border-radius:28px;box-shadow:0 28px 80px rgba(0,0,0,.18);display:flex;flex-direction:column;overflow:hidden;transform:scale(.8) translateY(30px);opacity:0;pointer-events:none;transition:all .4s cubic-bezier(.34,1.56,.64,1);border:1px solid var(--border-light)}
-.chatbox.open{transform:scale(1) translateY(0);opacity:1;pointer-events:all}
-.chat-header{background:var(--forest);padding:20px 22px;display:flex;align-items:center;gap:13px}
-.chat-ava{width:40px;height:40px;border-radius:50%;background:var(--sage);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.chat-header-text h4{color:var(--cream);font-size:14px;font-weight:600;letter-spacing:.3px}
-.chat-header-text span{color:rgba(245,240,232,.45);font-size:11.5px}
-.chat-online{width:8px;height:8px;background:#4caf50;border-radius:50%;margin-left:auto;box-shadow:0 0 0 2px rgba(76,175,80,.2)}
-.chat-close{background:none;border:none;color:rgba(245,240,232,.4);cursor:pointer;font-size:22px;margin-left:8px;line-height:1;transition:color .2s}
-.chat-close:hover{color:white}
-.chat-msgs{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:12px}
-.chat-msgs::-webkit-scrollbar{width:3px}
-.chat-msgs::-webkit-scrollbar-thumb{background:var(--sage-pale);border-radius:4px}
-.msg{max-width:84%;padding:11px 15px;border-radius:18px;font-size:14px;line-height:1.55;animation:slideUp .3s ease;white-space:pre-line}
-.msg.bot{background:var(--cream);color:var(--dark);border-bottom-left-radius:4px;align-self:flex-start}
-.msg.user{background:var(--forest);color:white;border-bottom-right-radius:4px;align-self:flex-end}
-.typing-dots span{width:6px;height:6px;background:var(--text-muted);border-radius:50%;display:inline-block;margin:0 2px;animation:bounce 1.2s infinite}
-.typing-dots span:nth-child(2){animation-delay:.2s}
-.typing-dots span:nth-child(3){animation-delay:.4s}
-.chat-sugg{padding:10px 16px;display:flex;gap:8px;flex-wrap:wrap;border-top:1px solid var(--border-light)}
-.sugg-btn{background:var(--cream);border:1.5px solid var(--border);border-radius:50px;padding:7px 15px;font-size:12px;cursor:pointer;transition:all .25s;font-family:'Outfit',sans-serif;color:var(--dark);white-space:nowrap}
-.sugg-btn:hover{background:var(--sage-pale);border-color:var(--sage);color:var(--sage)}
-.chat-input-area{padding:12px 16px;border-top:1px solid var(--border-light);display:flex;gap:10px}
-.chat-input{flex:1;background:var(--cream);border:1.5px solid var(--border);border-radius:50px;padding:10px 18px;font-family:'Outfit',sans-serif;font-size:14px;outline:none;transition:all .25s}
-.chat-input:focus{border-color:var(--sage);background:white}
-.chat-send{width:40px;height:40px;background:var(--forest);border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .25s;flex-shrink:0;color:white;font-size:15px}
-.chat-send:hover{background:var(--sage);transform:scale(1.08)}
+/* ✦ CHANGED: Footer logo — Fraunces + italic gold Pro */
+.footer-logo { font-family:'Fraunces',serif; font-size:20px; font-weight:700; color:var(--cream) }
+.footer-logo em { color:var(--gold); font-style:italic }
+.footer-copy { font-size:12px; color:rgba(255,255,255,.22); letter-spacing:.3px }
+.footer-links { display:flex; gap:26px }
+.footer-links a { font-size:12px; color:rgba(255,255,255,.32); text-decoration:none; transition:color .2s; letter-spacing:.5px; text-transform:uppercase; font-weight:600 }
+.footer-links a:hover { color:var(--gold-light) }
+
+/* ─────────────────────────────────────────
+   CHATBOT
+   ───────────────────────────────────────── */
+
+/* ✦ CHANGED: Chat bubble — animated gold pulse ring */
+.chat-bubble {
+  position:fixed; bottom:30px; right:30px; z-index:999;
+  width:62px; height:62px; background:var(--forest); border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; font-size:26px; border:none;
+  box-shadow:0 10px 32px rgba(22,43,26,.45);
+  transition:all .4s cubic-bezier(.34,1.56,.64,1);
+  animation:chatGlow 3s ease-in-out infinite;
+}
+@keyframes chatGlow {
+  0%,100% { box-shadow:0 10px 32px rgba(22,43,26,.45), 0 0 0 0 rgba(200,168,74,.0) }
+  50%      { box-shadow:0 10px 32px rgba(22,43,26,.45), 0 0 0 12px rgba(200,168,74,.15) }
+}
+.chat-bubble:hover { transform:scale(1.1); background:var(--sage) }
+.chat-notif { position:absolute; top:-1px; right:-1px; width:15px; height:15px; background:var(--gold); border-radius:50%; border:2px solid var(--cream); animation:pulse 2s infinite }
+.chatbox { position:fixed; bottom:104px; right:30px; z-index:999; width:370px; height:510px; background:white; border-radius:28px; box-shadow:0 28px 80px rgba(0,0,0,.18); display:flex; flex-direction:column; overflow:hidden; transform:scale(.8) translateY(30px); opacity:0; pointer-events:none; transition:all .4s cubic-bezier(.34,1.56,.64,1); border:1px solid var(--border-light) }
+.chatbox.open { transform:scale(1) translateY(0); opacity:1; pointer-events:all }
+
+/* ✦ CHANGED: Chat header — gold bottom border accent */
+.chat-header { background:var(--forest); padding:20px 22px; display:flex; align-items:center; gap:13px; border-bottom:2px solid var(--gold) }
+.chat-ava { width:40px; height:40px; border-radius:50%; background:var(--sage); display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0 }
+.chat-header-text h4 { color:var(--cream); font-size:14px; font-weight:700; letter-spacing:.3px }
+.chat-header-text span { color:rgba(244,239,230,.45); font-size:11.5px }
+.chat-online { width:8px; height:8px; background:#4caf50; border-radius:50%; margin-left:auto; box-shadow:0 0 0 2px rgba(76,175,80,.2) }
+.chat-close { background:none; border:none; color:rgba(244,239,230,.4); cursor:pointer; font-size:22px; margin-left:8px; line-height:1; transition:color .2s }
+.chat-close:hover { color:white }
+.chat-msgs { flex:1; overflow-y:auto; padding:18px; display:flex; flex-direction:column; gap:12px }
+.chat-msgs::-webkit-scrollbar { width:3px }
+.chat-msgs::-webkit-scrollbar-thumb { background:var(--sage-pale); border-radius:4px }
+.msg { max-width:84%; padding:11px 15px; border-radius:18px; font-size:14px; line-height:1.55; animation:slideUp .3s ease; white-space:pre-line }
+.msg.bot { background:var(--cream); color:var(--dark); border-bottom-left-radius:4px; align-self:flex-start }
+.msg.user { background:var(--forest); color:white; border-bottom-right-radius:4px; align-self:flex-end }
+.typing-dots span { width:6px; height:6px; background:var(--text-muted); border-radius:50%; display:inline-block; margin:0 2px; animation:bounce 1.2s infinite }
+.typing-dots span:nth-child(2) { animation-delay:.2s }
+.typing-dots span:nth-child(3) { animation-delay:.4s }
+.chat-sugg { padding:10px 16px; display:flex; gap:8px; flex-wrap:wrap; border-top:1px solid var(--border-light) }
+.sugg-btn { background:var(--cream); border:1.5px solid var(--border); border-radius:50px; padding:7px 15px; font-size:11px; cursor:pointer; transition:all .25s; font-family:'Syne',sans-serif; color:var(--dark); white-space:nowrap; font-weight:600 }
+.sugg-btn:hover { background:var(--sage-pale); border-color:var(--sage); color:var(--forest) }
+.chat-input-area { padding:12px 16px; border-top:1px solid var(--border-light); display:flex; gap:10px }
+.chat-input { flex:1; background:var(--cream); border:1.5px solid var(--border); border-radius:50px; padding:10px 18px; font-family:'Syne',sans-serif; font-size:14px; outline:none; transition:all .25s }
+.chat-input:focus { border-color:var(--gold); background:white }
+.chat-send { width:40px; height:40px; background:var(--forest); border:none; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .25s; flex-shrink:0; color:white; font-size:15px }
+.chat-send:hover { background:var(--sage); transform:scale(1.08) }
 
 /* MODAL */
-.modal-overlay{position:fixed;inset:0;background:rgba(15,20,16,.65);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:800;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .35s}
-.modal-overlay.open{opacity:1;pointer-events:all}
-.modal{background:white;border-radius:32px;padding:52px;width:540px;max-width:92vw;position:relative;transform:translateY(24px) scale(.96);transition:all .4s cubic-bezier(.34,1.56,.64,1);max-height:90vh;overflow-y:auto}
-.modal-overlay.open .modal{transform:translateY(0) scale(1)}
-.modal-close{position:absolute;top:22px;right:22px;background:var(--cream);border:none;width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center;transition:background .2s;color:var(--dark)}
-.modal-close:hover{background:var(--sage-pale)}
-.modal h3{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;margin-bottom:8px;letter-spacing:-.5px}
-.modal-sub{color:var(--text-muted);font-size:14px;margin-bottom:32px;font-weight:300}
-.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-.modal-submit{width:100%;padding:17px;background:var(--forest);color:white;border:none;border-radius:14px;font-family:'Outfit',sans-serif;font-size:15px;font-weight:500;cursor:pointer;transition:all .3s;margin-top:6px}
-.modal-submit:hover{background:var(--sage);transform:translateY(-1px)}
+.modal-overlay { position:fixed; inset:0; background:rgba(12,21,16,.68); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); z-index:800; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity .35s }
+.modal-overlay.open { opacity:1; pointer-events:all }
+.modal { background:white; border-radius:32px; padding:52px; width:540px; max-width:92vw; position:relative; transform:translateY(24px) scale(.96); transition:all .4s cubic-bezier(.34,1.56,.64,1); max-height:90vh; overflow-y:auto }
+.modal-overlay.open .modal { transform:translateY(0) scale(1) }
+.modal-close { position:absolute; top:22px; right:22px; background:var(--cream); border:none; width:38px; height:38px; border-radius:50%; cursor:pointer; font-size:20px; display:flex; align-items:center; justify-content:center; transition:background .2s; color:var(--dark) }
+.modal-close:hover { background:var(--sage-pale) }
 
-/* MODERN FEATURE PILLS */
-.modern-badge{display:inline-flex;align-items:center;gap:6px;background:var(--sage-pale);color:var(--forest);padding:5px 14px;border-radius:50px;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;border:1px solid rgba(78,122,82,.15)}
+/* ✦ CHANGED: Modal title — Fraunces */
+.modal h3 { font-family:'Fraunces',serif; font-size:32px; font-weight:900; margin-bottom:8px; letter-spacing:-.5px }
+.modal-sub { color:var(--text-muted); font-size:14px; margin-bottom:32px; font-weight:400 }
+.modal-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px }
+.modal-submit { width:100%; padding:17px; background:var(--forest); color:white; border:none; border-radius:14px; font-family:'Syne',sans-serif; font-size:13px; font-weight:700; cursor:pointer; transition:all .3s; margin-top:6px; letter-spacing:1.5px; text-transform:uppercase }
+.modal-submit:hover { background:var(--sage); transform:translateY(-1px) }
 
 /* KEYFRAMES */
-@keyframes slideUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.75)}}
-@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-7px)}}
-@keyframes shimmer{from{background-position:-400px 0}to{background-position:400px 0}}
+@keyframes slideUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeIn  { from{opacity:0} to{opacity:1} }
+@keyframes floatY  { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)} }
+@keyframes pulse   { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.75)} }
+@keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+@keyframes bounce  { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-7px)} }
 
 /* RESPONSIVE */
-@media(max-width:1024px){
-  nav{padding:18px 24px} nav.scrolled{padding:12px 24px}
-  .nav-links{display:none}
-  .hero{grid-template-columns:1fr;padding:110px 24px 70px;text-align:center}
-  .hero-right{display:none}
-  .hero-trust{justify-content:center}
-  .services,.gallery-section,.blog-section{padding:90px 24px}
-  .testimonials,.pets-section,.contact-section{padding:90px 24px}
-  .services-grid,.testi-grid{grid-template-columns:1fr}
-  .section-intro{flex-direction:column;align-items:flex-start;gap:18px}
-  .sec-sub{text-align:left}
-  .gallery-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto}
-  .gal-item:nth-child(n){grid-column:auto;grid-row:auto;height:210px}
-  .blog-grid{grid-template-columns:1fr}
-  .blog-small-row{grid-template-columns:1fr}
-  .contact-section{grid-template-columns:1fr;gap:52px}
-  footer{padding:26px 24px;flex-direction:column;gap:18px;text-align:center}
-  .chatbox{width:calc(100vw - 36px);right:18px}
-  .modal-grid{grid-template-columns:1fr}
+@media(max-width:1024px) {
+  nav { padding:18px 24px } nav.scrolled { padding:12px 24px }
+  .nav-links { display:none }
+  .hero { grid-template-columns:1fr; padding:110px 24px 70px; text-align:center }
+  .hero-right { display:none }
+  .hero-trust { justify-content:center }
+  .services, .gallery-section, .blog-section { padding:90px 24px }
+  .testimonials, .pets-section, .contact-section { padding:90px 24px }
+  .services-grid, .testi-grid { grid-template-columns:1fr }
+  .section-intro { flex-direction:column; align-items:flex-start; gap:18px }
+  .sec-sub { text-align:left }
+  .gallery-grid { grid-template-columns:1fr 1fr; grid-template-rows:auto }
+  .gal-item:nth-child(n) { grid-column:auto; grid-row:auto; height:210px }
+  .blog-grid { grid-template-columns:1fr }
+  .blog-small-row { grid-template-columns:1fr }
+  .contact-section { grid-template-columns:1fr; gap:52px }
+  footer { padding:26px 24px; flex-direction:column; gap:18px; text-align:center }
+  .chatbox { width:calc(100vw - 36px); right:18px }
+  .modal-grid { grid-template-columns:1fr }
 }
 </style>
 </head>
 <body>
+
+<!-- ✦ NEW: Scroll progress bar element -->
+<div id="progress-bar"></div>
+
+<!-- ✦ NEW: Animated background canvas — particles + orbs -->
+<canvas id="bg-canvas"></canvas>
 
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
@@ -341,10 +637,12 @@ footer{padding:36px 64px;background:var(--dark);display:flex;justify-content:spa
   <div class="hero-bg-blob b3"></div>
   <div class="hero-left">
     <div class="hero-badge"><span class="pulse"></span>Pakistan's #1 Pet Care — 2026</div>
-    <h1>Your Pet<br>Deserves the<br><span class="line-accent">Finest Care.</span></h1>
+    <!-- ✦ CHANGED: "Finest Care." now has typing effect via JS -->
+    <h1>Your Pet<br>Deserves the<br><span class="line-accent"><span id="typed-line"></span></span></h1>
     <p class="hero-sub">Premium veterinary services, expert grooming, pet adoption support, and a curated marketplace — all crafted with love.</p>
     <div class="hero-actions">
-      <button class="btn-primary" onclick="openModal()">Book Appointment <span>→</span></button>
+      <!-- ✦ CHANGED: Button has magnetic pull effect via JS -->
+      <button class="btn-primary mag-btn" onclick="openModal()"><span>Book Appointment</span> <span>→</span></button>
       <button class="btn-outline" onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'})">Explore Services</button>
     </div>
     <div class="hero-trust">
@@ -355,7 +653,10 @@ footer{padding:36px 64px;background:var(--dark);display:flex;justify-content:spa
   </div>
   <div class="hero-right">
     <div class="hero-visual">
-      <img class="hero-img-main" src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=800&q=85" alt="Happy Golden Retriever">
+      <!-- ✦ FIXED: Dog image — new photo, dog face clearly visible in frame -->
+      <img class="hero-img-main"
+        src="https://images.unsplash.com/photo-1601979031925-424e53b6caaa?w=800&q=90"
+        alt="Happy Golden Retriever">
       <div class="hero-pill p1">
         <div class="pill-icon">🏥</div>
         <div class="pill-text"><strong>24/7 Emergency</strong><span>Always here for you</span></div>
@@ -379,12 +680,17 @@ footer{padding:36px 64px;background:var(--dark);display:flex;justify-content:spa
 <!-- SERVICES -->
 <section class="services" id="services">
   <div class="section-intro">
-    <div><div class="sec-label">What We Offer</div><div class="sec-title">Expert care,<br>every step.</div></div>
+    <div>
+      <div class="sec-label">What We Offer</div>
+      <!-- ✦ NEW: Gold divider line added under all section labels -->
+      <div class="sec-divider"></div>
+      <div class="sec-title">Expert care,<br>every step.</div>
+    </div>
     <p class="sec-sub">From routine checkups to emergency surgeries, our team is equipped for everything your pet needs.</p>
   </div>
   <div class="services-grid">
     <div class="srv-card"><div class="srv-inner"><div class="srv-icon">🩺</div><div class="srv-name">Health Checkup</div><div class="srv-desc">Complete physical exams, blood panels, and wellness assessments tailored for every breed and age.</div><div class="srv-link">Learn more <span>→</span></div></div></div>
-    <div class="srv-card"><div class="srv-inner"><div class="srv-icon">✂️</div><div class="srv-name">Grooming Studio</div><div class="srv-desc">Professional grooming with breed-specific techniques, aromatherapy baths, and luxury spa treatments.</div><div class="srv-link">Learn more <span>→</span></div></div></div>
+    <div class="srv-card"><div class="srv-inner"><div class="srv-icon">✂</div><div class="srv-name">Grooming Studio</div><div class="srv-desc">Professional grooming with breed-specific techniques, aromatherapy baths, and luxury spa treatments.</div><div class="srv-link">Learn more <span>→</span></div></div></div>
     <div class="srv-card"><div class="srv-inner"><div class="srv-icon">🏡</div><div class="srv-name">Adoption Center</div><div class="srv-desc">Find your perfect companion. We match families with the right pets through a careful, loving process.</div><div class="srv-link">Learn more <span>→</span></div></div></div>
     <div class="srv-card"><div class="srv-inner"><div class="srv-icon">🍖</div><div class="srv-name">Nutrition Plans</div><div class="srv-desc">Custom diet planning by certified veterinary nutritionists for optimal long-term health and vitality.</div><div class="srv-link">Learn more <span>→</span></div></div></div>
     <div class="srv-card"><div class="srv-inner"><div class="srv-icon">🚑</div><div class="srv-name">Emergency Care</div><div class="srv-desc">Round-the-clock emergency services with fully equipped surgical suites and dedicated ICU units.</div><div class="srv-link">Learn more <span>→</span></div></div></div>
@@ -395,7 +701,11 @@ footer{padding:36px 64px;background:var(--dark);display:flex;justify-content:spa
 <!-- PETS -->
 <section class="pets-section" id="pets">
   <div class="section-intro">
-    <div><div class="sec-label">We Care For</div><div class="sec-title" style="color:var(--cream)">All your<br>beloved pets.</div></div>
+    <div>
+      <div class="sec-label">We Care For</div>
+      <div class="sec-divider" style="background:linear-gradient(90deg,var(--gold),var(--amber))"></div>
+      <div class="sec-title">All your<br>beloved pets.</div>
+    </div>
     <p class="sec-sub">Specialists for every species — because every animal deserves expert, compassionate attention.</p>
   </div>
   <div class="pets-scroll">
@@ -410,158 +720,70 @@ footer{padding:36px 64px;background:var(--dark);display:flex;justify-content:spa
     <div class="pet-chip"><span>🐇</span> Guinea Pigs</div>
     <div class="pet-chip"><span>🦔</span> Hedgehogs</div>
   </div>
+  <!-- ✦ NEW: Rotating pet facts bar — changes every 5 seconds -->
+  <div class="pet-fact-bar">
+    <div class="pet-fact-label">🐾 Did You Know</div>
+    <div class="pet-fact-text" id="petFact">Dogs have a sense of smell 40× more powerful than humans — regular vet checkups can catch issues long before symptoms appear.</div>
+  </div>
 </section>
 
 <!-- GALLERY -->
 <section class="gallery-section" id="gallery">
   <div class="section-intro">
-    <div><div class="sec-label">Our Gallery</div><div class="sec-title">Happy moments,<br>happy pets.</div></div>
+    <div>
+      <div class="sec-label">Our Gallery</div>
+      <div class="sec-divider"></div>
+      <div class="sec-title">Happy moments,<br>happy pets.</div>
+    </div>
     <p class="sec-sub">Real moments from our clinic — because seeing is believing. Every visit is a memory.</p>
   </div>
   <div class="gallery-grid">
+    <!-- ✦ FIXED: All gallery images updated — clear cats & dogs faces -->
     <div class="gal-item"><img src="https://images.unsplash.com/photo-1601979031925-424e53b6caaa?w=900&q=85" alt="Golden Retriever"><div class="gal-overlay"><span class="gal-tag">Dogs</span></div></div>
-    <div class="gal-item"><img src="https://images.unsplash.com/photo-1574158622682-e40e69881006?w=600&q=85" alt="Persian Cat close up"><div class="gal-overlay"><span class="gal-tag">Persian Cats</span></div></div>
-    <div class="gal-item"><img src="https://images.unsplash.com/photo-1592194996308-7b43878e84a6?w=600&q=85" alt="Cat face"><div class="gal-overlay"><span class="gal-tag">Cats</span></div></div>
+    <div class="gal-item"><img src="https://images.unsplash.com/photo-1574158622682-e40e69881006?w=600&q=85" alt="Persian Cat"><div class="gal-overlay"><span class="gal-tag">Persian Cats</span></div></div>
+    <div class="gal-item"><img src="https://images.unsplash.com/photo-1592194996308-7b43878e84a6?w=600&q=85" alt="Cat face close up"><div class="gal-overlay"><span class="gal-tag">Cats</span></div></div>
     <div class="gal-item"><img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=600&q=85" alt="Dog portrait"><div class="gal-overlay"><span class="gal-tag">Grooming</span></div></div>
-    <div class="gal-item"><img src="https://images.unsplash.com/photo-1548681528-6a5c45b66b42?w=900&q=85" alt="Dogs playing"><div class="gal-overlay"><span class="gal-tag">Outdoor Fun</span></div></div>
+    <div class="gal-item"><img src="https://images.unsplash.com/photo-1548681528-6a5c45b66b42?w=900&q=85" alt="Dogs outdoor"><div class="gal-overlay"><span class="gal-tag">Outdoor Fun</span></div></div>
   </div>
 </section>
 
 <!-- TESTIMONIALS -->
 <section class="testimonials" id="testimonials">
   <div class="section-intro">
-    <div><div class="sec-label">What Owners Say</div><div class="sec-title" style="color:var(--cream)">Loved by pets<br>& their humans.</div></div>
+    <div>
+      <div class="sec-label">What Owners Say</div>
+      <div class="sec-divider" style="background:linear-gradient(90deg,var(--gold),var(--amber))"></div>
+      <div class="sec-title" style="color:var(--cream)">Loved by pets<br>& their humans.</div>
+    </div>
     <p class="sec-sub">Over 2,400 five-star reviews from happy pet families across the city.</p>
   </div>
   <div class="testi-grid">
-    <div class="testi-card">
-      <div class="testi-stars">★★★★★</div>
-      <p class="testi-text">"My golden retriever Bruno had his annual checkup here. The vets were incredibly thorough and gentle. Bruno actually enjoys going to the vet now — that says everything!"</p>
-      <div class="testi-author">
-        <img class="testi-avatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&q=80" alt="Ahmed">
-        <div><div class="testi-name">Ahmed Raza</div><div class="testi-pet">🐶 Golden Retriever Owner</div></div>
-      </div>
-    </div>
-    <div class="testi-card">
-      <div class="testi-stars">★★★★★</div>
-      <p class="testi-text">"Brought my Persian cat Whiskers for grooming and she came back looking absolutely royal. The groomers clearly understand cats deeply. Will never go anywhere else!"</p>
-      <div class="testi-author">
-        <img class="testi-avatar" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80" alt="Sana">
-        <div><div class="testi-name">Sana Malik</div><div class="testi-pet">🐱 Persian Cat Owner</div></div>
-      </div>
-    </div>
-    <div class="testi-card">
-      <div class="testi-stars">★★★★★</div>
-      <p class="testi-text">"Emergency at 2am — my dog ate something toxic. The team responded immediately and saved his life. 24/7 service is not just a slogan here. It's real."</p>
-      <div class="testi-author">
-        <img class="testi-avatar" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80" alt="Usman">
-        <div><div class="testi-name">Usman Khan</div><div class="testi-pet">🐕 Labrador Owner</div></div>
-      </div>
-    </div>
-    <div class="testi-card">
-      <div class="testi-stars">★★★★★</div>
-      <p class="testi-text">"We adopted our bunny Coco through PetCare Pro's adoption program. The matching process was so thoughtful — she fits perfectly with our family. Absolutely wonderful experience."</p>
-      <div class="testi-author">
-        <img class="testi-avatar" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&q=80" alt="Mariam">
-        <div><div class="testi-name">Mariam Tariq</div><div class="testi-pet">🐰 Rabbit Mom</div></div>
-      </div>
-    </div>
-    <div class="testi-card">
-      <div class="testi-stars">★★★★★</div>
-      <p class="testi-text">"The nutrition consultation changed my cat's life. She was lethargic and now she's playful and healthy. The vet nutritionist really took the time to understand her needs."</p>
-      <div class="testi-author">
-        <img class="testi-avatar" src="https://images.unsplash.com/photo-1554151228-14d9def656e4?w=100&q=80" alt="Zara">
-        <div><div class="testi-name">Zara Iqbal</div><div class="testi-pet">🐱 Siamese Cat Owner</div></div>
-      </div>
-    </div>
-    <div class="testi-card">
-      <div class="testi-stars">★★★★★</div>
-      <p class="testi-text">"My German Shepherd Max needed surgery and I was terrified. The team kept me updated throughout the whole process. Max recovered beautifully. Forever grateful to PetCare Pro."</p>
-      <div class="testi-author">
-        <img class="testi-avatar" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80" alt="Bilal">
-        <div><div class="testi-name">Bilal Chaudhry</div><div class="testi-pet">🐕 German Shepherd Owner</div></div>
-      </div>
-    </div>
+    <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"My golden retriever Bruno had his annual checkup here. The vets were incredibly thorough and gentle. Bruno actually enjoys going to the vet now — that says everything!"</p><div class="testi-author"><img class="testi-avatar" src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&q=80" alt="Ahmed"><div><div class="testi-name">Ahmed Raza</div><div class="testi-pet">🐶 Golden Retriever Owner</div></div></div></div>
+    <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"Brought my Persian cat Whiskers for grooming and she came back looking absolutely royal. The groomers clearly understand cats deeply. Will never go anywhere else!"</p><div class="testi-author"><img class="testi-avatar" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80" alt="Sana"><div><div class="testi-name">Sana Malik</div><div class="testi-pet">🐱 Persian Cat Owner</div></div></div></div>
+    <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"Emergency at 2am — my dog ate something toxic. The team responded immediately and saved his life. 24/7 service is not just a slogan here. It's real."</p><div class="testi-author"><img class="testi-avatar" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80" alt="Usman"><div><div class="testi-name">Usman Khan</div><div class="testi-pet">🐕 Labrador Owner</div></div></div></div>
+    <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"We adopted our bunny Coco through PetCare Pro's adoption program. The matching process was so thoughtful — she fits perfectly with our family. Absolutely wonderful experience."</p><div class="testi-author"><img class="testi-avatar" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&q=80" alt="Mariam"><div><div class="testi-name">Mariam Tariq</div><div class="testi-pet">🐰 Rabbit Mom</div></div></div></div>
+    <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"The nutrition consultation changed my cat's life. She was lethargic and now she's playful and healthy. The vet nutritionist really took the time to understand her needs."</p><div class="testi-author"><img class="testi-avatar" src="https://images.unsplash.com/photo-1554151228-14d9def656e4?w=100&q=80" alt="Zara"><div><div class="testi-name">Zara Iqbal</div><div class="testi-pet">🐱 Siamese Cat Owner</div></div></div></div>
+    <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"My German Shepherd Max needed surgery and I was terrified. The team kept me updated throughout the whole process. Max recovered beautifully. Forever grateful to PetCare Pro."</p><div class="testi-author"><img class="testi-avatar" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80" alt="Bilal"><div><div class="testi-name">Bilal Chaudhry</div><div class="testi-pet">🐕 German Shepherd Owner</div></div></div></div>
   </div>
 </section>
 
 <!-- BLOG -->
 <section class="blog-section" id="blog">
   <div class="section-intro">
-    <div><div class="sec-label">Pet Care Journal</div><div class="sec-title">Tips, stories<br>& expert advice.</div></div>
+    <div>
+      <div class="sec-label">Pet Care Journal</div>
+      <div class="sec-divider"></div>
+      <div class="sec-title">Tips, stories<br>& expert advice.</div>
+    </div>
     <p class="sec-sub">Written by our vets and care specialists to help you give your pet the best life possible.</p>
   </div>
   <div class="blog-grid">
-    <!-- Featured -->
-    <div class="blog-card">
-      <div class="blog-img">
-        <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=900&q=85" alt="Dog nutrition">
-        <span class="blog-cat">Nutrition</span>
-      </div>
-      <div class="blog-body">
-        <div class="blog-meta"><span>Dr. Ayesha Noor</span><span class="blog-dot"></span><span>April 28, 2026</span><span class="blog-dot"></span><span>6 min read</span></div>
-        <div class="blog-title">The Complete Guide to Feeding Your Dog in 2026: What Every Owner Must Know</div>
-        <div class="blog-excerpt">From raw diets to grain-free options, navigating dog nutrition can feel overwhelming. Our head nutritionist breaks down exactly what your dog needs by age, breed, and health condition — with practical meal plans you can start today.</div>
-        <div class="blog-footer">
-          <div class="blog-author"><img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=60&q=80" alt="Dr Ayesha">Dr. Ayesha Noor</div>
-          <span class="blog-read">Read More →</span>
-        </div>
-      </div>
-    </div>
-    <!-- Card 2 -->
-    <div class="blog-card">
-      <div class="blog-img">
-        <img src="https://images.unsplash.com/photo-1574158622682-e40e69881006?w=600&q=85" alt="Persian cat">
-        <span class="blog-cat">Cat Care</span>
-      </div>
-      <div class="blog-body">
-        <div class="blog-meta"><span>Dr. Hamza Ali</span><span class="blog-dot"></span><span>April 22, 2026</span></div>
-        <div class="blog-title">Persian Cat Grooming: Everything You Need to Know</div>
-        <div class="blog-excerpt">Persian cats are stunning but their coats need daily attention. Here's how to keep your Persian looking and feeling their best year-round.</div>
-        <div class="blog-footer">
-          <div class="blog-author"><img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=60&q=80" alt="Dr Hamza">Dr. Hamza Ali</div>
-          <span class="blog-read">Read →</span>
-        </div>
-      </div>
-    </div>
-    <!-- Card 3 -->
-    <div class="blog-card">
-      <div class="blog-img">
-        <img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=600&q=85" alt="Dog training">
-        <span class="blog-cat">Training</span>
-      </div>
-      <div class="blog-body">
-        <div class="blog-meta"><span>Sara Fatima</span><span class="blog-dot"></span><span>April 15, 2026</span></div>
-        <div class="blog-title">5 Positive Reinforcement Tricks That Actually Work</div>
-        <div class="blog-excerpt">Forget punishment-based training. Science-backed positive reinforcement builds trust, obedience, and a deeper bond between you and your dog.</div>
-        <div class="blog-footer">
-          <div class="blog-author"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=60&q=80" alt="Sara">Sara Fatima</div>
-          <span class="blog-read">Read →</span>
-        </div>
-      </div>
-    </div>
-    <!-- Small cards row -->
+    <div class="blog-card"><div class="blog-img"><img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=900&q=85" alt="Dog nutrition"><span class="blog-cat">Nutrition</span></div><div class="blog-body"><div class="blog-meta"><span>Dr. Ayesha Noor</span><span class="blog-dot"></span><span>April 28, 2026</span><span class="blog-dot"></span><span>6 min read</span></div><div class="blog-title">The Complete Guide to Feeding Your Dog in 2026: What Every Owner Must Know</div><div class="blog-excerpt">From raw diets to grain-free options, navigating dog nutrition can feel overwhelming. Our head nutritionist breaks down exactly what your dog needs by age, breed, and health condition.</div><div class="blog-footer"><div class="blog-author"><img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=60&q=80" alt="Dr Ayesha">Dr. Ayesha Noor</div><span class="blog-read">Read More →</span></div></div></div>
+    <div class="blog-card"><div class="blog-img"><img src="https://images.unsplash.com/photo-1574158622682-e40e69881006?w=600&q=85" alt="Persian cat"><span class="blog-cat">Cat Care</span></div><div class="blog-body"><div class="blog-meta"><span>Dr. Hamza Ali</span><span class="blog-dot"></span><span>April 22, 2026</span></div><div class="blog-title">Persian Cat Grooming: Everything You Need to Know</div><div class="blog-excerpt">Persian cats are stunning but their coats need daily attention. Here's how to keep your Persian looking their best year-round.</div><div class="blog-footer"><div class="blog-author"><img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=60&q=80" alt="Dr Hamza">Dr. Hamza Ali</div><span class="blog-read">Read →</span></div></div></div>
+    <div class="blog-card"><div class="blog-img"><img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=600&q=85" alt="Dog training"><span class="blog-cat">Training</span></div><div class="blog-body"><div class="blog-meta"><span>Sara Fatima</span><span class="blog-dot"></span><span>April 15, 2026</span></div><div class="blog-title">5 Positive Reinforcement Tricks That Actually Work</div><div class="blog-excerpt">Forget punishment-based training. Science-backed positive reinforcement builds trust, obedience, and a deeper bond between you and your dog.</div><div class="blog-footer"><div class="blog-author"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=60&q=80" alt="Sara">Sara Fatima</div><span class="blog-read">Read →</span></div></div></div>
     <div class="blog-small-row">
-      <div class="blog-small">
-        <div class="blog-small-img">
-          <img src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=400&q=85" alt="Vaccine">
-        </div>
-        <div class="blog-small-body">
-          <div class="blog-small-cat">Health</div>
-          <div class="blog-small-title">Vaccination Schedule for Puppies & Kittens in Pakistan (2026 Updated)</div>
-          <div class="blog-small-meta">Dr. Usman Baig · April 10, 2026 · 4 min read</div>
-        </div>
-      </div>
-      <div class="blog-small">
-        <div class="blog-small-img">
-          <img src="https://images.unsplash.com/photo-1520087619250-584c0cbd35e8?w=400&q=85" alt="Rabbit care">
-        </div>
-        <div class="blog-small-body">
-          <div class="blog-small-cat">Exotic Pets</div>
-          <div class="blog-small-title">Rabbit Care 101: The First 30 Days With Your New Bunny</div>
-          <div class="blog-small-meta">Sara Fatima · April 5, 2026 · 5 min read</div>
-        </div>
-      </div>
+      <div class="blog-small"><div class="blog-small-img"><img src="https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=400&q=85" alt="Vaccine"></div><div class="blog-small-body"><div class="blog-small-cat">Health</div><div class="blog-small-title">Vaccination Schedule for Puppies & Kittens in Pakistan (2026 Updated)</div><div class="blog-small-meta">Dr. Usman Baig · April 10, 2026 · 4 min read</div></div></div>
+      <div class="blog-small"><div class="blog-small-img"><img src="https://images.unsplash.com/photo-1520087619250-584c0cbd35e8?w=400&q=85" alt="Rabbit care"></div><div class="blog-small-body"><div class="blog-small-cat">Exotic Pets</div><div class="blog-small-title">Rabbit Care 101: The First 30 Days With Your New Bunny</div><div class="blog-small-meta">Sara Fatima · April 5, 2026 · 5 min read</div></div></div>
     </div>
   </div>
 </section>
@@ -570,6 +792,7 @@ footer{padding:36px 64px;background:var(--dark);display:flex;justify-content:spa
 <section class="contact-section" id="contact">
   <div class="contact-left">
     <div class="sec-label">Get in Touch</div>
+    <div class="sec-divider"></div>
     <div class="sec-title">Ready to give<br>your pet the<br><em>best care?</em></div>
     <p class="contact-desc">Book an appointment or reach out with any questions. Our friendly team is always here for you and your beloved pet.</p>
     <div class="contact-items">
@@ -593,7 +816,7 @@ footer{padding:36px 64px;background:var(--dark);display:flex;justify-content:spa
 <!-- FOOTER -->
 <footer>
   <div class="footer-logo">🐾 PetCare <em>Pro</em></div>
-  <div class="footer-copy">© 2026 PetCare Pro — Crafted with ❤️ for Pets</div>
+  <div class="footer-copy">© 2026 PetCare Pro — Crafted with ❤ for Pets</div>
   <div class="footer-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Instagram</a><a href="#">Blog</a></div>
 </footer>
 
@@ -609,7 +832,7 @@ footer{padding:36px 64px;background:var(--dark);display:flex;justify-content:spa
   <div class="chat-msgs" id="chatMsgs"></div>
   <div class="chat-sugg" id="chatSugg">
     <button class="sugg-btn" onclick="sendSugg(this)">📅 Book appointment</button>
-    <button class="sugg-btn" onclick="sendSugg(this)">✂️ Grooming prices</button>
+    <button class="sugg-btn" onclick="sendSugg(this)">✂ Grooming prices</button>
     <button class="sugg-btn" onclick="sendSugg(this)">🚨 Emergency care</button>
     <button class="sugg-btn" onclick="sendSugg(this)">🕐 Opening hours</button>
   </div>
@@ -639,105 +862,299 @@ footer{padding:36px 64px;background:var(--dark);display:flex;justify-content:spa
   </div>
 </div>
 
+<!-- ✦ NEW: Lenis smooth scroll CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+
 <script>
-// CURSOR
-const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.transform=`translate(${mx-4}px,${my-4}px)`});
-(function ar(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;ring.style.transform=`translate(${rx-16}px,${ry-16}px)`;requestAnimationFrame(ar)})();
-document.querySelectorAll('button,a,.srv-card,.pet-chip,.gal-item,.blog-card,.blog-small,.testi-card').forEach(el=>{
-  el.addEventListener('mouseenter',()=>ring.classList.add('hovered'));
-  el.addEventListener('mouseleave',()=>ring.classList.remove('hovered'));
+// ════════════════════════════════════════════════
+// ✦ NEW: LENIS ULTRA-SMOOTH SCROLL
+// Exponential easing — feels buttery, not jarring
+// ════════════════════════════════════════════════
+const lenis = new Lenis({
+  duration: 1.6,
+  easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+  smooth: true,
+  smoothTouch: false,
+  touchMultiplier: 1.8,
+});
+function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+requestAnimationFrame(raf);
+
+// Progress bar driven by Lenis
+const pb = document.getElementById('progress-bar');
+lenis.on('scroll', ({ progress }) => { pb.style.width = (progress * 100) + '%'; });
+
+// Smooth anchor scroll via Lenis
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const t = document.querySelector(a.getAttribute('href'));
+    if (!t) return; e.preventDefault();
+    lenis.scrollTo(t, { offset: -80, duration: 1.8 });
+  });
 });
 
-// NAVBAR
-const nav=document.getElementById('navbar');
-window.addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>60));
+// Navbar scrolled class via Lenis
+const nav = document.getElementById('navbar');
+lenis.on('scroll', ({ scroll }) => nav.classList.toggle('scrolled', scroll > 60));
 
-// SCROLL REVEAL
-const rv=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),+e.target.dataset.delay||0)})},{threshold:.1});
-document.querySelectorAll('.srv-card').forEach((el,i)=>{el.dataset.delay=i*90;rv.observe(el)});
-document.querySelectorAll('.gal-item').forEach((el,i)=>{el.dataset.delay=i*110;rv.observe(el)});
-document.querySelectorAll('.testi-card').forEach((el,i)=>{el.dataset.delay=i*110;rv.observe(el)});
-document.querySelectorAll('.blog-card,.blog-small').forEach((el,i)=>{el.dataset.delay=i*100;rv.observe(el)});
+// ✦ CHANGED: Blob parallax — now driven by Lenis scroll event
+const blob1 = document.querySelector('.hero-bg-blob.b1');
+const blob2 = document.querySelector('.hero-bg-blob.b2');
+lenis.on('scroll', ({ scroll }) => {
+  if (blob1) blob1.style.transform = `translateY(${scroll * 0.18}px)`;
+  if (blob2) blob2.style.transform = `translateY(${scroll * -0.10}px)`;
+});
 
-// COUNTER
-function animCount(el,t,s){
-  const d=2000,step=ts=>{if(!step.t)step.t=ts;const p=Math.min((ts-step.t)/d,1),e=1-Math.pow(1-p,3);el.textContent=Math.round(e*t).toLocaleString()+s;if(p<1)requestAnimationFrame(step)};
+// ════════════════════════════════════════════════
+// ✦ NEW: BACKGROUND CANVAS
+// 80 floating particles (sage + gold) + 6 large drifting orbs
+// ════════════════════════════════════════════════
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+let W, H;
+function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+resize();
+window.addEventListener('resize', resize);
+
+class Particle {
+  constructor() {
+    this.x = Math.random() * W; this.y = Math.random() * H;
+    this.r = Math.random() * 2 + .5;
+    this.vx = (Math.random() - .5) * .3; this.vy = (Math.random() - .5) * .3;
+    this.alpha = Math.random() * .22 + .04;
+    this.color = Math.random() > .55 ? '#C8A84A' : '#4E7A52';
+  }
+  update() {
+    this.x += this.vx; this.y += this.vy;
+    if (this.x < 0) this.x = W; if (this.x > W) this.x = 0;
+    if (this.y < 0) this.y = H; if (this.y > H) this.y = 0;
+  }
+  draw() {
+    ctx.beginPath(); ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    ctx.fillStyle = this.color; ctx.globalAlpha = this.alpha; ctx.fill(); ctx.globalAlpha = 1;
+  }
+}
+
+class Orb {
+  constructor() {
+    this.x = Math.random() * W; this.y = Math.random() * H;
+    this.r = Math.random() * 220 + 80;
+    this.vx = (Math.random() - .5) * .1; this.vy = (Math.random() - .5) * .1;
+    this.color = Math.random() > .5 ? '#C8E0CA' : '#E8C97A';
+    this.alpha = Math.random() * .06 + .02;
+  }
+  update() {
+    this.x += this.vx; this.y += this.vy;
+    if (this.x < -this.r) this.x = W + this.r; if (this.x > W + this.r) this.x = -this.r;
+    if (this.y < -this.r) this.y = H + this.r; if (this.y > H + this.r) this.y = -this.r;
+  }
+  draw() {
+    const g = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.r);
+    g.addColorStop(0, this.color + 'BB'); g.addColorStop(1, 'transparent');
+    ctx.beginPath(); ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    ctx.fillStyle = g; ctx.globalAlpha = this.alpha; ctx.fill(); ctx.globalAlpha = 1;
+  }
+}
+
+const particles = Array.from({ length: 80 }, () => new Particle());
+const orbs = Array.from({ length: 6 }, () => new Orb());
+
+function animBG() {
+  ctx.clearRect(0, 0, W, H);
+  orbs.forEach(o => { o.update(); o.draw(); });
+  particles.forEach(p => { p.update(); p.draw(); });
+  requestAnimationFrame(animBG);
+}
+animBG();
+
+// ════════════════════════════════════════════════
+// ✦ NEW: PAW PRINT TRAIL — drops 🐾 as mouse moves
+// ════════════════════════════════════════════════
+let lastPaw = 0;
+document.addEventListener('mousemove', e => {
+  if (Date.now() - lastPaw < 300) return;
+  lastPaw = Date.now();
+  const p = document.createElement('div');
+  p.className = 'paw-trail';
+  p.textContent = '🐾';
+  p.style.left = e.clientX + 'px';
+  p.style.top = e.clientY + 'px';
+  p.style.setProperty('--rot', (Math.random() * 50 - 25) + 'deg');
+  document.body.appendChild(p);
+  setTimeout(() => p.remove(), 1000);
+});
+
+// ════════════════════════════════════════════════
+// ✦ CHANGED: CURSOR — ring now uses hovered class
+// ════════════════════════════════════════════════
+const cursor = document.getElementById('cursor'), ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.transform = `translate(${mx - 4}px,${my - 4}px)`;
+});
+(function ar() {
+  rx += (mx - rx) * .1; ry += (my - ry) * .1;
+  ring.style.transform = `translate(${rx - 16}px,${ry - 16}px)`;
+  requestAnimationFrame(ar);
+})();
+document.querySelectorAll('button,a,.srv-card,.pet-chip,.gal-item,.blog-card,.blog-small,.testi-card').forEach(el => {
+  el.addEventListener('mouseenter', () => ring.classList.add('hovered'));
+  el.addEventListener('mouseleave', () => ring.classList.remove('hovered'));
+});
+
+// ════════════════════════════════════════════════
+// ✦ NEW: MAGNETIC BUTTON — follows mouse slightly
+// Applied to .mag-btn class
+// ════════════════════════════════════════════════
+document.querySelectorAll('.mag-btn').forEach(btn => {
+  btn.addEventListener('mousemove', e => {
+    const r = btn.getBoundingClientRect();
+    const dx = (e.clientX - r.left - r.width / 2) * .28;
+    const dy = (e.clientY - r.top - r.height / 2) * .28;
+    btn.style.transform = `translate(${dx}px,${dy}px)`;
+  });
+  btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
+});
+
+// ════════════════════════════════════════════════
+// ✦ NEW: TYPED TEXT EFFECT in hero
+// Cycles through phrases with type + delete animation
+// ════════════════════════════════════════════════
+const typedEl = document.getElementById('typed-line');
+const phrases = ['Finest Care.', 'Best Life.', 'Happiest Self.', 'Premium Attention.'];
+let pIdx = 0, cIdx = 0, deleting = false;
+function typeLoop() {
+  const phrase = phrases[pIdx];
+  if (!deleting) {
+    typedEl.textContent = phrase.slice(0, cIdx + 1); cIdx++;
+    if (cIdx === phrase.length) { deleting = true; setTimeout(typeLoop, 2400); return; }
+    setTimeout(typeLoop, 80);
+  } else {
+    typedEl.textContent = phrase.slice(0, cIdx - 1); cIdx--;
+    if (cIdx === 0) { deleting = false; pIdx = (pIdx + 1) % phrases.length; setTimeout(typeLoop, 350); return; }
+    setTimeout(typeLoop, 40);
+  }
+}
+setTimeout(typeLoop, 1400);
+
+// ════════════════════════════════════════════════
+// SCROLL REVEAL — synced with IntersectionObserver
+// ════════════════════════════════════════════════
+const rv = new IntersectionObserver(es => {
+  es.forEach(e => { if (e.isIntersecting) setTimeout(() => e.target.classList.add('visible'), +e.target.dataset.delay || 0); });
+}, { threshold: .08, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.srv-card').forEach((el, i) => { el.dataset.delay = i * 90; rv.observe(el); });
+document.querySelectorAll('.gal-item').forEach((el, i) => { el.dataset.delay = i * 110; rv.observe(el); });
+document.querySelectorAll('.testi-card').forEach((el, i) => { el.dataset.delay = i * 110; rv.observe(el); });
+document.querySelectorAll('.blog-card,.blog-small').forEach((el, i) => { el.dataset.delay = i * 100; rv.observe(el); });
+
+// COUNTER ANIMATION
+function animCount(el, t, s) {
+  const d = 2200, step = ts => {
+    if (!step.t) step.t = ts;
+    const p = Math.min((ts - step.t) / d, 1), e = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(e * t).toLocaleString() + s;
+    if (p < 1) requestAnimationFrame(step);
+  };
   requestAnimationFrame(step);
 }
-let counted=false;
-new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting&&!counted){counted=true;document.querySelectorAll('[data-count]').forEach(el=>{animCount(el,+el.dataset.count,el.dataset.suffix||'');delete el.dataset.count})}})},{threshold:.5}).observe(document.querySelector('.hero-trust'));
+let counted = false;
+new IntersectionObserver(es => {
+  es.forEach(e => {
+    if (e.isIntersecting && !counted) {
+      counted = true;
+      document.querySelectorAll('[data-count]').forEach(el => {
+        animCount(el, +el.dataset.count, el.dataset.suffix || '');
+        delete el.dataset.count;
+      });
+    }
+  });
+}, { threshold: .5 }).observe(document.querySelector('.hero-trust'));
+
+// ════════════════════════════════════════════════
+// ✦ NEW: ROTATING PET FACTS — auto changes every 5s
+// ════════════════════════════════════════════════
+const facts = [
+  "Dogs have a sense of smell 40× more powerful than humans — regular vet checkups catch issues before symptoms appear.",
+  "Cats spend up to 70% of their lives sleeping — but still need annual checkups to stay at their healthiest!",
+  "Rabbits' teeth never stop growing. Dental checks every 6 months are essential for a healthy bunny.",
+  "A dog's heart beats 60–140 times per minute. Heart screenings start at age 3 for large breeds.",
+  "Cats groom themselves up to 5 hours a day — professional grooming still removes loose fur & checks skin health.",
+  "Birds can live 15–80 years depending on species. Annual avian checkups can add years to their life.",
+];
+let fIdx = 0;
+const factEl = document.getElementById('petFact');
+factEl.style.transition = 'opacity .4s ease';
+setInterval(() => {
+  factEl.style.opacity = '0';
+  setTimeout(() => { fIdx = (fIdx + 1) % facts.length; factEl.textContent = facts[fIdx]; factEl.style.opacity = '1'; }, 400);
+}, 5000);
 
 // PET CHIPS
-document.querySelectorAll('.pet-chip').forEach(c=>c.addEventListener('click',()=>{document.querySelectorAll('.pet-chip').forEach(x=>x.classList.remove('active'));c.classList.add('active')}));
+document.querySelectorAll('.pet-chip').forEach(c => c.addEventListener('click', () => {
+  document.querySelectorAll('.pet-chip').forEach(x => x.classList.remove('active')); c.classList.add('active');
+}));
 
 // CONTACT FORM
-function handleContactSubmit(btn){
-  const n=document.getElementById('f-name').value.trim(),em=document.getElementById('f-email').value.trim();
-  if(!n||!em){alert('Naam aur email zaroor bharein!');return}
-  btn.textContent='Sending...';btn.disabled=true;
-  setTimeout(()=>{btn.textContent='✓ Message Sent!';btn.style.background='var(--sage)';
-    ['f-name','f-email','f-pet','f-msg'].forEach(id=>document.getElementById(id).value='');
-    setTimeout(()=>{btn.textContent='Send Message →';btn.disabled=false;btn.style.background=''},3000);
-  },1200);
+function handleContactSubmit(btn) {
+  const n = document.getElementById('f-name').value.trim(), em = document.getElementById('f-email').value.trim();
+  if (!n || !em) { alert('Naam aur email zaroor bharein!'); return; }
+  btn.textContent = 'Sending...'; btn.disabled = true;
+  setTimeout(() => {
+    btn.textContent = '✓ Message Sent!'; btn.style.background = 'var(--sage)';
+    ['f-name', 'f-email', 'f-pet', 'f-msg'].forEach(id => document.getElementById(id).value = '');
+    setTimeout(() => { btn.textContent = 'Send Message →'; btn.disabled = false; btn.style.background = ''; }, 3000);
+  }, 1200);
 }
 
 // MODAL
-function openModal(e){if(e)e.preventDefault();document.getElementById('modalOverlay').classList.add('open');document.body.style.overflow='hidden'}
-function closeModal(){document.getElementById('modalOverlay').classList.remove('open');document.body.style.overflow=''}
-function submitModal(btn){
-  btn.textContent='Booking...';btn.disabled=true;
-  setTimeout(()=>{btn.textContent='✓ Confirmed!';btn.style.background='var(--sage)';setTimeout(()=>{closeModal();btn.textContent='Confirm Appointment →';btn.disabled=false;btn.style.background=''},2000)},1200);
+function openModal(e) { if (e) e.preventDefault(); document.getElementById('modalOverlay').classList.add('open'); lenis.stop(); document.body.style.overflow = 'hidden'; }
+function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); lenis.start(); document.body.style.overflow = ''; }
+function submitModal(btn) {
+  btn.textContent = 'Booking...'; btn.disabled = true;
+  setTimeout(() => {
+    btn.textContent = '✓ Confirmed!'; btn.style.background = 'var(--sage)';
+    setTimeout(() => { closeModal(); btn.textContent = 'Confirm Appointment →'; btn.disabled = false; btn.style.background = ''; }, 2000);
+  }, 1200);
 }
 
 // CHATBOT
-let chatOpen=false;
-const chatbox=document.getElementById('chatbox'),msgs=document.getElementById('chatMsgs'),sugg=document.getElementById('chatSugg');
-const R={
-  book:"Appointment book karne ke liye upar 'Book Now' button dabao ya seedha hamain call karo:\n📞 +92-300-738 2273\n\nHum 9 AM se 8 PM tak available hain, aur emergencies 24/7! Koi specific time hai?",
-  groom:"Grooming prices 2026:\n• Small dogs/cats: Rs. 800–1,200\n• Medium dogs: Rs. 1,200–2,000\n• Large dogs: Rs. 2,000–3,500\n• Persian cats: Rs. 1,500–2,500\n\nHar session mein bath, haircut aur nail trim shamil hai ✂️",
-  price:"Hamari service fees:\n• Basic checkup: Rs. 500\n• Vaccination: Rs. 800–1,500\n• Grooming: Rs. 800–3,500\n• Dental cleaning: Rs. 2,000\n• Nutrition consult: Rs. 1,200\n\nFull list ke liye: info@petcarepro.com 💰",
-  emergency:"🚨 Emergency? Foran call karein:\n📞 +92-300-738 2273\n\nHamara emergency team 24/7 tayar hai. Apne pet ki jaan hamari pehli priority hai!",
-  hours:"Hamare timings ⏰\n• Weekdays: 9 AM – 8 PM\n• Saturday: 9 AM – 6 PM\n• Sunday: 10 AM – 4 PM\n• Emergency: 24/7 available!",
-  cat:"Cats ke liye hamari services 🐱\n• Vaccination & full checkups\n• Persian cat grooming & bathing\n• Dental care\n• Nutrition planning\n• Surgery & emergency\n\nAppointment book karein?",
-  dog:"Dogs ke liye hamari services 🐶\n• Annual health checkups\n• Complete vaccination schedule\n• Professional grooming\n• Nutrition consultation\n• Emergency care 24/7\n\nKoi specific service chahiye?",
-  hi:"Assalamu Alaikum! 👋 Main PetCare Pro ka virtual assistant hoon.\n\nAapke pet ke baare mein kuch bhi poochh sakte hain — services, prices, appointments sab! 🐾",
-  blog:"Hamare blog 'Pet Care Journal' mein expert vets ki tips milti hain 📖\n\n• Dog nutrition guides\n• Cat grooming tips\n• Vaccination schedules\n• Training advice\n\nBlog section mein scroll karein ya website dekhein!",
-  def:"Samajh gaya! Kuch aur info chahiye. Hamari team se seedha baat karein:\n📩 info@petcarepro.com\n📞 +92-300-738 2273\n\nMain in topics mein help kar sakta hoon:\nservices · prices · grooming · emergency · appointments · blog 🐾"
+let chatOpen = false;
+const chatbox = document.getElementById('chatbox'), msgs = document.getElementById('chatMsgs'), sugg = document.getElementById('chatSugg');
+const R = {
+  book: "Appointment book karne ke liye upar 'Book Now' button dabao ya call karo:\n📞 +92-300-738 2273\n\n9 AM – 8 PM weekdays, emergencies 24/7! ✅",
+  groom: "Grooming prices 2026:\n• Small dogs/cats: Rs. 800–1,200\n• Medium dogs: Rs. 1,200–2,000\n• Large breeds: Rs. 2,000–3,500\n• Persian cats: Rs. 1,500–2,500\n\nBath, haircut, nail trim sab shamil ✂",
+  price: "Service fees:\n• Basic checkup: Rs. 500\n• Vaccination: Rs. 800–1,500\n• Grooming: Rs. 800–3,500\n• Dental: Rs. 2,000\n• Nutrition consult: Rs. 1,200",
+  emergency: "🚨 Emergency? Foran call:\n📞 +92-300-738 2273\n\n24/7 team har waqt tayar hai!",
+  hours: "Timings ⏰\n• Mon–Fri: 9 AM – 8 PM\n• Saturday: 9 AM – 6 PM\n• Sunday: 10 AM – 4 PM\n• Emergency: 24/7!",
+  cat: "Cats ke liye 🐱\n• Full checkups & vaccination\n• Persian grooming & spa\n• Dental care & nutrition\n• Surgery & emergency\n\nAppointment chahiye?",
+  dog: "Dogs ke liye 🐶\n• Annual health checkups\n• Complete vaccination\n• Professional grooming\n• Nutrition consult\n• 24/7 Emergency",
+  blog: "Pet Care Journal 📖\n• Dog nutrition guides\n• Cat grooming tips\n• Vaccination schedules\n• Training advice\n\nBlog section mein scroll karein!",
+  def: "Seedha contact karein:\n📩 info@petcarepro.com\n📞 +92-300-738 2273\n\nMain help kar sakta hoon:\nservices · prices · grooming · emergency · appointments 🐾"
 };
-function getReply(m){
-  const t=m.toLowerCase();
-  if(/hello|hi|salaam|hey|salam/.test(t)) return R.hi;
-  if(/book|appointment|appoint/.test(t)) return R.book;
-  if(/groom/.test(t)) return R.groom;
-  if(/price|cost|fee|kitna|rate|charges/.test(t)) return R.price;
-  if(/emergency|urgent|help|abhi|jaldi/.test(t)) return R.emergency;
-  if(/hour|time|open|timing|kab|schedule/.test(t)) return R.hours;
-  if(/cat|billi|kitten|persian/.test(t)) return R.cat;
-  if(/dog|kutta|puppy|pup|retriever/.test(t)) return R.dog;
-  if(/blog|article|tip|guide|read/.test(t)) return R.blog;
+function getReply(m) {
+  const t = m.toLowerCase();
+  if (/hello|hi|salaam|hey/.test(t)) return "Assalamu Alaikum! 👋 Main PetCare Pro ka Assistant hoon.\n\nAapke pet ke liye kya kar sakta hoon? 🐾";
+  if (/book|appoint/.test(t)) return R.book;
+  if (/groom/.test(t)) return R.groom;
+  if (/price|cost|fee|kitna|rate/.test(t)) return R.price;
+  if (/emergency|urgent|abhi/.test(t)) return R.emergency;
+  if (/hour|time|open|timing|kab/.test(t)) return R.hours;
+  if (/cat|billi|kitten|persian/.test(t)) return R.cat;
+  if (/dog|kutta|puppy|pup/.test(t)) return R.dog;
+  if (/blog|article|tip|guide/.test(t)) return R.blog;
   return R.def;
 }
-function addMsg(text,who){const d=document.createElement('div');d.className=`msg ${who}`;d.textContent=text;msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight}
-function showTyping(){const d=document.createElement('div');d.className='msg bot';d.id='td';d.innerHTML='<div class="typing-dots"><span></span><span></span><span></span></div>';msgs.appendChild(d);msgs.scrollTop=msgs.scrollHeight;return d}
-function sendChat(){
-  const inp=document.getElementById('chatInput'),t=inp.value.trim();if(!t)return;
-  addMsg(t,'user');inp.value='';sugg.style.display='none';
-  const dot=showTyping();
-  setTimeout(()=>{dot.remove();addMsg(getReply(t),'bot')},700+Math.random()*500);
-}
-function sendSugg(btn){
-  addMsg(btn.textContent,'user');sugg.style.display='none';
-  const t=btn.textContent;
-  const dot=showTyping();
-  setTimeout(()=>{dot.remove();addMsg(getReply(t),'bot')},800);
-}
-function toggleChat(){
-  chatOpen=!chatOpen;chatbox.classList.toggle('open',chatOpen);
-  if(chatOpen&&msgs.children.length===0){
-    setTimeout(()=>addMsg('👋 Assalamu Alaikum! Main PetCare Pro Assistant hoon.\n\nAapke pet ke liye kya kar sakta hoon? Neeche se choose karein ya kuch bhi likhen! 🐾','bot'),300);
-    document.querySelector('.chat-notif').style.display='none';
+function addMsg(text, who) { const d = document.createElement('div'); d.className = `msg ${who}`; d.textContent = text; msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight; }
+function showTyping() { const d = document.createElement('div'); d.className = 'msg bot'; d.id = 'td'; d.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>'; msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight; return d; }
+function sendChat() { const inp = document.getElementById('chatInput'), t = inp.value.trim(); if (!t) return; addMsg(t, 'user'); inp.value = ''; sugg.style.display = 'none'; const dot = showTyping(); setTimeout(() => { dot.remove(); addMsg(getReply(t), 'bot'); }, 700 + Math.random() * 500); }
+function sendSugg(btn) { addMsg(btn.textContent, 'user'); sugg.style.display = 'none'; const dot = showTyping(); setTimeout(() => { dot.remove(); addMsg(getReply(btn.textContent), 'bot'); }, 800); }
+function toggleChat() {
+  chatOpen = !chatOpen; chatbox.classList.toggle('open', chatOpen);
+  if (chatOpen && msgs.children.length === 0) {
+    setTimeout(() => addMsg('👋 Assalamu Alaikum! Main PetCare Pro Assistant hoon.\n\nKya madad kar sakta hoon? 🐾', 'bot'), 300);
+    document.querySelector('.chat-notif').style.display = 'none';
   }
 }
 </script>
@@ -753,15 +1170,15 @@ const app = initializeApp({
   messagingSenderId:"972163287285",
   appId:"1:972163287285:web:10579718d1d33c451b9dbc"
 });
-const auth=getAuth(app),provider=new GoogleAuthProvider();
-document.getElementById('login-btn').onclick=()=>signInWithPopup(auth,provider);
-document.getElementById('signup-btn').onclick=()=>signInWithPopup(auth,provider);
-document.getElementById('logout-btn').onclick=()=>signOut(auth);
-onAuthStateChanged(auth,u=>{
-  document.getElementById('auth-controls').style.display=u?'none':'flex';
-  document.getElementById('user-profile').style.display=u?'flex':'none';
-  if(u)document.getElementById('user-photo').src=u.photoURL||'';
-  window.isLoggedIn=!!u;
+const auth = getAuth(app), provider = new GoogleAuthProvider();
+document.getElementById('login-btn').onclick = () => signInWithPopup(auth, provider);
+document.getElementById('signup-btn').onclick = () => signInWithPopup(auth, provider);
+document.getElementById('logout-btn').onclick = () => signOut(auth);
+onAuthStateChanged(auth, u => {
+  document.getElementById('auth-controls').style.display = u ? 'none' : 'flex';
+  document.getElementById('user-profile').style.display = u ? 'flex' : 'none';
+  if (u) document.getElementById('user-photo').src = u.photoURL || '';
+  window.isLoggedIn = !!u;
 });
 </script>
 </body>
