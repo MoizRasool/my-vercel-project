@@ -1197,7 +1197,7 @@ const R = {
 };
 function getReply(m) {
   const t = m.toLowerCase();
-  if (/hello|hi|salaam|hey/.test(t)) return "Assalamu Alaikum! 👋 Main PetCare Pro ka Assistant hoon.\n\nAapke pet ke liye kya kar sakta hoon? 🐾";
+  if (/hello|hi|salaam|hey/.test(t)) return "Asalam u Alaikum! 👋 Main PetCare Pro ka Assistant hoon.\n\nAapke pet ke liye kya kar sakta hoon? 🐾";
   if (/book|appoint/.test(t)) return R.book;
   if (/groom/.test(t)) return R.groom;
   if (/price|cost|fee|kitna|rate/.test(t)) return R.price;
@@ -1215,7 +1215,7 @@ function sendSugg(btn) { addMsg(btn.textContent, 'user'); sugg.style.display = '
 function toggleChat() {
   chatOpen = !chatOpen; chatbox.classList.toggle('open', chatOpen);
   if (chatOpen && msgs.children.length === 0) {
-    setTimeout(() => addMsg('👋 Assalamu Alaikum! Main PetCare Pro Assistant hoon.\n\nKya madad kar sakta hoon? 🐾', 'bot'), 300);
+    setTimeout(() => addMsg('👋 Asalam u Alaikum! Main PetCare Pro Assistant hoon.\n\nKya madad kar sakta hoon? 🐾', 'bot'), 300);
     document.querySelector('.chat-notif').style.display = 'none';
   }
 }
