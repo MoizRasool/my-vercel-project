@@ -1242,6 +1242,9 @@ onAuthStateChanged(auth, u => {
   window.isLoggedIn = !!u;
 });
 </script>
+
+<!-- ========== TRIVIA & SCRAMBLE GAMES ========= -->
+<script>
 // ========== TRIVIA GAME ==========
 const triviaData = [
   { q: "What is the average lifespan of a healthy domestic cat?", options: ["8–10 years", "12–18 years", "20–25 years", "5–7 years"], correct: 1 },
@@ -1253,8 +1256,10 @@ const triviaData = [
 let triviaIdx = 0, triviaScoreVal = 0, triviaSelected = null;
 function loadTrivia() {
   const qd = triviaData[triviaIdx];
-  document.getElementById('triviaQuestion').textContent = qd.q;
+  const qEl = document.getElementById('triviaQuestion');
+  if (qEl) qEl.textContent = qd.q;
   const optsDiv = document.getElementById('triviaOptions');
+  if (!optsDiv) return;
   optsDiv.innerHTML = '';
   qd.options.forEach((opt, i) => {
     const btn = document.createElement('div');
@@ -1265,8 +1270,8 @@ function loadTrivia() {
     optsDiv.appendChild(btn);
   });
   triviaSelected = null;
-  document.getElementById('triviaNextBtn').disabled = false;
-  document.getElementById('triviaNextBtn').textContent = 'Next Question →';
+  const nextBtn = document.getElementById('triviaNextBtn');
+  if (nextBtn) { nextBtn.disabled = false; nextBtn.textContent = 'Next Question →'; }
 }
 function selectTriviaOption(idx, btnEl) {
   if (triviaSelected !== null) return;
@@ -1276,7 +1281,7 @@ function selectTriviaOption(idx, btnEl) {
   const isCorrect = (idx === triviaData[triviaIdx].correct);
   if (isCorrect) {
     triviaScoreVal++;
-    document.getElementById('triviaScore').textContent = `Score: ${triviaScoreVal}`;
+    const scoreEl = document.getElementById('triviaScore'); if (scoreEl) scoreEl.textContent = `Score: ${triviaScoreVal}`;
   }
   const feedback = document.createElement('div');
   feedback.textContent = isCorrect ? "✅ Correct!" : `❌ Wrong! Correct answer: ${triviaData[triviaIdx].options[triviaData[triviaIdx].correct]}`;
@@ -1286,24 +1291,21 @@ function selectTriviaOption(idx, btnEl) {
   const old = document.querySelector('.trivia-feedback');
   if(old) old.remove();
   feedback.classList.add('trivia-feedback');
-  document.getElementById('triviaOptions').after(feedback);
-  document.getElementById('triviaNextBtn').disabled = false;
+  const optsDiv = document.getElementById('triviaOptions'); if (optsDiv) optsDiv.after(feedback);
 }
-document.getElementById('triviaNextBtn').addEventListener('click', () => {
+const triviaNextBtn = document.getElementById('triviaNextBtn');
+if (triviaNextBtn) triviaNextBtn.addEventListener('click', () => {
   if (triviaIdx + 1 < triviaData.length) {
     triviaIdx++;
     loadTrivia();
   } else {
-    document.getElementById('triviaQuestion').textContent = "🎉 Great job! You completed the trivia!";
-    document.getElementById('triviaOptions').innerHTML = '';
-    document.getElementById('triviaNextBtn').disabled = true;
-    document.getElementById('triviaNextBtn').textContent = 'Completed';
+    const qEl = document.getElementById('triviaQuestion'); if (qEl) qEl.textContent = "🎉 Great job! You completed the trivia!";
+    const opts = document.getElementById('triviaOptions'); if (opts) opts.innerHTML = '';
+    if (triviaNextBtn) { triviaNextBtn.disabled = true; triviaNextBtn.textContent = 'Completed'; }
     const finalMsg = document.createElement('div');
     finalMsg.textContent = `Final score: ${triviaScoreVal}/${triviaData.length}`;
-    finalMsg.className = 'trivia-feedback';
-    finalMsg.style.marginTop = '16px';
-    finalMsg.style.fontWeight = 'bold';
-    document.getElementById('triviaOptions').after(finalMsg);
+    finalMsg.className = 'trivia-feedback'; finalMsg.style.marginTop = '16px'; finalMsg.style.fontWeight = 'bold';
+    if (opts) opts.after(finalMsg);
   }
 });
 loadTrivia();
@@ -1330,28 +1332,26 @@ function newScrambleWord() {
   const rand = Math.floor(Math.random() * scrambleWords.length);
   currentWordObj = scrambleWords[rand];
   const scrambled = scrambleString(currentWordObj.word);
-  document.getElementById('scrambleWord').textContent = scrambled;
-  document.getElementById('scrambleInput').value = '';
-  document.getElementById('scrambleFeedback').innerHTML = '';
+  const sw = document.getElementById('scrambleWord'); if (sw) sw.textContent = scrambled;
+  const inp = document.getElementById('scrambleInput'); if (inp) inp.value = '';
+  const fb = document.getElementById('scrambleFeedback'); if (fb) fb.innerHTML = '';
   currentScramble = scrambled;
 }
 function checkScramble() {
-  const userAnswer = document.getElementById('scrambleInput').value.trim().toUpperCase();
-  if (!currentWordObj) return;
+  const userAnswerEl = document.getElementById('scrambleInput'); if (!userAnswerEl || !currentWordObj) return;
+  const userAnswer = userAnswerEl.value.trim().toUpperCase();
+  const fb = document.getElementById('scrambleFeedback');
   if (userAnswer === currentWordObj.word) {
     scrambleScoreVal++;
-    document.getElementById('scrambleScore').textContent = `Score: ${scrambleScoreVal}`;
-    document.getElementById('scrambleFeedback').innerHTML = '<span style="color:#4E7A52;">✔ Correct! +1 point</span>';
+    const sc = document.getElementById('scrambleScore'); if (sc) sc.textContent = `Score: ${scrambleScoreVal}`;
+    if (fb) fb.innerHTML = '<span style="color:#4E7A52;">✔ Correct! +1 point</span>';
     newScrambleWord();
   } else {
-    document.getElementById('scrambleFeedback').innerHTML = `<span style="color:#D4854A;">❌ Not quite. Hint: ${currentWordObj.hint}</span>`;
+    if (fb) fb.innerHTML = `<span style="color:#D4854A;">❌ Not quite. Hint: ${currentWordObj.hint}</span>`;
   }
 }
-document.getElementById('scrambleCheckBtn').addEventListener('click', checkScramble);
-document.getElementById('scrambleNewBtn').addEventListener('click', () => {
-  newScrambleWord();
-  document.getElementById('scrambleFeedback').innerHTML = '';
-});
+const checkBtn = document.getElementById('scrambleCheckBtn'); if (checkBtn) checkBtn.addEventListener('click', checkScramble);
+const newBtn = document.getElementById('scrambleNewBtn'); if (newBtn) newBtn.addEventListener('click', () => { newScrambleWord(); const fb = document.getElementById('scrambleFeedback'); if (fb) fb.innerHTML = ''; });
 newScrambleWord();
 </script>
 </body>
