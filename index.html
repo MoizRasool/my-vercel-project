@@ -524,6 +524,18 @@ footer { padding:36px 64px; background:var(--dark); display:flex; justify-conten
 .chat-notif { position:absolute; top:-1px; right:-1px; width:15px; height:15px; background:var(--gold); border-radius:50%; border:2px solid var(--cream); animation:pulse 2s infinite }
 .chatbox { position:fixed; bottom:104px; right:30px; z-index:999; width:370px; height:510px; background:white; border-radius:28px; box-shadow:0 28px 80px rgba(0,0,0,.18); display:flex; flex-direction:column; overflow:hidden; transform:scale(.8) translateY(30px); opacity:0; pointer-events:none; transition:all .4s cubic-bezier(.34,1.56,.64,1); border:1px solid var(--border-light) }
 .chatbox.open { transform:scale(1) translateY(0); opacity:1; pointer-events:all }
+.chat-history-badge { position:absolute; top:10px; right:60px; background:var(--gold); color:var(--dark); padding:4px 12px; border-radius:50px; font-size:11px; font-weight:700; z-index:999; }
+.chat-actions { display:flex; gap:8px; margin-top:8px; flex-wrap:wrap; }
+.chat-action-btn { background:var(--sage-pale); border:1px solid var(--sage); border-radius:20px; padding:6px 12px; font-size:11px; cursor:pointer; transition:all .2s; font-weight:600; color:var(--forest); }
+.chat-action-btn:hover { background:var(--sage); color:white; }
+.msg-reaction { display:inline-flex; gap:4px; margin-left:4px; }
+.msg-reaction span { cursor:pointer; font-size:12px; opacity:.6; transition:opacity .2s; }
+.msg-reaction span:hover { opacity:1; }
+.msg.read-receipt::after { content:'✓✓'; font-size:10px; margin-left:4px; opacity:.5; }
+.chat-rating { display:flex; gap:8px; align-items:center; padding:12px; background:var(--cream); border-radius:12px; margin-top:8px; }
+.chat-rating span { font-size:24px; cursor:pointer; opacity:.6; transition:opacity .2s; }
+.chat-rating span:hover { opacity:1; }
+.chat-export-btn { background:var(--gold); color:var(--dark); border:none; padding:8px 14px; border-radius:20px; font-size:11px; font-weight:700; cursor:pointer; transition:all .2s; }
 
 /* ✦ CHANGED: Chat header — gold bottom border accent */
 .chat-header { background:var(--forest); padding:20px 22px; display:flex; align-items:center; gap:13px; border-bottom:2px solid var(--gold) }
@@ -884,20 +896,36 @@ footer { padding:36px 64px; background:var(--dark); display:flex; justify-conten
 
 <!-- CHATBOT -->
 <button class="chat-bubble" id="chatBubble" onclick="toggleChat()" aria-label="Open chat">🐾<div class="chat-notif"></div></button>
+<div id="chat-history-badge" class="chat-history-badge" style="display:none">💬 <span id="chat-count">0</span></div>
 <div class="chatbox" id="chatbox">
   <div class="chat-header">
     <div class="chat-ava">🐾</div>
-    <div class="chat-header-text"><h4>PetCare Assistant</h4><span>Online — Ask me anything!</span></div>
+    <div class="chat-header-text">
+      <h4>PetCare Assistant</h4>
+      <span id="chat-status">Online — Ask me anything!</span>
+    </div>
     <div class="chat-online"></div>
     <button class="chat-close" onclick="toggleChat()">×</button>
   </div>
   <div class="chat-msgs" id="chatMsgs"></div>
+  <div id="chatRating" style="display:none;">
+    <div style="font-size:13px;font-weight:700;color:var(--dark);margin-bottom:8px;">How helpful was this chat?</div>
+    <div class="chat-rating">
+      <span onclick="rateChatSession(1)">😞</span>
+      <span onclick="rateChatSession(2)">😐</span>
+      <span onclick="rateChatSession(3)">😊</span>
+      <span onclick="rateChatSession(4)">😄</span>
+      <span onclick="rateChatSession(5)">🥰</span>
+    </div>
+    <button class="chat-export-btn" onclick="exportChatHistory()" style="width:100%;margin-top:8px;">📥 Export Chat</button>
+  </div>
   <div class="chat-sugg" id="chatSugg">
     <button class="sugg-btn" onclick="sendSugg(this)">📅 Book appointment</button>
     <button class="sugg-btn" onclick="sendSugg(this)">✂ Grooming prices</button>
     <button class="sugg-btn" onclick="sendSugg(this)">🚨 Emergency care</button>
     <button class="sugg-btn" onclick="sendSugg(this)">🕐 Opening hours</button>
   </div>
+  <div id="chatActions" class="chat-actions" style="display:none;padding:8px 12px;border-top:1px solid var(--border-light);"></div>
   <div class="chat-input-area">
     <input class="chat-input" id="chatInput" placeholder="Type a message..." onkeydown="if(event.key==='Enter')sendChat()">
     <button class="chat-send" onclick="sendChat()">➤</button>
@@ -1181,44 +1209,214 @@ function submitModal(btn) {
   }, 1200);
 }
 
-// CHATBOT
-let chatOpen = false;
+// ════════════════════════════════════════════════
+// ✦ PREMIUM CHATBOT v2.0 — Enhanced with AI-like features
+// Chat History · Rating System · Context Memory · Smart Responses
+// ════════════════════════════════════════════════
+let chatOpen = false, chatHistory = [], currentContext = null;
 const chatbox = document.getElementById('chatbox'), msgs = document.getElementById('chatMsgs'), sugg = document.getElementById('chatSugg');
+const chatActions = document.getElementById('chatActions'), chatRating = document.getElementById('chatRating');
+
+// Load chat history from localStorage
+function loadChatHistory() {
+  const saved = localStorage.getItem('petcareChatHistory');
+  if (saved) { chatHistory = JSON.parse(saved); updateHistoryBadge(); }
+}
+
+// Save chat history to localStorage
+function saveChatHistory() {
+  localStorage.setItem('petcareChatHistory', JSON.stringify(chatHistory.slice(-50)));
+  updateHistoryBadge();
+}
+
+// Update history badge count
+function updateHistoryBadge() {
+  const badge = document.getElementById('chat-history-badge');
+  const count = document.getElementById('chat-count');
+  if (chatHistory.length > 0) { badge.style.display = 'block'; count.textContent = chatHistory.length; }
+}
+
+// Response variants for more natural feel
 const R = {
-  book: "Appointment book karne ke liye upar 'Book Now' button dabao ya call karo:\n📞 +92-300-738 2273\n\n9 AM – 8 PM weekdays, emergencies 24/7! ✅",
-  groom: "Grooming prices 2026:\n• Small dogs/cats: Rs. 800–1,200\n• Medium dogs: Rs. 1,200–2,000\n• Large breeds: Rs. 2,000–3,500\n• Persian cats: Rs. 1,500–2,500\n\nBath, haircut, nail trim sab shamil ✂",
-  price: "Service fees:\n• Basic checkup: Rs. 500\n• Vaccination: Rs. 800–1,500\n• Grooming: Rs. 800–3,500\n• Dental: Rs. 2,000\n• Nutrition consult: Rs. 1,200",
-  emergency: "🚨 Emergency? Foran call:\n📞 +92-300-738 2273\n\n24/7 team har waqt tayar hai!",
-  hours: "Timings ⏰\n• Mon–Fri: 9 AM – 8 PM\n• Saturday: 9 AM – 6 PM\n• Sunday: 10 AM – 4 PM\n• Emergency: 24/7!",
-  cat: "Cats ke liye 🐱\n• Full checkups & vaccination\n• Persian grooming & spa\n• Dental care & nutrition\n• Surgery & emergency\n\nAppointment chahiye?",
-  dog: "Dogs ke liye 🐶\n• Annual health checkups\n• Complete vaccination\n• Professional grooming\n• Nutrition consult\n• 24/7 Emergency",
-  blog: "Pet Care Journal 📖\n• Dog nutrition guides\n• Cat grooming tips\n• Vaccination schedules\n• Training advice\n\nBlog section mein scroll karein!",
-  def: "Seedha contact karein:\n📩 info@petcarepro.com\n📞 +92-300-738 2273\n\nMain help kar sakta hoon:\nservices · prices · grooming · emergency · appointments 🐾"
+  book: [
+    "Appointment book karne ke liye upar 'Book Now' button dabao ya call karo:\n📞 +92-300-738 2273\n\n9 AM – 8 PM weekdays, emergencies 24/7! ✅",
+    "Appointment lena chahte ho? 📅\n\n'Book Now' button daba do ya directly call: 📞 +92-300-738 2273\n\nHum within 2 hours confirm kar denge!"
+  ],
+  groom: [
+    "Grooming prices 2026:\n• Small dogs/cats: Rs. 800–1,200\n• Medium dogs: Rs. 1,200–2,000\n• Large breeds: Rs. 2,000–3,500\n• Persian cats: Rs. 1,500–2,500\n\nBath, haircut, nail trim sab shamil ✂",
+    "Grooming ka rates:\n🐶 Small: Rs. 800–1,200\n🐕 Medium: Rs. 1,200–2,000\n🐂 Large: Rs. 2,000–3,500\n🐱 Persian: Rs. 1,500–2,500\n\nSab me shampooing & nail trim included hai!"
+  ],
+  price: [
+    "Service fees:\n• Basic checkup: Rs. 500\n• Vaccination: Rs. 800–1,500\n• Grooming: Rs. 800–3,500\n• Dental: Rs. 2,000\n• Nutrition consult: Rs. 1,200",
+    "Hamara pricing 2026:\n🏥 Checkup: Rs. 500 only\n💉 Vaccination: Rs. 800–1,500\n✂ Grooming: Rs. 800–3,500\n🦷 Dental: Rs. 2,000\n🍽 Nutrition: Rs. 1,200"
+  ],
+  emergency: [
+    "🚨 Emergency? Foran call:\n📞 +92-300-738 2273\n\n24/7 team har waqt tayar hai!",
+    "Urgent situation? 🆘\n\nCall immediately: 📞 +92-300-738 2273\n\nHamara team 24/7 available hai. Jaldi help kar denge!"
+  ],
+  hours: [
+    "Timings ⏰\n• Mon–Fri: 9 AM – 8 PM\n• Saturday: 9 AM – 6 PM\n• Sunday: 10 AM – 4 PM\n• Emergency: 24/7!",
+    "Hamara timing: 📍\n🕘 Weekdays: 9 AM – 8 PM\n🕘 Saturday: 9 AM – 6 PM\n🕘 Sunday: 10 AM – 4 PM\n🚨 Emergency: Kabhi bhi! 24/7"
+  ],
+  cat: [
+    "Cats ke liye 🐱\n• Full checkups & vaccination\n• Persian grooming & spa\n• Dental care & nutrition\n• Surgery & emergency\n\nAppointment chahiye?",
+    "Aapka bilali ke liye humari services:\n✓ Complete checkups\n✓ Vaccination\n✓ Professional grooming\n✓ Dental care\n✓ 24/7 Emergency\n\nKab aana hai? 🐱"
+  ],
+  dog: [
+    "Dogs ke liye 🐶\n• Annual health checkups\n• Complete vaccination\n• Professional grooming\n• Nutrition consult\n• 24/7 Emergency",
+    "Aapke kutton ke liye:\n✓ Health checkups\n✓ Vaccination\n✓ Grooming\n✓ Nutrition planning\n✓ Emergency care 24/7\n\nAppointment book karo! 🐶"
+  ],
+  def: [
+    "Seedha contact karein:\n📩 info@petcarepro.com\n📞 +92-300-738 2273\n\nMain help kar sakta hoon:\nservices · prices · grooming · emergency · appointments 🐾",
+    "Mujhe samajh nahi aya, par main yeh kar sakta hoon:\n📞 +92-300-738 2273 par call karo\n📩 ya info@petcarepro.com email karo\n\nHamara team tum se touch karega! 🐾"
+  ]
 };
+
 function getReply(m) {
   const t = m.toLowerCase();
-  if (/hello|hi|salaam|hey/.test(t)) return "Asalam u Alaikum! 👋 Main PetCare Pro ka Assistant hoon.\n\nAapke pet ke liye kya kar sakta hoon? 🐾";
-  if (/book|appoint/.test(t)) return R.book;
-  if (/groom/.test(t)) return R.groom;
-  if (/price|cost|fee|kitna|rate/.test(t)) return R.price;
-  if (/emergency|urgent|abhi/.test(t)) return R.emergency;
-  if (/hour|time|open|timing|kab/.test(t)) return R.hours;
-  if (/cat|billi|kitten|persian/.test(t)) return R.cat;
-  if (/dog|kutta|puppy|pup/.test(t)) return R.dog;
-  if (/blog|article|tip|guide/.test(t)) return R.blog;
-  return R.def;
+  let responses = [];
+  
+  if (/hello|hi|salaam|hey|hola|namaste/.test(t)) {
+    responses = ["Assalamu Alaikum! 👋 Main PetCare Pro ka Assistant hoon.\n\nAapke pet ke liye kya kar sakta hoon? 🐾", "Salam! 👋\n\nMain yahan aapki madad ke liye hoon. Pet ke bare mein kya poochna hai? 🐾"];
+    return responses[Math.floor(Math.random() * responses.length)];
+  }
+  if (/book|appoint/.test(t)) return R.book[Math.floor(Math.random() * R.book.length)];
+  if (/groom/.test(t)) return R.groom[Math.floor(Math.random() * R.groom.length)];
+  if (/price|cost|fee|kitna|rate/.test(t)) return R.price[Math.floor(Math.random() * R.price.length)];
+  if (/emergency|urgent|abhi|help|bachao/.test(t)) return R.emergency[Math.floor(Math.random() * R.emergency.length)];
+  if (/hour|time|open|timing|kab|kaunsa|samay/.test(t)) return R.hours[Math.floor(Math.random() * R.hours.length)];
+  if (/cat|billi|kitten|persian|mew|meow/.test(t)) { currentContext = 'cat'; return R.cat[Math.floor(Math.random() * R.cat.length)]; }
+  if (/dog|kutta|puppy|pup|bark|woof|canine/.test(t)) { currentContext = 'dog'; return R.dog[Math.floor(Math.random() * R.dog.length)]; }
+  if (/thank|dhanyavaad|shukriya|thanks/.test(t)) return "Khush rah! 🐾 Aapka pet khush rahe, bas yahi hamari dua hai! ❤";
+  if (/bye|goodbye|alvida|cya|later/.test(t)) return "Khuda hafiz! 👋 Pet care ke liye hamesa humara door khula hai! 🐾";
+  return R.def[Math.floor(Math.random() * R.def.length)];
 }
-function addMsg(text, who) { const d = document.createElement('div'); d.className = `msg ${who}`; d.textContent = text; msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight; }
-function showTyping() { const d = document.createElement('div'); d.className = 'msg bot'; d.id = 'td'; d.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>'; msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight; return d; }
-function sendChat() { const inp = document.getElementById('chatInput'), t = inp.value.trim(); if (!t) return; addMsg(t, 'user'); inp.value = ''; sugg.style.display = 'none'; const dot = showTyping(); setTimeout(() => { dot.remove(); addMsg(getReply(t), 'bot'); }, 700 + Math.random() * 500); }
-function sendSugg(btn) { addMsg(btn.textContent, 'user'); sugg.style.display = 'none'; const dot = showTyping(); setTimeout(() => { dot.remove(); addMsg(getReply(btn.textContent), 'bot'); }, 800); }
+
+function addMsg(text, who, showReactions = false) {
+  const d = document.createElement('div');
+  d.className = `msg ${who}`;
+  d.textContent = text;
+  
+  if (showReactions && who === 'bot') {
+    const reactions = document.createElement('div');
+    reactions.className = 'msg-reaction';
+    reactions.innerHTML = '<span onclick="reactMsg(this, \'👍\')" title="Helpful">👍</span><span onclick="reactMsg(this, \'❤\')" title="Loved it">❤</span><span onclick="reactMsg(this, \'🤔\')" title="Confused">🤔</span>';
+    d.appendChild(reactions);
+  }
+  
+  msgs.appendChild(d);
+  msgs.scrollTop = msgs.scrollHeight;
+  
+  // Save to history
+  chatHistory.push({ text, who, time: new Date().toLocaleTimeString() });
+  saveChatHistory();
+  
+  return d;
+}
+
+function reactMsg(el, emoji) {
+  el.style.opacity = '1';
+  el.textContent = emoji;
+  el.style.pointerEvents = 'none';
+}
+
+function showTyping() {
+  const d = document.createElement('div');
+  d.className = 'msg bot';
+  d.id = 'td';
+  d.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+  msgs.appendChild(d);
+  msgs.scrollTop = msgs.scrollHeight;
+  return d;
+}
+
+function sendChat() {
+  const inp = document.getElementById('chatInput'), t = inp.value.trim();
+  if (!t) return;
+  
+  addMsg(t, 'user');
+  inp.value = '';
+  sugg.style.display = 'none';
+  chatActions.style.display = 'none';
+  
+  const dot = showTyping();
+  setTimeout(() => {
+    dot.remove();
+    const reply = getReply(t);
+    addMsg(reply, 'bot', true);
+    
+    // Show action buttons for certain contexts
+    if (currentContext === 'dog' || currentContext === 'cat') {
+      showActionButtons();
+    }
+    
+    // Show rating after 5+ messages
+    if (chatHistory.length >= 10 && chatHistory.filter(m => m.who === 'bot').length >= 5) {
+      setTimeout(() => { chatRating.style.display = 'block'; }, 1500);
+    }
+  }, 600 + Math.random() * 600);
+}
+
+function sendSugg(btn) {
+  addMsg(btn.textContent, 'user');
+  sugg.style.display = 'none';
+  chatActions.style.display = 'none';
+  const dot = showTyping();
+  setTimeout(() => {
+    dot.remove();
+    const reply = getReply(btn.textContent);
+    addMsg(reply, 'bot', true);
+    if (btn.textContent.includes('appointment')) showActionButtons(['💬 More info', '📋 Check prices']);
+  }, 700 + Math.random() * 400);
+}
+
+function showActionButtons(actions = null) {
+  chatActions.innerHTML = '';
+  const defaultActions = ['📞 Call us', '📅 Book now', '💬 Ask more'];
+  const btns = actions || defaultActions;
+  btns.forEach(action => {
+    const btn = document.createElement('button');
+    btn.className = 'chat-action-btn';
+    btn.textContent = action;
+    btn.onclick = () => sendChat.call({ value: { trim: () => action }, type: 'click' }) || sendSugg(btn);
+    chatActions.appendChild(btn);
+  });
+  chatActions.style.display = 'flex';
+}
+
+function rateChatSession(rating) {
+  const ratings = ['😞 Not helpful', '😐 Okay', '😊 Good', '😄 Great', '🥰 Excellent'];
+  addMsg(`${ratings[rating - 1]}`, 'user');
+  addMsg(`Shukriya! 🙏 Teri feedback humari madad karti hai. Agle waqt aur behtar service denge! 💪`, 'bot');
+  chatRating.style.display = 'none';
+}
+
+function exportChatHistory() {
+  if (chatHistory.length === 0) { alert('Chat history khali hai!'); return; }
+  const txt = chatHistory.map(m => `[${m.time}] ${m.who === 'user' ? 'You' : 'Bot'}: ${m.text}`).join('\n\n');
+  const blob = new Blob([txt], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `PetCare-Chat-${new Date().toISOString().split('T')[0]}.txt`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 function toggleChat() {
   chatOpen = !chatOpen; chatbox.classList.toggle('open', chatOpen);
   if (chatOpen && msgs.children.length === 0) {
-    setTimeout(() => addMsg('👋 Asalam u Alaikum! Main PetCare Pro Assistant hoon.\n\nKya madad kar sakta hoon? 🐾', 'bot'), 300);
+    loadChatHistory();
+    if (chatHistory.length > 0) {
+      // Show last message if history exists
+      addMsg('📜 Pichli chat history load ho gayi! Kya nayi kisi cheez mein help chahiye? 🐾', 'bot');
+    } else {
+      setTimeout(() => addMsg('👋 Assalamu Alaikum! Main PetCare Pro Assistant hoon.\n\nKya madad kar sakta hoon? 🐾', 'bot'), 300);
+    }
     document.querySelector('.chat-notif').style.display = 'none';
   }
 }
+
+loadChatHistory();
 </script>
 
 <script type="module">
