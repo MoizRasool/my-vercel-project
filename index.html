@@ -438,7 +438,20 @@ nav.scrolled {
 /* ✦ CHANGED: Blog titles — Fraunces serif */
 .blog-title { font-family:'Fraunces',serif; font-size:22px; font-weight:700; line-height:1.3; letter-spacing:-.5px; color:var(--dark); margin-bottom:14px }
 .blog-card:nth-child(1) .blog-title { font-size:26px }
-.blog-excerpt { font-size:14px; color:var(--text-muted); line-height:1.7; font-weight:400; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden }
+.blog-excerpt {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.7;
+  font-weight: 400;
+  display: -webkit-box;
+  display: -moz-box;
+  display: box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  box-orient: vertical;
+  overflow: hidden;
+  max-height: 5.1em; /* 3 lines * 1.7 line-height */
+}
 .blog-footer { display:flex; align-items:center; justify-content:space-between; margin-top:22px; padding-top:20px; border-top:1px solid var(--border-light) }
 .blog-author { display:flex; align-items:center; gap:10px; font-size:13px; font-weight:600; color:var(--dark) }
 .blog-author img { width:30px; height:30px; border-radius:50%; object-fit:cover; object-position:top }
