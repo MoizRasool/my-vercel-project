@@ -679,7 +679,88 @@ footer { padding:36px 64px; background:var(--dark); display:flex; justify-conten
 .puzzle-difficulty button { flex:1; padding:10px; background:rgba(78,122,82,.08); border:1.5px solid rgba(78,122,82,.2); border-radius:12px; font-size:12px; font-weight:700; cursor:pointer; transition:all .25s; text-transform:uppercase; letter-spacing:.5px; color:var(--forest); }
 .puzzle-difficulty button.active { background:var(--sage); color:white; border-color:var(--sage); }
 
-/* Responsive Puzzle Game */
+/* ═════════════════════════════════════════════════════════
+   ✦ NEW FEATURES STYLES
+   ═════════════════════════════════════════════════════════ */
+
+/* PET PROFILES SECTION */
+.pet-profiles-section { padding:130px 64px; background:var(--cream); }
+.profiles-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:28px; margin-top:50px; }
+.profile-card { background:white; border-radius:24px; padding:28px; box-shadow:0 12px 40px rgba(0,0,0,.08); border:1px solid var(--border-light); transition:all .3s; text-align:center; }
+.profile-card:hover { transform:translateY(-4px); box-shadow:0 20px 60px rgba(0,0,0,.12); }
+.profile-avatar { width:100px; height:100px; border-radius:50%; background:linear-gradient(135deg, var(--sage-pale), var(--gold-light)); display:flex; align-items:center; justify-content:center; font-size:48px; margin:0 auto 16px; }
+.profile-name { font-family:'Fraunces',serif; font-size:18px; font-weight:700; color:var(--forest); margin-bottom:4px; }
+.profile-type { font-size:14px; color:var(--sage); margin-bottom:12px; }
+.profile-info { font-size:13px; color:var(--text-muted); margin-bottom:16px; line-height:1.6; }
+.profile-actions { display:flex; gap:8px; }
+.profile-actions button { flex:1; padding:10px; background:rgba(78,122,82,.1); border:1px solid rgba(78,122,82,.2); border-radius:12px; font-size:12px; font-weight:700; color:var(--forest); cursor:pointer; transition:all .25s; }
+.profile-actions button:hover { background:var(--sage); color:white; border-color:var(--sage); }
+.add-pet-btn { background:linear-gradient(135deg, var(--sage), var(--sage-light)); color:white; padding:16px 32px; border-radius:50px; border:none; font-weight:700; cursor:pointer; margin-top:30px; width:100%; transition:all .3s; }
+.add-pet-btn:hover { transform:translateY(-2px); box-shadow:0 12px 32px rgba(78,122,82,.3); }
+
+/* PET HEALTH TRACKER */
+.health-tracker-section { padding:130px 64px; background:linear-gradient(145deg, #f5f1e8, var(--cream)); }
+.tracker-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:24px; margin-top:50px; }
+.tracker-card { background:white; border-radius:20px; padding:24px; box-shadow:0 12px 36px rgba(0,0,0,.08); border:1px solid var(--border-light); }
+.tracker-icon { font-size:32px; margin-bottom:12px; }
+.tracker-title { font-family:'Fraunces',serif; font-size:18px; font-weight:700; color:var(--forest); margin-bottom:12px; }
+.tracker-content { font-size:13px; color:var(--text-muted); line-height:1.6; margin-bottom:16px; }
+.tracker-stats { background:rgba(78,122,82,.08); border-radius:12px; padding:12px; font-size:12px; color:var(--forest); font-weight:700; }
+.tracker-btn { width:100%; padding:12px; background:var(--sage); color:white; border:none; border-radius:12px; font-weight:700; cursor:pointer; margin-top:12px; transition:all .25s; }
+.tracker-btn:hover { background:var(--forest); }
+
+/* FAQ SECTION */
+.faq-section { padding:130px 64px; background:var(--cream); }
+.faq-grid { display:grid; grid-template-columns:1fr 1fr; gap:60px; margin-top:50px; align-items:start; }
+.faq-list { display:flex; flex-direction:column; gap:16px; }
+.faq-item { background:white; border-radius:16px; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,.06); border:1px solid var(--border-light); }
+.faq-question { padding:20px; background:linear-gradient(135deg, rgba(78,122,82,.05), rgba(200,168,74,.05)); cursor:pointer; display:flex; justify-content:space-between; align-items:center; font-weight:700; color:var(--forest); transition:all .25s; font-family:'Syne',sans-serif; }
+.faq-question:hover { background:linear-gradient(135deg, rgba(78,122,82,.1), rgba(200,168,74,.1)); }
+.faq-toggle { font-size:20px; transition:transform .3s; }
+.faq-item.active .faq-toggle { transform:rotate(180deg); }
+.faq-answer { max-height:0; overflow:hidden; transition:max-height .3s; }
+.faq-item.active .faq-answer { max-height:500px; }
+.faq-answer-content { padding:20px; font-size:14px; color:var(--text-muted); line-height:1.7; }
+.faq-image { width:100%; height:100%; object-fit:cover; border-radius:16px; }
+
+/* EMERGENCY & WHATSAPP BUTTONS */
+.emergency-btn, .whatsapp-btn { position:fixed; z-index:9995; width:56px; height:56px; border-radius:50%; border:none; cursor:pointer; box-shadow:0 8px 32px rgba(0,0,0,.2); transition:all .3s; display:flex; align-items:center; justify-content:center; font-size:24px; font-weight:700; }
+.emergency-btn { bottom:140px; right:28px; background:linear-gradient(135deg, #ff6b6b, #ff5252); color:white; }
+.emergency-btn:hover { transform:scale(1.1); box-shadow:0 12px 40px rgba(255,107,107,.4); }
+.whatsapp-btn { bottom:210px; right:28px; background:linear-gradient(135deg, #25d366, #20ba5a); color:white; }
+.whatsapp-btn:hover { transform:scale(1.1); box-shadow:0 12px 40px rgba(37,211,102,.4); }
+
+/* NEWSLETTER SECTION */
+.newsletter-section { padding:60px 64px; background:linear-gradient(135deg, var(--forest), var(--sage)); text-align:center; margin:60px 64px; border-radius:32px; }
+.newsletter-title { font-family:'Fraunces',serif; font-size:32px; font-weight:800; color:white; margin-bottom:12px; }
+.newsletter-sub { font-size:16px; color:rgba(255,255,255,.8); margin-bottom:32px; max-width:600px; margin-left:auto; margin-right:auto; }
+.newsletter-form { display:flex; gap:12px; max-width:500px; margin:0 auto; }
+.newsletter-form input { flex:1; padding:14px 20px; border:none; border-radius:12px; font-size:14px; }
+.newsletter-form button { padding:14px 32px; background:var(--gold); color:var(--forest); border:none; border-radius:12px; font-weight:700; cursor:pointer; transition:all .3s; }
+.newsletter-form button:hover { background:var(--gold-light); transform:translateY(-2px); }
+
+/* RATINGS & REVIEWS */
+.review-form { background:white; border-radius:20px; padding:32px; margin:30px 0; box-shadow:0 12px 40px rgba(0,0,0,.08); }
+.review-form-title { font-family:'Fraunces',serif; font-size:22px; font-weight:700; color:var(--forest); margin-bottom:20px; }
+.rating-input { display:flex; gap:8px; margin-bottom:20px; }
+.star-btn { font-size:32px; cursor:pointer; opacity:.5; transition:all .2s; }
+.star-btn:hover { opacity:1; transform:scale(1.2); }
+.star-btn.active { opacity:1; }
+.review-textarea { width:100%; padding:16px; border:1px solid var(--border-light); border-radius:12px; font-family:'Syne',sans-serif; font-size:14px; resize:vertical; }
+.review-submit { width:100%; padding:14px; background:var(--sage); color:white; border:none; border-radius:12px; font-weight:700; cursor:pointer; margin-top:16px; transition:all .3s; }
+.review-submit:hover { background:var(--forest); }
+
+/* GOOGLE MAP EMBED */
+.map-container { margin:40px 0; border-radius:20px; overflow:hidden; box-shadow:0 12px 40px rgba(0,0,0,.1); height:400px; }
+.map-container iframe { width:100%; height:100%; border:none; }
+
+/* Responsive */
+@media (max-width:1024px) {
+  .pet-profiles-section, .health-tracker-section, .faq-section, .newsletter-section { padding:90px 24px; }
+  .faq-grid { grid-template-columns:1fr; gap:40px; }
+  .newsletter-form { flex-direction:column; }
+  .map-container { height:300px; }
+}
 @media (max-width:1024px) {
   .puzzle-game-container { grid-template-columns:1fr; gap:40px; }
   .puzzle-game-wrapper { margin:0 auto; width:100%; max-width:500px; }
@@ -723,6 +804,9 @@ footer { padding:36px 64px; background:var(--dark); display:flex; justify-conten
     <a href="#blog">Journal</a>
     <a href="#testimonials">Reviews</a>
     <a href="#contact">Contact</a>
+    <a href="#health-tracker">Health Tracker</a>
+    <a href="#faq">FAQ</a>
+    <a href="#pet-profiles">Pet Profiles</a>
     <a href="#games">Play & Learn</a>
     <a href="#" class="nav-cta" onclick="openModal(event)">Book Now</a>
     <div id="auth-controls" style="display:flex;gap:10px;align-items:center;margin-left:8px">
@@ -853,6 +937,62 @@ footer { padding:36px 64px; background:var(--dark); display:flex; justify-conten
   </div>
 </section>
 
+<!-- PET HEALTH TRACKER -->
+<section class="health-tracker-section" id="health-tracker">
+  <div class="section-intro">
+    <div>
+      <div class="sec-label">Monitor Health</div>
+      <div class="sec-divider"></div>
+      <div class="sec-title">Pet Health<br>Tracking Tools.</div>
+    </div>
+    <p class="sec-sub">Keep detailed records of your pet's health, vaccinations, and medical history in one place.</p>
+  </div>
+  <div class="tracker-grid">
+    <div class="tracker-card">
+      <div class="tracker-icon">💉</div>
+      <div class="tracker-title">Vaccination Tracker</div>
+      <div class="tracker-content">Schedule and track all important vaccinations for your pet.</div>
+      <div class="tracker-stats">Last: Rabies (Mar 2026)</div>
+      <button class="tracker-btn" onclick="alert('Vaccination tracker - coming soon')">View Timeline</button>
+    </div>
+    <div class="tracker-card">
+      <div class="tracker-icon">⚖️</div>
+      <div class="tracker-title">Weight Monitor</div>
+      <div class="tracker-content">Track your pet's weight changes over time with growth charts.</div>
+      <div class="tracker-stats">Current: 32.5 kg</div>
+      <button class="tracker-btn" onclick="alert('Weight tracker - coming soon')">Log Weight</button>
+    </div>
+    <div class="tracker-card">
+      <div class="tracker-icon">💊</div>
+      <div class="tracker-title">Medicine Reminders</div>
+      <div class="tracker-content">Set reminders for daily medications and supplements.</div>
+      <div class="tracker-stats">Active: 2 medicines</div>
+      <button class="tracker-btn" onclick="alert('Medicine reminders - coming soon')">Add Medicine</button>
+    </div>
+    <div class="tracker-card">
+      <div class="tracker-icon">📋</div>
+      <div class="tracker-title">Vet Visit History</div>
+      <div class="tracker-content">Keep complete records of all veterinary visits and treatments.</div>
+      <div class="tracker-stats">Last visit: 15 days ago</div>
+      <button class="tracker-btn" onclick="alert('Visit history - coming soon')">View History</button>
+    </div>
+    <div class="tracker-card">
+      <div class="tracker-icon">🥗</div>
+      <div class="tracker-title">Nutrition Tracker</div>
+      <div class="tracker-content">Monitor diet, calories, and nutritional intake daily.</div>
+      <div class="tracker-stats">Plan: High-protein</div>
+      <button class="tracker-btn" onclick="alert('Nutrition tracker - coming soon')">Update Diet</button>
+    </div>
+    <div class="tracker-card">
+      <div class="tracker-icon">🩺</div>
+      <div class="tracker-title">Health Reports</div>
+      <div class="tracker-content">Download and share detailed health reports with vets.</div>
+      <div class="tracker-stats">Latest: Mar 2026</div>
+      <button class="tracker-btn" onclick="alert('Health reports - coming soon')">Download PDF</button>
+    </div>
+  </div>
+</section>
+
 <!-- TESTIMONIALS -->
 <section class="testimonials" id="testimonials">
   <div class="section-intro">
@@ -870,6 +1010,110 @@ footer { padding:36px 64px; background:var(--dark); display:flex; justify-conten
     <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"We adopted our bunny Coco through PetCare Pro's adoption program. The matching process was so thoughtful — she fits perfectly with our family. Absolutely wonderful experience."</p><div class="testi-author"><img class="testi-avatar" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&q=80" alt="Mariam"><div><div class="testi-name">Mariam Tariq</div><div class="testi-pet">🐰 Rabbit Mom</div></div></div></div>
     <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"The nutrition consultation changed my cat's life. She was lethargic and now she's playful and healthy. The vet nutritionist really took the time to understand her needs."</p><div class="testi-author"><img class="testi-avatar" src="https://images.unsplash.com/photo-1554151228-14d9def656e4?w=100&q=80" alt="Zara"><div><div class="testi-name">Zara Iqbal</div><div class="testi-pet">🐱 Siamese Cat Owner</div></div></div></div>
     <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-text">"My German Shepherd Max needed surgery and I was terrified. The team kept me updated throughout the whole process. Max recovered beautifully. Forever grateful to PetCare Pro."</p><div class="testi-author"><img class="testi-avatar" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80" alt="Bilal"><div><div class="testi-name">Bilal Chaudhry</div><div class="testi-pet">🐕 German Shepherd Owner</div></div></div></div>
+  </div>
+</section>
+
+<!-- FAQ SECTION -->
+<section class="faq-section" id="faq">
+  <div class="section-intro">
+    <div>
+      <div class="sec-label">Questions & Answers</div>
+      <div class="sec-divider"></div>
+      <div class="sec-title">Frequently Asked<br>Questions.</div>
+    </div>
+    <p class="sec-sub">Find answers to common pet care questions from our expert team.</p>
+  </div>
+  <div class="faq-grid">
+    <div class="faq-list">
+      <div class="faq-item" onclick="this.classList.toggle('active')">
+        <div class="faq-question">What age should my pet be vaccinated? <span class="faq-toggle">▼</span></div>
+        <div class="faq-answer"><div class="faq-answer-content">Most puppies and kittens should start vaccinations at 6-8 weeks of age, with boosters every 3-4 weeks until 16 weeks old. Adult pets require annual or tri-annual boosters depending on the vaccine type.</div></div>
+      </div>
+      <div class="faq-item" onclick="this.classList.toggle('active')">
+        <div class="faq-question">How often should I bring my pet for checkups? <span class="faq-toggle">▼</span></div>
+        <div class="faq-answer"><div class="faq-answer-content">Healthy adult pets should have an annual wellness checkup. Senior pets (7+ years) should visit every 6 months. Puppies and kittens need visits every 3-4 weeks.</div></div>
+      </div>
+      <div class="faq-item" onclick="this.classList.toggle('active')">
+        <div class="faq-question">What should I feed my pet for optimal health? <span class="faq-toggle">▼</span></div>
+        <div class="faq-answer"><div class="faq-answer-content">Feed high-quality, age-appropriate food with essential proteins, fats, and nutrients. Consult our nutritionists for breed and health-specific recommendations.</div></div>
+      </div>
+      <div class="faq-item" onclick="this.classList.toggle('active')">
+        <div class="faq-question">Is pet insurance worth it? <span class="faq-toggle">▼</span></div>
+        <div class="faq-answer"><div class="faq-answer-content">Yes, pet insurance can protect you from high veterinary costs. We recommend comparing plans based on coverage, deductibles, and your pet's breed predispositions.</div></div>
+      </div>
+      <div class="faq-item" onclick="this.classList.toggle('active')">
+        <div class="faq-question">How can I help my anxious pet? <span class="faq-toggle">▼</span></div>
+        <div class="faq-answer"><div class="faq-answer-content">Use positive reinforcement, create safe spaces, consider anxiety wraps, and consult vets about behavior modification or supplements. In severe cases, medication may help.</div></div>
+      </div>
+    </div>
+    <div style="background:white; border-radius:20px; padding:40px; box-shadow:0 12px 40px rgba(0,0,0,.08); height:fit-content;">
+      <h3 style="font-family:'Fraunces',serif; font-size:24px; font-weight:700; color:var(--forest); margin-bottom:20px;">Still Have Questions?</h3>
+      <p style="font-size:14px; color:var(--text-muted); margin-bottom:24px; line-height:1.7;">Our expert veterinarians and pet care specialists are ready to help. Get personalized advice tailored to your pet's needs.</p>
+      <div style="margin-bottom:20px;">
+        <div style="font-size:13px; font-weight:700; color:var(--dark); margin-bottom:8px;">📞 Call Us</div>
+        <div style="font-size:14px; color:var(--text-muted);">+92 300 PetCare (738 2273)</div>
+      </div>
+      <div style="margin-bottom:24px;">
+        <div style="font-size:13px; font-weight:700; color:var(--dark); margin-bottom:8px;">💬 Chat Support</div>
+        <div style="font-size:14px; color:var(--text-muted);">24/7 available via chat bubble</div>
+      </div>
+      <button class="form-submit" style="width:100%; background:var(--sage);" onclick="toggleChat()">Start Chat Now</button>
+    </div>
+  </div>
+</section>
+
+<!-- PET PROFILES -->
+<section class="pet-profiles-section" id="pet-profiles">
+  <div class="section-intro">
+    <div>
+      <div class="sec-label">Your Pets</div>
+      <div class="sec-divider"></div>
+      <div class="sec-title">Create Pet<br>Profiles.</div>
+    </div>
+    <p class="sec-sub">Keep detailed profiles of all your beloved pets with their medical history and preferences.</p>
+  </div>
+  <div class="profiles-grid">
+    <div class="profile-card">
+      <div class="profile-avatar">🐕</div>
+      <div class="profile-name">Max</div>
+      <div class="profile-type">Golden Retriever</div>
+      <div class="profile-info">Age: 4 years<br>Weight: 32 kg<br>Status: Healthy</div>
+      <div class="profile-actions">
+        <button onclick="alert('Edit profile - coming soon')">Edit</button>
+        <button onclick="alert('Health history - coming soon')">History</button>
+      </div>
+    </div>
+    <div class="profile-card">
+      <div class="profile-avatar">🐱</div>
+      <div class="profile-name">Whiskers</div>
+      <div class="profile-type">Persian Cat</div>
+      <div class="profile-info">Age: 3 years<br>Weight: 4.5 kg<br>Status: Healthy</div>
+      <div class="profile-actions">
+        <button onclick="alert('Edit profile - coming soon')">Edit</button>
+        <button onclick="alert('Health history - coming soon')">History</button>
+      </div>
+    </div>
+    <div class="profile-card">
+      <div class="profile-avatar">🐰</div>
+      <div class="profile-name">Coco</div>
+      <div class="profile-type">Holland Lop</div>
+      <div class="profile-info">Age: 2 years<br>Weight: 2.2 kg<br>Status: Healthy</div>
+      <div class="profile-actions">
+        <button onclick="alert('Edit profile - coming soon')">Edit</button>
+        <button onclick="alert('Health history - coming soon')">History</button>
+      </div>
+    </div>
+  </div>
+  <button class="add-pet-btn" onclick="alert('Add new pet - coming soon')">+ Add New Pet Profile</button>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="newsletter-section">
+  <div class="newsletter-title">Stay Updated on Pet Care</div>
+  <div class="newsletter-sub">Get weekly tips, health alerts, and exclusive offers delivered to your inbox.</div>
+  <div class="newsletter-form">
+    <input type="email" id="newsletter-email" placeholder="Enter your email address...">
+    <button onclick="subscribeNewsletter()">Subscribe →</button>
   </div>
 </section>
 
@@ -916,6 +1160,26 @@ footer { padding:36px 64px; background:var(--dark); display:flex; justify-conten
       <div class="form-group"><label>Message</label><textarea id="f-msg" placeholder="Tell us about your pet and what you need..."></textarea></div>
       <button class="form-submit" onclick="handleContactSubmit(this)">Send Message →</button>
     </div>
+  </div>
+  <!-- Google Map Embed -->
+  <div class="map-container">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3619.0877639832753!2d67.0597!3d24.7758!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sPetCare%20Pro!5e0!3m2!1sen!2s!4v1234567890" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  </div>
+  <!-- Review Form -->
+  <div class="review-form">
+    <div class="review-form-title">Share Your Experience</div>
+    <div style="margin-bottom:20px;">
+      <div style="font-size:13px; font-weight:700; color:var(--dark); margin-bottom:12px;">Rate Your Visit</div>
+      <div class="rating-input" id="rating-input">
+        <button class="star-btn" onclick="setRating(1)">⭐</button>
+        <button class="star-btn" onclick="setRating(2)">⭐</button>
+        <button class="star-btn" onclick="setRating(3)">⭐</button>
+        <button class="star-btn" onclick="setRating(4)">⭐</button>
+        <button class="star-btn" onclick="setRating(5)">⭐</button>
+      </div>
+    </div>
+    <textarea class="review-textarea" id="review-text" placeholder="Share your experience with PetCare Pro..."></textarea>
+    <button class="review-submit" onclick="submitReview()">Submit Review</button>
   </div>
 </section>
 
@@ -986,6 +1250,13 @@ footer { padding:36px 64px; background:var(--dark); display:flex; justify-conten
 </footer>
 
 <!-- CHATBOT -->
+<!-- Emergency Button -->
+<button class="emergency-btn" onclick="callEmergency()" title="Call Emergency Vet">🚨</button>
+
+<!-- WhatsApp Button -->
+<button class="whatsapp-btn" onclick="openWhatsApp()" title="Chat on WhatsApp">💬</button>
+
+<!-- Chat Bubble -->
 <button class="chat-bubble" id="chatBubble" onclick="toggleChat()" aria-label="Open chat">🐾<div class="chat-notif"></div></button>
 <div id="chat-history-badge" class="chat-history-badge" style="display:none">💬 <span id="chat-count">0</span></div>
 <div class="chatbox" id="chatbox">

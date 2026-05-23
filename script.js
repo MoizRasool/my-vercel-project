@@ -142,8 +142,84 @@ function setPuzzleDifficulty(level) {
 // Make setPuzzleDifficulty globally accessible
 window.setPuzzleDifficulty = setPuzzleDifficulty;
 
+// ==================== NEW FEATURES ====================
+
+// Newsletter subscription
+function subscribeNewsletter() {
+  const email = document.getElementById('newsletter-email');
+  if (!email.value) {
+    alert('Please enter your email address');
+    return;
+  }
+  localStorage.setItem('newsletter-' + email.value, 'subscribed');
+  alert('✅ Welcome to PetCare Pro Newsletter! Check your email for confirmation.');
+  email.value = '';
+}
+
+// Emergency button
+function callEmergency() {
+  const phone = '+923007382273';
+  window.location.href = `tel:${phone}`;
+  alert('📞 Calling emergency vet service...');
+}
+
+// WhatsApp button
+function openWhatsApp() {
+  const message = 'Hi PetCare Pro, I need emergency pet care assistance!';
+  const phone = '923007382273';
+  const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+  window.open(url, '_blank');
+}
+
+// Review rating
+let selectedRating = 0;
+function setRating(rating) {
+  selectedRating = rating;
+  const stars = document.querySelectorAll('.star-btn');
+  stars.forEach((star, index) => {
+    if (index < rating) {
+      star.classList.add('active');
+    } else {
+      star.classList.remove('active');
+    }
+  });
+}
+
+// Submit review
+function submitReview() {
+  const reviewText = document.getElementById('review-text').value;
+  if (!selectedRating || !reviewText) {
+    alert('Please select a rating and write a review');
+    return;
+  }
+  
+  const reviews = JSON.parse(localStorage.getItem('petcareReviews') || '[]');
+  reviews.push({
+    rating: selectedRating,
+    text: reviewText,
+    date: new Date().toLocaleDateString()
+  });
+  localStorage.setItem('petcareReviews', JSON.stringify(reviews));
+  
+  alert('✅ Thank you for your review!');
+  document.getElementById('review-text').value = '';
+  selectedRating = 0;
+  document.querySelectorAll('.star-btn').forEach(star => star.classList.remove('active'));
+}
+
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
   console.log('DOM loaded, initializing puzzle stats...');
   updatePuzzleStats();
+  
+  // Add smooth scroll behavior
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      const href = this.getAttribute('href');
+      if (href !== '#' && document.querySelector(href)) {
+        e.preventDefault();
+        document.querySelector(href).scrollIntoView({behavior: 'smooth'});
+      }
+    });
+  });
 });
