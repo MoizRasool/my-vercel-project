@@ -648,30 +648,49 @@ footer { padding:36px 64px; background:var(--dark); display:flex; justify-conten
 }
 /* Games Section */
 .games-section { padding:130px 64px; background:linear-gradient(145deg, var(--cream) 0%, #f0ece3 100%); position:relative; }
-.games-grid { display:grid; grid-template-columns:1fr 1fr; gap:40px; margin-top:50px; }
-.game-card { background:white; border-radius:32px; padding:32px; box-shadow:0 20px 48px rgba(0,0,0,.06); border:1px solid var(--border-light); transition:transform .3s ease, box-shadow .3s ease; }
-.game-card:hover { transform:translateY(-5px); box-shadow:0 28px 56px rgba(0,0,0,.1); }
-.game-title { font-family:'Fraunces',serif; font-size:28px; font-weight:800; letter-spacing:-0.5px; color:var(--forest); margin-bottom:8px; display:flex; align-items:center; gap:10px; }
-.game-desc { font-size:13px; color:var(--text-muted); margin-bottom:24px; border-left:3px solid var(--gold); padding-left:16px; }
-.trivia-question { font-family:'Fraunces',serif; font-size:20px; font-weight:700; margin:20px 0 18px; color:var(--dark); }
-.trivia-options { display:flex; flex-direction:column; gap:12px; margin-bottom:24px; }
-.trivia-opt { background:var(--cream); border:1px solid var(--border); border-radius:60px; padding:12px 20px; cursor:pointer; transition:all .2s; font-weight:500; display:flex; align-items:center; gap:12px; }
-.trivia-opt:hover { background:var(--sage-pale); border-color:var(--sage); transform:translateX(6px); }
-.trivia-opt.selected { background:var(--gold); border-color:var(--gold); color:var(--dark); }
-.trivia-score, .scramble-score { font-size:14px; font-weight:700; background:var(--sage-pale); display:inline-block; padding:5px 12px; border-radius:40px; color:var(--forest); margin-bottom:20px; }
-.trivia-next { background:var(--forest); color:white; border:none; padding:10px 24px; border-radius:40px; font-weight:700; cursor:pointer; transition:all .2s; font-family:'Syne',sans-serif; }
-.trivia-next:hover { background:var(--sage); transform:scale(1.02); }
-.scramble-word { font-family:'Fraunces',serif; font-size:48px; font-weight:800; letter-spacing:8px; background:var(--cream); padding:24px; text-align:center; border-radius:24px; margin:20px 0; color:var(--forest); border:1px dashed var(--gold); }
-.scramble-input { width:100%; padding:14px 18px; border-radius:60px; border:1.5px solid var(--border); background:var(--cream); font-size:16px; margin:16px 0; font-family:'Syne',sans-serif; }
-.scramble-input:focus { border-color:var(--gold); outline:none; background:white; }
-.scramble-btn { background:var(--forest); color:white; border:none; padding:10px 20px; border-radius:40px; font-weight:700; cursor:pointer; margin-right:12px; transition:.2s; }
-.scramble-btn:hover { background:var(--sage); }
-.scramble-feedback { margin-top:16px; font-size:14px; min-height:50px; font-weight:500; }
+
+/* 🎮 RUNNER GAME CONTAINER */
+.runner-game-container { display:grid; grid-template-columns:1fr 1fr; gap:60px; margin-top:50px; align-items:start; }
+#runnerCanvas { display:block; width:100%; height:auto; background:linear-gradient(to bottom, #4E7A52, #F4EFE6); border-radius:32px; box-shadow:0 24px 72px rgba(0,0,0,.12); border:2px solid rgba(200,168,74,.15); }
+.runner-canvas-wrapper { position:relative; aspect-ratio:1; }
+.runner-stats-card { background:white; border-radius:32px; padding:32px; box-shadow:0 20px 48px rgba(0,0,0,.06); border:1px solid var(--border-light); height:fit-content; }
+.runner-stats-header { margin-bottom:28px; }
+.runner-stats-header h3 { font-family:'Fraunces',serif; font-size:28px; font-weight:800; color:var(--forest); letter-spacing:-0.5px; }
+.runner-stats-content { display:flex; flex-direction:column; gap:0; }
+.runner-stat-item { padding:16px 0; border-bottom:1px solid var(--border-light); }
+.runner-stat-item:last-of-type { border-bottom:none; }
+.runner-stat-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.8px; color:var(--text-muted); margin-bottom:8px; }
+.runner-stat-value { font-family:'Fraunces',serif; font-size:32px; font-weight:900; color:var(--forest); }
+.runner-high-score { color:var(--gold) }
+.runner-speed-meter { color:var(--sage); font-size:24px; }
+.runner-start-btn { width:100%; padding:18px; background:linear-gradient(135deg, var(--forest) 0%, var(--sage) 100%); color:white; border:none; border-radius:20px; font-family:'Syne',sans-serif; font-size:14px; font-weight:700; cursor:pointer; transition:all .35s cubic-bezier(.34,1.56,.64,1); letter-spacing:1.2px; text-transform:uppercase; margin-top:20px; position:relative; overflow:hidden; }
+.runner-start-btn::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg, var(--sage) 0%, var(--sage-light) 100%); opacity:0; transition:opacity .3s; }
+.runner-start-btn:hover::before { opacity:1; }
+.runner-start-btn:hover { transform:translateY(-2px); box-shadow:0 16px 40px rgba(78,122,82,.3); }
+.runner-start-btn > * { position:relative; z-index:1; }
+.runner-start-btn:disabled { opacity:.5; cursor:not-allowed; transform:none; }
+
+/* Responsive Runner Game */
 @media (max-width:1024px) {
-  .games-grid { grid-template-columns:1fr; }
+  .runner-game-container { grid-template-columns:1fr; gap:40px; }
+  .runner-canvas-wrapper { margin:0 auto; width:100%; max-width:500px; }
   .games-section { padding:90px 24px; }
-  .scramble-word { font-size:36px; letter-spacing:4px; }
+  #runnerCanvas { max-width:100%; }
 }
+
+/* LEGACY GAME STYLES (keeping for reference, no longer used) */
+.games-grid { display:none; }
+.game-card { display:none; }
+.game-title { display:none; }
+.game-desc { display:none; }
+.trivia-question { display:none; }
+.trivia-options { display:none; }
+.trivia-opt { display:none; }
+.trivia-score { display:none; }
+.scramble-word { display:none; }
+.scramble-input { display:none; }
+.scramble-btn { display:none; }
+.scramble-feedback { display:none; }
 </style>
 </head>
 <body>
