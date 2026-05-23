@@ -649,33 +649,42 @@ footer { padding:36px 64px; background:var(--dark); display:flex; justify-conten
 /* Games Section */
 .games-section { padding:130px 64px; background:linear-gradient(145deg, var(--cream) 0%, #f0ece3 100%); position:relative; }
 
-/* 🎮 RUNNER GAME CONTAINER */
-.runner-game-container { display:grid; grid-template-columns:1fr 1fr; gap:60px; margin-top:50px; align-items:start; }
-#runnerCanvas { display:block; width:100%; height:auto; background:linear-gradient(to bottom, #4E7A52, #F4EFE6); border-radius:32px; box-shadow:0 24px 72px rgba(0,0,0,.12); border:2px solid rgba(200,168,74,.15); }
-.runner-canvas-wrapper { position:relative; aspect-ratio:1; }
-.runner-stats-card { background:white; border-radius:32px; padding:32px; box-shadow:0 20px 48px rgba(0,0,0,.06); border:1px solid var(--border-light); height:fit-content; }
-.runner-stats-header { margin-bottom:28px; }
-.runner-stats-header h3 { font-family:'Fraunces',serif; font-size:28px; font-weight:800; color:var(--forest); letter-spacing:-0.5px; }
-.runner-stats-content { display:flex; flex-direction:column; gap:0; }
-.runner-stat-item { padding:16px 0; border-bottom:1px solid var(--border-light); }
-.runner-stat-item:last-of-type { border-bottom:none; }
-.runner-stat-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.8px; color:var(--text-muted); margin-bottom:8px; }
-.runner-stat-value { font-family:'Fraunces',serif; font-size:32px; font-weight:900; color:var(--forest); }
-.runner-high-score { color:var(--gold) }
-.runner-speed-meter { color:var(--sage); font-size:24px; }
-.runner-start-btn { width:100%; padding:18px; background:linear-gradient(135deg, var(--forest) 0%, var(--sage) 100%); color:white; border:none; border-radius:20px; font-family:'Syne',sans-serif; font-size:14px; font-weight:700; cursor:pointer; transition:all .35s cubic-bezier(.34,1.56,.64,1); letter-spacing:1.2px; text-transform:uppercase; margin-top:20px; position:relative; overflow:hidden; }
-.runner-start-btn::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg, var(--sage) 0%, var(--sage-light) 100%); opacity:0; transition:opacity .3s; }
-.runner-start-btn:hover::before { opacity:1; }
-.runner-start-btn:hover { transform:translateY(-2px); box-shadow:0 16px 40px rgba(78,122,82,.3); }
-.runner-start-btn > * { position:relative; z-index:1; }
-.runner-start-btn:disabled { opacity:.5; cursor:not-allowed; transform:none; }
+/* 🎮 PUZZLE GAME CONTAINER */
+.puzzle-game-container { display:grid; grid-template-columns:1fr 1fr; gap:60px; margin-top:50px; align-items:start; }
+.puzzle-grid { display:grid; grid-template-columns:repeat(4, 1fr); gap:12px; aspect-ratio:1; }
+.puzzle-tile { background:linear-gradient(135deg, var(--forest) 0%, var(--sage) 100%); border:2px solid rgba(200,168,74,.2); border-radius:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:48px; transition:all .3s cubic-bezier(.34,1.56,.64,1); position:relative; user-select:none; box-shadow:0 12px 32px rgba(0,0,0,.1); }
+.puzzle-tile:hover { transform:translateY(-4px); box-shadow:0 16px 40px rgba(78,122,82,.2); }
+.puzzle-tile.matched { background:linear-gradient(135deg, var(--sage-pale) 0%, var(--sage-light) 100%); cursor:default; box-shadow:0 8px 24px rgba(78,122,82,.15); }
+.puzzle-tile.matched:hover { transform:none; }
+.puzzle-tile-inner { font-size:42px; transition:transform .35s; }
+.puzzle-tile.flipped .puzzle-tile-inner { transform:scaleX(-1); }
+.puzzle-game-wrapper { background:white; border-radius:32px; padding:32px; box-shadow:0 24px 72px rgba(0,0,0,.12); border:2px solid rgba(200,168,74,.15); }
+.puzzle-stats-card { background:white; border-radius:32px; padding:32px; box-shadow:0 20px 48px rgba(0,0,0,.06); border:1px solid var(--border-light); height:fit-content; }
+.puzzle-stats-header { margin-bottom:28px; }
+.puzzle-stats-header h3 { font-family:'Fraunces',serif; font-size:28px; font-weight:800; color:var(--forest); letter-spacing:-0.5px; }
+.puzzle-stats-content { display:flex; flex-direction:column; gap:0; }
+.puzzle-stat-item { padding:16px 0; border-bottom:1px solid var(--border-light); }
+.puzzle-stat-item:last-of-type { border-bottom:none; }
+.puzzle-stat-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.8px; color:var(--text-muted); margin-bottom:8px; }
+.puzzle-stat-value { font-family:'Fraunces',serif; font-size:32px; font-weight:900; color:var(--forest); }
+.puzzle-best-score { color:var(--gold) }
+.puzzle-moves-counter { color:var(--sage); font-size:24px; }
+.puzzle-start-btn { width:100%; padding:18px; background:linear-gradient(135deg, var(--forest) 0%, var(--sage) 100%); color:white; border:none; border-radius:20px; font-family:'Syne',sans-serif; font-size:14px; font-weight:700; cursor:pointer; transition:all .35s cubic-bezier(.34,1.56,.64,1); letter-spacing:1.2px; text-transform:uppercase; margin-top:20px; position:relative; overflow:hidden; }
+.puzzle-start-btn::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg, var(--sage) 0%, var(--sage-light) 100%); opacity:0; transition:opacity .3s; }
+.puzzle-start-btn:hover::before { opacity:1; }
+.puzzle-start-btn:hover { transform:translateY(-2px); box-shadow:0 16px 40px rgba(78,122,82,.3); }
+.puzzle-start-btn > * { position:relative; z-index:1; }
+.puzzle-start-btn:disabled { opacity:.5; cursor:not-allowed; transform:none; }
+.puzzle-difficulty { display:flex; gap:10px; margin-bottom:16px; }
+.puzzle-difficulty button { flex:1; padding:10px; background:rgba(78,122,82,.08); border:1.5px solid rgba(78,122,82,.2); border-radius:12px; font-size:12px; font-weight:700; cursor:pointer; transition:all .25s; text-transform:uppercase; letter-spacing:.5px; color:var(--forest); }
+.puzzle-difficulty button.active { background:var(--sage); color:white; border-color:var(--sage); }
 
-/* Responsive Runner Game */
+/* Responsive Puzzle Game */
 @media (max-width:1024px) {
-  .runner-game-container { grid-template-columns:1fr; gap:40px; }
-  .runner-canvas-wrapper { margin:0 auto; width:100%; max-width:500px; }
+  .puzzle-game-container { grid-template-columns:1fr; gap:40px; }
+  .puzzle-game-wrapper { margin:0 auto; width:100%; max-width:500px; }
   .games-section { padding:90px 24px; }
-  #runnerCanvas { max-width:100%; }
+  .puzzle-grid { grid-template-columns:repeat(4, 1fr); }
 }
 
 /* LEGACY GAME STYLES (keeping for reference, no longer used) */
@@ -916,50 +925,54 @@ footer { padding:36px 64px; background:var(--dark); display:flex; justify-conten
     <div>
       <div class="sec-label">Play & Learn</div>
       <div class="sec-divider"></div>
-      <div class="sec-title">Fun games<br>for pet lovers.</div>
+      <div class="sec-title">Pet Memory<br>Puzzle Challenge.</div>
     </div>
-    <p class="sec-sub">Test your knowledge & unscramble pet words — challenge yourself!</p>
+    <p class="sec-sub">Match pet-themed pairs & test your memory skills — can you beat your best score?</p>
   </div>
-  <div class="runner-game-container">
-    <!-- Left: Canvas -->
-    <div class="runner-canvas-wrapper">
-      <canvas id="runnerCanvas" width="500" height="500"></canvas>
+  <div class="puzzle-game-container">
+    <!-- Left: Puzzle Grid -->
+    <div class="puzzle-game-wrapper">
+      <div class="puzzle-grid" id="puzzleGrid"></div>
     </div>
     
     <!-- Right: Game Stats Hub -->
-    <div class="runner-stats-card">
-      <div class="runner-stats-header">
-        <h3>🐾 Pet Rescue Run</h3>
-        <p style="font-size:13px;color:var(--text-muted);margin-top:4px;">Collect bones & avoid rocks!</p>
+    <div class="puzzle-stats-card">
+      <div class="puzzle-stats-header">
+        <h3>🧩 Memory Puzzle</h3>
+        <p style="font-size:13px;color:var(--text-muted);margin-top:4px;">Match all pairs to win!</p>
       </div>
       
-      <div class="runner-stats-content">
-        <div class="runner-stat-item">
-          <div class="runner-stat-label">Live Score</div>
-          <div class="runner-stat-value" id="runnerLiveScore">0</div>
+      <div class="puzzle-stats-content">
+        <div class="puzzle-stat-item">
+          <div class="puzzle-stat-label">Pairs Matched</div>
+          <div class="puzzle-stat-value" id="pairsMatched">0/8</div>
         </div>
         
-        <div class="runner-stat-item">
-          <div class="runner-stat-label">High Score</div>
-          <div class="runner-stat-value runner-high-score" id="runnerHighScore">0</div>
+        <div class="puzzle-stat-item">
+          <div class="puzzle-stat-label">Best Score</div>
+          <div class="puzzle-stat-value puzzle-best-score" id="bestScore">∞</div>
         </div>
         
-        <div class="runner-stat-item">
-          <div class="runner-stat-label">Level Speed</div>
-          <div class="runner-stat-value runner-speed-meter" id="runnerSpeed">1.0x</div>
+        <div class="puzzle-stat-item">
+          <div class="puzzle-stat-label">Moves Made</div>
+          <div class="puzzle-stat-value puzzle-moves-counter" id="moveCounter">0</div>
         </div>
         
         <div style="margin:20px 0;padding:16px;background:rgba(78,122,82,.08);border-radius:16px;border-left:3px solid var(--sage);">
           <div style="font-size:12px;font-weight:700;color:var(--dark);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">🎮 How to Play</div>
           <ul style="font-size:12px;color:var(--text-muted);list-style:none;">
-            <li style="margin-bottom:6px;">← → or A/D — Switch lanes</li>
-            <li style="margin-bottom:6px;">🦴 Bones — +10 points</li>
-            <li>⚠️ Rocks — Game Over</li>
+            <li style="margin-bottom:6px;">Click tiles to flip them over</li>
+            <li style="margin-bottom:6px;">Match pairs of pet emojis</li>
+            <li>Complete with fewest moves!</li>
           </ul>
         </div>
         
-        <button class="runner-start-btn" id="runnerStartBtn">🕹 Start Game</button>
-        <div style="font-size:11px;color:var(--text-muted);text-align:center;margin-top:12px;" id="runnerGameStatus">Ready to race!</div>
+        <div class="puzzle-difficulty">
+          <button class="active" onclick="setPuzzleDifficulty('easy')">Easy (4x4)</button>
+        </div>
+        
+        <button class="puzzle-start-btn" id="puzzleStartBtn" onclick="initPuzzleGame()">🕹 Start Game</button>
+        <div style="font-size:11px;color:var(--text-muted);text-align:center;margin-top:12px;" id="puzzleGameStatus">Ready to play!</div>
       </div>
     </div>
   </div>
