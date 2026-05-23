@@ -6,6 +6,102 @@
   font-family: "Arial";
 }
 
+/* Premium color palette and fonts from index.html */
+:root {
+  --cream: #F4EFE6;
+  --dark: #0C1510;
+  --forest: #162B1A;
+  --forest-mid: #1F3D25;
+  --sage: #4E7A52;
+  --sage-light: #7FB584;
+  --sage-pale: #C8E0CA;
+  --gold: #C8A84A;
+  --gold-light: #E8C97A;
+  --amber: #D4854A;
+  --warm: #E8C49A;
+  --text-muted: #5A5A4A;
+  --border: rgba(12,21,16,0.1);
+  --border-light: rgba(12,21,16,0.06);
+}
+
+body {
+  font-family: 'Syne', sans-serif;
+  background: var(--cream);
+  color: var(--dark);
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* Button styles unified */
+button, .btn-primary, .nav-cta {
+  padding: 12px 28px;
+  border: none;
+  border-radius: 30px;
+  background: var(--forest);
+  color: var(--cream);
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+}
+button:hover, .btn-primary:hover, .nav-cta:hover {
+  background: var(--sage);
+  transform: scale(1.08);
+  box-shadow: 0 8px 24px rgba(78,122,82,.3);
+}
+
+/* Navbar styles unified */
+.navbar, nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 40px;
+  background: rgba(220, 245, 220, 0.6);
+  backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  border-bottom: 1px solid var(--border-light);
+  z-index: 500;
+}
+.navbar h1, .nav-logo {
+  color: var(--forest);
+  font-family: 'Fraunces', serif;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+.navbar a, .nav-links a {
+  margin: 0 12px;
+  text-decoration: none;
+  color: var(--sage);
+  font-weight: bold;
+  font-size: 13px;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  transition: color .25s;
+}
+.navbar a:hover, .nav-links a:hover {
+  color: var(--dark);
+}
+
+/* Section and card backgrounds */
+.section, .card {
+  background: #ffffffcc;
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+}
+
+/* Footer unified */
+footer {
+  text-align: center;
+  padding: 20px;
+  background: var(--sage-pale);
+  margin-top: 40px;
+}
+
 body {
   background: #f3f7f3;   /* soft green-gray instead of white */
   color: #1f1f1f;
