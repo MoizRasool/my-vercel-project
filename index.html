@@ -566,14 +566,14 @@ footer { padding:36px 64px; background:var(--dark); display:flex; justify-conten
 /* AUTH MODAL — Modern 2026 login/signup */
 .auth-modal-overlay { position:fixed; inset:0; background:rgba(12,21,16,.72); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); z-index:900; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity .35s cubic-bezier(.34,1.56,.64,1) }
 .auth-modal-overlay.open { opacity:1; pointer-events:all }
-.auth-modal { background:linear-gradient(135deg, #F4EFE6 0%, #f8f5f0 100%); border-radius:40px; padding:0; width:420px; max-width:92vw; position:relative; transform:translateY(40px) scale(.94); transition:all .5s cubic-bezier(.34,1.56,.64,1); max-height:90vh; overflow:hidden; box-shadow:0 40px 120px rgba(12,21,16,.25); border:1px solid rgba(200,168,74,.2) }
+.auth-modal { background:linear-gradient(135deg, #F4EFE6 0%, #f8f5f0 100%); border-radius:40px; padding:0; width:420px; max-width:92vw; position:relative; transform:translateY(40px) scale(.94); transition:all .5s cubic-bezier(.34,1.56,.64,1); height:auto; max-height:90vh; overflow-y:auto; box-shadow:0 40px 120px rgba(12,21,16,.25); border:1px solid rgba(200,168,74,.2) }
 .auth-modal-overlay.open .auth-modal { transform:translateY(0) scale(1) }
 .auth-header { background:linear-gradient(135deg, var(--forest) 0%, var(--sage) 100%); padding:36px 32px; text-align:center; position:relative; overflow:hidden }
 .auth-header::before { content:''; position:absolute; inset:0; background:radial-gradient(circle at 20% 50%, rgba(200,168,74,.15), transparent 50%); }
 .auth-logo { position:relative; z-index:1; font-size:32px; margin-bottom:8px; }
 .auth-header h2 { position:relative; z-index:1; font-family:'Fraunces',serif; font-size:28px; font-weight:800; color:var(--cream); letter-spacing:-1px; margin-bottom:4px; }
 .auth-header p { position:relative; z-index:1; color:rgba(244,239,230,.65); font-size:13px; font-weight:500; letter-spacing:.5px; }
-.auth-body { padding:40px 32px; }
+.auth-body { padding:40px 32px 48px 32px; }
 .auth-tab-toggle { display:flex; gap:12px; margin-bottom:32px; background:rgba(12,21,16,.04); padding:6px; border-radius:50px; }
 .auth-tab { flex:1; padding:10px 16px; border:none; background:transparent; color:var(--text-muted); font-family:'Syne',sans-serif; font-size:13px; font-weight:700; cursor:pointer; border-radius:40px; transition:all .3s; text-transform:uppercase; letter-spacing:.5px; }
 .auth-tab.active { background:white; color:var(--forest); box-shadow:0 4px 16px rgba(78,122,82,.15); }
