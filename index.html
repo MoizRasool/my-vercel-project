@@ -1399,61 +1399,198 @@ function updateHistoryBadge() {
   if (chatHistory.length > 0) { badge.style.display = 'block'; count.textContent = chatHistory.length; }
 }
 
-// Response variants for more natural feel
+// ════════════════════════════════════════════════
+// 🤖 ENHANCED PETCARE AI ASSISTANT — English Version
+// Multilingual keywords, smart contextual responses
+// ════════════════════════════════════════════════
+
+// Response variants for natural, contextual conversations
 const R = {
   book: [
-    "Appointment book karne ke liye upar 'Book Now' button dabao ya call karo:\n📞 +92-300-738 2273\n\n9 AM – 8 PM weekdays, emergencies 24/7! ✅",
-    "Appointment lena chahte ho? 📅\n\n'Book Now' button daba do ya directly call: 📞 +92-300-738 2273\n\nHum within 2 hours confirm kar denge!"
+    "📅 To book an appointment, click the 'Book Now' button at the top or call us:\n📞 +92-300-738 2273\n\n✅ 9 AM – 8 PM weekdays\n🚨 24/7 Emergency support",
+    "Would you like to schedule an appointment? 🐾\n\n📞 Call us: +92-300-738 2273\n💻 Or use the 'Book Now' button\n\n⏱️ We'll confirm within 2 hours!"
   ],
   groom: [
-    "Grooming prices 2026:\n• Small dogs/cats: Rs. 800–1,200\n• Medium dogs: Rs. 1,200–2,000\n• Large breeds: Rs. 2,000–3,500\n• Persian cats: Rs. 1,500–2,500\n\nBath, haircut, nail trim sab shamil ✂",
-    "Grooming ka rates:\n🐶 Small: Rs. 800–1,200\n🐕 Medium: Rs. 1,200–2,000\n🐂 Large: Rs. 2,000–3,500\n🐱 Persian: Rs. 1,500–2,500\n\nSab me shampooing & nail trim included hai!"
+    "✨ Grooming Services & Pricing:\n\n🐕 Small dogs/cats: PKR 800–1,200\n🐕 Medium dogs: PKR 1,200–2,000\n🐂 Large breeds: PKR 2,000–3,500\n🐱 Persian cats: PKR 1,500–2,500\n\nIncludes: Bath, haircut, nail trim, ear cleaning ✂️",
+    "Premium grooming packages available! 🧴\n\n🐶 Small: PKR 800–1,200\n🐕 Medium: PKR 1,200–2,000\n🦁 Large: PKR 2,000–3,500\n😺 Persian: PKR 1,500–2,500\n\nAll services include spa treatment!"
   ],
   price: [
-    "Service fees:\n• Basic checkup: Rs. 500\n• Vaccination: Rs. 800–1,500\n• Grooming: Rs. 800–3,500\n• Dental: Rs. 2,000\n• Nutrition consult: Rs. 1,200",
-    "Hamara pricing 2026:\n🏥 Checkup: Rs. 500 only\n💉 Vaccination: Rs. 800–1,500\n✂ Grooming: Rs. 800–3,500\n🦷 Dental: Rs. 2,000\n🍽 Nutrition: Rs. 1,200"
+    "💰 Our Service Pricing (2026):\n\n🏥 Basic checkup: PKR 500\n💉 Vaccination: PKR 800–1,500\n✂️ Grooming: PKR 800–3,500\n🦷 Dental care: PKR 2,000\n🥗 Nutrition consult: PKR 1,200\n🏨 Emergency: PKR 2,500+",
+    "💵 Complete Price List:\n\n🏥 Health Checkup: PKR 500\n💉 Vaccination Pack: PKR 800–1,500\n✂️ Professional Grooming: PKR 800–3,500\n🦷 Dental Service: PKR 2,000\n🍽️ Nutrition Planning: PKR 1,200"
   ],
   emergency: [
-    "🚨 Emergency? Foran call:\n📞 +92-300-738 2273\n\n24/7 team har waqt tayar hai!",
-    "Urgent situation? 🆘\n\nCall immediately: 📞 +92-300-738 2273\n\nHamara team 24/7 available hai. Jaldi help kar denge!"
+    "🚨 EMERGENCY SUPPORT AVAILABLE 24/7\n\n📞 Call immediately: +92-300-738 2273\n\n⚡ Our team is always ready to help!\n💪 Fast response, expert care",
+    "🆘 Urgent situation? We're here for you!\n\n📱 Emergency Hotline: +92-300-738 2273\n\n✅ Available 24 hours a day\n🏥 Experienced emergency care team"
   ],
   hours: [
-    "Timings ⏰\n• Mon–Fri: 9 AM – 8 PM\n• Saturday: 9 AM – 6 PM\n• Sunday: 10 AM – 4 PM\n• Emergency: 24/7!",
-    "Hamara timing: 📍\n🕘 Weekdays: 9 AM – 8 PM\n🕘 Saturday: 9 AM – 6 PM\n🕘 Sunday: 10 AM – 4 PM\n🚨 Emergency: Kabhi bhi! 24/7"
+    "⏰ Our Business Hours:\n\n📍 Monday–Friday: 9 AM – 8 PM\n📍 Saturday: 9 AM – 6 PM\n📍 Sunday: 10 AM – 4 PM\n🚨 Emergency: 24/7 Available",
+    "🕐 Opening Hours:\n\n🏢 Weekdays: 9 AM – 8 PM\n🏢 Saturday: 9 AM – 6 PM\n🏢 Sunday: 10 AM – 4 PM\n📞 Emergency: Round-the-clock"
   ],
   cat: [
-    "Cats ke liye 🐱\n• Full checkups & vaccination\n• Persian grooming & spa\n• Dental care & nutrition\n• Surgery & emergency\n\nAppointment chahiye?",
-    "Aapka bilali ke liye humari services:\n✓ Complete checkups\n✓ Vaccination\n✓ Professional grooming\n✓ Dental care\n✓ 24/7 Emergency\n\nKab aana hai? 🐱"
+    "🐱 Comprehensive Cat Care Services:\n\n✓ Full health checkups & vaccination\n✓ Persian grooming & luxury spa\n✓ Dental cleaning & care\n✓ Nutrition planning\n✓ Surgery & emergency care\n\nSchedule a checkup today! 📞",
+    "Feline Expert Services 😺\n\n✅ Preventive health programs\n✅ Professional grooming\n✅ Behavioral consultation\n✅ Vaccination & dental care\n✅ 24/7 emergency support\n\nYour cat deserves the best! 🐱"
   ],
   dog: [
-    "Dogs ke liye 🐶\n• Annual health checkups\n• Complete vaccination\n• Professional grooming\n• Nutrition consult\n• 24/7 Emergency",
-    "Aapke kutton ke liye:\n✓ Health checkups\n✓ Vaccination\n✓ Grooming\n✓ Nutrition planning\n✓ Emergency care 24/7\n\nAppointment book karo! 🐶"
+    "🐶 Complete Dog Care Program:\n\n✓ Annual health checkups\n✓ Vaccination & parasite control\n✓ Professional grooming\n✓ Nutrition & diet planning\n✓ Behavioral training support\n✓ 24/7 Emergency care\n\nKeep your pup healthy! 🐾",
+    "Dog Care Excellence 🐕\n\n✅ Preventive health screening\n✅ Vaccination packages\n✅ Expert grooming services\n✅ Customized nutrition plans\n✅ Training support\n✅ Emergency services\n\nBook now for your best friend! 🐶"
+  ],
+  rabbit: [
+    "🐰 Rabbit & Small Pet Care:\n\n✓ Specialized exotic pet checkups\n✓ Dental care (critical for rabbits)\n✓ Nutritional counseling\n✓ Hay & diet guidance\n✓ Spay/neuter services\n✓ Emergency care available",
+    "🐇 Small Pet Specialists:\n\n✅ Rabbit health programs\n✅ Guinea pig care\n✅ Hamster consultation\n✅ Ferret services\n✅ 24/7 emergency support\n\nAll small pets welcome! 🐰"
+  ],
+  fish: [
+    "🐠 Aquatic Pet Services:\n\n✓ Tank health assessment\n✓ Water quality testing\n✓ Fish disease treatment\n✓ Tank maintenance tips\n✓ Species-specific care\n\nContact us for aquatic expertise! 🐟",
+    "🐠 Fish & Aquatic Care:\n\n✅ Professional tank setup\n✅ Health & disease treatment\n✅ Water quality management\n✅ Feed recommendations\n✅ Emergency support\n\nHealthy fish, happy aquarium! 💧"
   ],
   def: [
-    "Seedha contact karein:\n📩 info@petcarepro.com\n📞 +92-300-738 2273\n\nMain help kar sakta hoon:\nservices · prices · grooming · emergency · appointments 🐾",
-    "Mujhe samajh nahi aya, par main yeh kar sakta hoon:\n📞 +92-300-738 2273 par call karo\n📩 ya info@petcarepro.com email karo\n\nHamara team tum se touch karega! 🐾"
+    "📞 Contact PetCare Pro Directly:\n\n📩 Email: info@petcarepro.com\n📞 Phone: +92-300-738 2273\n\n💬 I can help with:\n• Service information • Pricing • Grooming • Emergencies • Appointments 🐾",
+    "I'm here to help! 👋\n\n📞 Call: +92-300-738 2273\n📧 Email: info@petcarepro.com\n💻 Use 'Book Now' button\n\nWhat would you like to know about your pet's care? 🐾"
   ]
 };
 
 function getReply(m) {
-  const t = m.toLowerCase();
+  const t = m.toLowerCase().trim();
   let responses = [];
   
-  if (/hello|hi|salaam|hey|hola|namaste/.test(t)) {
-    responses = ["Assalamu Alaikum! 👋 Main PetCare Pro ka Assistant hoon.\n\nAapke pet ke liye kya kar sakta hoon? 🐾", "Salam! 👋\n\nMain yahan aapki madad ke liye hoon. Pet ke bare mein kya poochna hai? 🐾"];
+  // Greeting
+  if (/hello|hi|hey|greetings|sup|what's up|namaste|salam/.test(t)) {
+    responses = [
+      "👋 Hello! Welcome to PetCare Pro Assistant!\n\nI'm here to help with your pet's health, grooming, appointments, and emergency care. What can I assist you with today? 🐾",
+      "Hi there! 🐾 I'm your PetCare Pro Assistant.\n\nReady to help with:\n• Appointments\n• Pricing info\n• Grooming services\n• Emergency support\n\nHow can I help your furry friend? 🐕"
+    ];
     return responses[Math.floor(Math.random() * responses.length)];
   }
-  if (/book|appoint/.test(t)) return R.book[Math.floor(Math.random() * R.book.length)];
-  if (/groom/.test(t)) return R.groom[Math.floor(Math.random() * R.groom.length)];
-  if (/price|cost|fee|kitna|rate/.test(t)) return R.price[Math.floor(Math.random() * R.price.length)];
-  if (/emergency|urgent|abhi|help|bachao/.test(t)) return R.emergency[Math.floor(Math.random() * R.emergency.length)];
-  if (/hour|time|open|timing|kab|kaunsa|samay/.test(t)) return R.hours[Math.floor(Math.random() * R.hours.length)];
-  if (/cat|billi|kitten|persian|mew|meow/.test(t)) { currentContext = 'cat'; return R.cat[Math.floor(Math.random() * R.cat.length)]; }
-  if (/dog|kutta|puppy|pup|bark|woof|canine/.test(t)) { currentContext = 'dog'; return R.dog[Math.floor(Math.random() * R.dog.length)]; }
-  if (/thank|dhanyavaad|shukriya|thanks/.test(t)) return "Khush rah! 🐾 Aapka pet khush rahe, bas yahi hamari dua hai! ❤";
-  if (/bye|goodbye|alvida|cya|later/.test(t)) return "Khuda hafiz! 👋 Pet care ke liye hamesa humara door khula hai! 🐾";
+  
+  // Appointments
+  if (/book|appoint|schedule|slot|available/.test(t)) return R.book[Math.floor(Math.random() * R.book.length)];
+  
+  // Grooming
+  if (/groom|bath|haircut|spa|trim|wash|clean/.test(t)) return R.groom[Math.floor(Math.random() * R.groom.length)];
+  
+  // Pricing
+  if (/price|cost|fee|rate|how much|expensive|afford|charge|pkr|rupee/.test(t)) return R.price[Math.floor(Math.random() * R.price.length)];
+  
+  // Emergency
+  if (/emergency|urgent|help|sick|died|dying|accident|critical|hurt|injury|bleeding/.test(t)) {
+    responses = [R.emergency[0], R.emergency[1], "🚨 This sounds serious! Call us immediately:\n📞 +92-300-738 2273\n\nOur emergency team is ready! 🏥"];
+    return responses[Math.floor(Math.random() * responses.length)];
+  }
+  
+  // Hours
+  if (/hour|time|open|close|timing|when|working|available|schedule/.test(t)) return R.hours[Math.floor(Math.random() * R.hours.length)];
+  
+  // Cats
+  if (/cat|kitten|feline|kitty|persian|meow|mew|tabby|siamese/.test(t)) {
+    currentContext = 'cat';
+    return R.cat[Math.floor(Math.random() * R.cat.length)];
+  }
+  
+  // Dogs
+  if (/dog|puppy|pup|canine|bulldog|labrador|shepherd|terrier|retriever|bark|woof/.test(t)) {
+    currentContext = 'dog';
+    return R.dog[Math.floor(Math.random() * R.dog.length)];
+  }
+  
+  // Rabbits & small pets
+  if (/rabbit|bunny|hamster|guinea pig|small pet|rodent|ferret/.test(t)) {
+    return R.rabbit[Math.floor(Math.random() * R.rabbit.length)];
+  }
+  
+  // Fish & aquatic
+  if (/fish|aquarium|aquatic|goldfish|betta|tank|water pet/.test(t)) {
+    return R.fish[Math.floor(Math.random() * R.fish.length)];
+  }
+  
+  // Contact info
+  if (/contact|number|phone|call|email|address|location|reach/.test(t)) {
+    return "📍 Contact Information:\n\n📞 Phone: +92-300-738 2273\n📧 Email: info@petcarepro.com\n📮 Address: 123 Pet Lane, DHA Phase 6, Karachi\n\n⏰ 9 AM – 8 PM (weekdays)\n🚨 24/7 Emergency: +92-300-738 2273";
+  }
+  
+  // Vaccination
+  if (/vaccin|shot|injection|immuniz|prevent/.test(t)) {
+    return "💉 Vaccination Services:\n\n✅ Puppy & kitten vaccination\n✅ Booster shots\n✅ Disease prevention programs\n✅ Vaccination records maintained\n\nProtect your pet! Call: 📞 +92-300-738 2273";
+  }
+  
+  // Dental
+  if (/dental|teeth|tooth|gum|cavity|brush|plaque/.test(t)) {
+    return "🦷 Professional Dental Care:\n\n✓ Cleaning & tartar removal\n✓ Cavity treatment\n✓ Oral health assessment\n✓ Prevention programs\n\nHealthy smile = Happy pet! 😊\n📞 Book now: +92-300-738 2273";
+  }
+  
+  // Nutrition
+  if (/nutri|diet|food|feed|eat|weight|obesity|protein|mineral/.test(t)) {
+    return "🥗 Nutrition & Diet Consultation:\n\n✓ Customized meal plans\n✓ Weight management\n✓ Breed-specific diets\n✓ Allergy consultation\n✓ Senior pet nutrition\n\n📞 Schedule consultation: +92-300-738 2273";
+  }
+  
+  // Vaccination
+  if (/training|behav|aggressive|bark|jump|behavior|problem/.test(t)) {
+    return "🎓 Behavioral Support:\n\n✓ Training guidance\n✓ Behavioral consultation\n✓ Aggression management\n✓ Socialization tips\n\nWe also connect you with professional trainers!\n📞 Ask more: +92-300-738 2273";
+  }
+  
+  // Thanks
+  if (/thank|thanks|appreciated|grateful|shukriya|dhanyavaad|merci/.test(t)) {
+    responses = [
+      "You're welcome! 😊 Happy to help!\n\nYour pet's health is our priority! 🐾❤️",
+      "Glad I could help! 🐾\n\nFeel free to ask anytime. We're here for your pet! 💪"
+    ];
+    return responses[Math.floor(Math.random() * responses.length)];
+  }
+  
+  // Goodbye
+  if (/bye|goodbye|see you|farewell|later|take care|cya|adios|khuda hafiz/.test(t)) {
+    responses = [
+      "👋 Goodbye! Take care of your pet!\n\nWe're always here when you need us. 🐾",
+      "See you soon! 🐾\n\nRemember: Regular checkups keep pets healthy! 🏥❤️"
+    ];
+    return responses[Math.floor(Math.random() * responses.length)];
+  }
+  
+  // Default fallback
   return R.def[Math.floor(Math.random() * R.def.length)];
 }
+
+function addMsg(text, who, showReactions = false) {
+  const d = document.createElement('div');
+  d.className = `msg ${who}`;
+  d.textContent = text;
+  
+  if (showReactions && who === 'bot') {
+    const reactions = document.createElement('div');
+    reactions.className = 'msg-reaction';
+    reactions.innerHTML = '<span onclick="reactMsg(this, \'👍\')" title="Helpful">👍</span><span onclick="reactMsg(this, \'❤\')" title="Loved it">❤</span><span onclick="reactMsg(this, \'🤔\')" title="Confused">🤔</span>';
+    d.appendChild(reactions);
+  }
+  
+  msgs.appendChild(d);
+  msgs.scrollTop = msgs.scrollHeight;
+  
+  // Save to history
+  chatHistory.push({ text, who, time: new Date().toLocaleTimeString() });
+  saveChatHistory();
+  
+  return d;
+}
+
+function reactMsg(el, emoji) {
+  el.style.opacity = '1';
+  el.textContent = emoji;
+  el.style.pointerEvents = 'none';
+}
+
+function showTyping() {
+  const d = document.createElement('div');
+  d.className = 'msg bot';
+  d.id = 'td';
+  d.innerHTML = '<div class="typing-dots"><span></span><span></span><span></span></div>';
+  msgs.appendChild(d);
+  msgs.scrollTop = msgs.scrollHeight;
+  return d;
+}
+
+function sendChat() {
+  const inp = document.getElementById('chatInput'), t = inp.value.trim();
+  if (!t) return;
+  
+  addMsg(t, 'user');
 
 function addMsg(text, who, showReactions = false) {
   const d = document.createElement('div');
@@ -1548,32 +1685,37 @@ function showActionButtons(actions = null) {
 }
 
 function rateChatSession(rating) {
-  const ratings = ['😞 Not helpful', '😐 Okay', '😊 Good', '😄 Great', '🥰 Excellent'];
+  const ratings = ['😞 Not helpful at all', '😐 Could be better', '😊 Pretty good!', '😄 Very helpful!', '🥰 Excellent! Best assistance'];
   addMsg(`${ratings[rating - 1]}`, 'user');
-  addMsg(`Shukriya! 🙏 Teri feedback humari madad karti hai. Agle waqt aur behtar service denge! 💪`, 'bot');
+  addMsg(`Thank you so much for your feedback! 🙏 Your rating helps us improve our service quality. We really appreciate it! 💪`, 'bot');
   chatRating.style.display = 'none';
 }
 
 function exportChatHistory() {
-  if (chatHistory.length === 0) { alert('Chat history khali hai!'); return; }
-  const txt = chatHistory.map(m => `[${m.time}] ${m.who === 'user' ? 'You' : 'Bot'}: ${m.text}`).join('\n\n');
+  if (chatHistory.length === 0) { 
+    alert('No chat history yet. Start a conversation!'); 
+    return; 
+  }
+  const txt = chatHistory.map(m => `[${m.time}] ${m.who === 'user' ? 'You' : 'PetCare Assistant'}: ${m.text}`).join('\n\n');
   const blob = new Blob([txt], { type: 'text/plain' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url; a.download = `PetCare-Chat-${new Date().toISOString().split('T')[0]}.txt`;
+  a.href = url; 
+  a.download = `PetCare-Chat-History-${new Date().toISOString().split('T')[0]}.txt`;
   a.click();
   URL.revokeObjectURL(url);
 }
 
 function toggleChat() {
-  chatOpen = !chatOpen; chatbox.classList.toggle('open', chatOpen);
+  chatOpen = !chatOpen; 
+  chatbox.classList.toggle('open', chatOpen);
   if (chatOpen && msgs.children.length === 0) {
     loadChatHistory();
     if (chatHistory.length > 0) {
-      // Show last message if history exists
-      addMsg('📜 Pichli chat history load ho gayi! Kya nayi kisi cheez mein help chahiye? 🐾', 'bot');
+      // Show welcome message if history exists
+      addMsg('📜 Welcome back! Your previous chat has been loaded. How can I help you today? 🐾', 'bot');
     } else {
-      setTimeout(() => addMsg('👋 Assalamu Alaikum! Main PetCare Pro Assistant hoon.\n\nKya madad kar sakta hoon? 🐾', 'bot'), 300);
+      setTimeout(() => addMsg('👋 Hello! Welcome to PetCare Pro Assistant!\n\nI\'m here to help with appointments, pricing, grooming, emergencies, and more. What can I help with? 🐾', 'bot'), 300);
     }
     document.querySelector('.chat-notif').style.display = 'none';
   }
@@ -2024,7 +2166,7 @@ function handleLogin(e) {
   const remember = document.getElementById('rememberMe').checked;
 
   if (!email || !password) {
-    alert('Email aur password zaroor bharen!');
+    alert('⚠️ Please enter both email and password!');
     return;
   }
 
@@ -2047,22 +2189,22 @@ function handleSignup(e) {
   const agree = document.getElementById('agreeTerms').checked;
 
   if (!name || !email || !petType || !password || !password2) {
-    alert('Sab details bharen please!');
+    alert('⚠️ Please fill in all fields!');
     return;
   }
 
   if (password !== password2) {
-    alert('Passwords match nahi kar rahe!');
+    alert('❌ Passwords do not match!');
     return;
   }
 
   if (password.length < 8) {
-    alert('Password kam se kam 8 characters ka hona chahiye!');
+    alert('🔐 Password must be at least 8 characters long!');
     return;
   }
 
   if (!agree) {
-    alert('Terms & Privacy accept karne zaroori hain!');
+    alert('✓ You must accept Terms & Privacy to proceed!');
     return;
   }
 
