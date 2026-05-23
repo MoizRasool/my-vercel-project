@@ -11,11 +11,19 @@ let bestScore = localStorage.getItem('puzzleBestScore') || '∞';
 
 // Initialize puzzle game
 function initPuzzleGame() {
+  console.log('Game initialization started...');
+  
   const grid = document.getElementById('puzzleGrid');
+  if (!grid) {
+    console.error('Puzzle grid not found!');
+    return;
+  }
+  
   grid.innerHTML = '';
   
   // Create pairs (double the emojis)
   puzzleCards = [...petEmojis, ...petEmojis].sort(() => Math.random() - 0.5);
+  console.log('Puzzle cards created:', puzzleCards);
   
   // Create tiles
   puzzleCards.forEach((emoji, index) => {
@@ -24,7 +32,12 @@ function initPuzzleGame() {
     tile.dataset.index = index;
     tile.dataset.emoji = emoji;
     tile.innerHTML = `<div class="puzzle-tile-inner">?</div>`;
-    tile.onclick = () => flipTile(tile);
+    tile.style.cursor = 'pointer';
+    
+    tile.addEventListener('click', function() {
+      flipTile(this);
+    });
+    
     grid.appendChild(tile);
   });
   
@@ -34,15 +47,28 @@ function initPuzzleGame() {
   gameActive = true;
   updatePuzzleStats();
   document.getElementById('puzzleGameStatus').textContent = 'Game started! Good luck! 🍀';
+  console.log('Game initialized with', puzzleCards.length, 'tiles');
 }
+
+// Make function globally accessible
+window.initPuzzleGame = initPuzzleGame;
 
 // Flip tile
 function flipTile(tile) {
-  if (!gameActive || tile.classList.contains('matched') || flippedCards.includes(tile)) return;
+  if (!gameActive) {
+    console.log('Game not active');
+    return;
+  }
+  
+  if (tile.classList.contains('matched') || flippedCards.includes(tile)) {
+    return;
+  }
   
   tile.classList.add('flipped');
   tile.querySelector('.puzzle-tile-inner').textContent = tile.dataset.emoji;
   flippedCards.push(tile);
+  
+  console.log('Tile flipped, flipped cards:', flippedCards.length);
   
   if (flippedCards.length === 2) {
     moveCount++;
@@ -54,6 +80,8 @@ function flipTile(tile) {
 function checkMatch() {
   const [tile1, tile2] = flippedCards;
   const match = tile1.dataset.emoji === tile2.dataset.emoji;
+  
+  console.log('Checking match:', tile1.dataset.emoji, 'vs', tile2.dataset.emoji, 'Match:', match);
   
   if (match) {
     tile1.classList.add('matched');
@@ -79,9 +107,13 @@ function checkMatch() {
 
 // Update stats display
 function updatePuzzleStats() {
-  document.getElementById('pairsMatched').textContent = `${matchedPairs}/${petEmojis.length}`;
-  document.getElementById('moveCounter').textContent = moveCount;
-  document.getElementById('bestScore').textContent = bestScore;
+  const pairsElement = document.getElementById('pairsMatched');
+  const moveElement = document.getElementById('moveCounter');
+  const scoreElement = document.getElementById('bestScore');
+  
+  if (pairsElement) pairsElement.textContent = `${matchedPairs}/${petEmojis.length}`;
+  if (moveElement) moveElement.textContent = moveCount;
+  if (scoreElement) scoreElement.textContent = bestScore;
 }
 
 // End game
@@ -96,15 +128,22 @@ function endPuzzleGame() {
   
   document.getElementById('puzzleGameStatus').textContent = `🎉 Completed in ${moveCount} moves! Best: ${bestScore}`;
   updatePuzzleStats();
+  console.log('Game completed! Moves:', moveCount, 'Best:', bestScore);
 }
 
 // Set difficulty (placeholder for future difficulties)
 function setPuzzleDifficulty(level) {
   document.querySelectorAll('.puzzle-difficulty button').forEach(btn => btn.classList.remove('active'));
-  event.target.classList.add('active');
+  if (event && event.target) {
+    event.target.classList.add('active');
+  }
 }
+
+// Make setPuzzleDifficulty globally accessible
+window.setPuzzleDifficulty = setPuzzleDifficulty;
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
+  console.log('DOM loaded, initializing puzzle stats...');
   updatePuzzleStats();
 });
