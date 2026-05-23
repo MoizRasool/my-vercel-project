@@ -698,16 +698,44 @@ footer { padding:36px 64px; background:var(--dark); display:flex; justify-conten
 .add-pet-btn { background:linear-gradient(135deg, var(--sage), var(--sage-light)); color:white; padding:16px 32px; border-radius:50px; border:none; font-weight:700; cursor:pointer; margin-top:30px; width:100%; transition:all .3s; }
 .add-pet-btn:hover { transform:translateY(-2px); box-shadow:0 12px 32px rgba(78,122,82,.3); }
 
-/* PET HEALTH TRACKER */
-.health-tracker-section { padding:130px 64px; background:linear-gradient(145deg, #f5f1e8, var(--cream)); }
-.tracker-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:24px; margin-top:50px; }
-.tracker-card { background:white; border-radius:20px; padding:24px; box-shadow:0 12px 36px rgba(0,0,0,.08); border:1px solid var(--border-light); }
-.tracker-icon { font-size:32px; margin-bottom:12px; }
-.tracker-title { font-family:'Fraunces',serif; font-size:18px; font-weight:700; color:var(--forest); margin-bottom:12px; }
-.tracker-content { font-size:13px; color:var(--text-muted); line-height:1.6; margin-bottom:16px; }
-.tracker-stats { background:rgba(78,122,82,.08); border-radius:12px; padding:12px; font-size:12px; color:var(--forest); font-weight:700; }
-.tracker-btn { width:100%; padding:12px; background:var(--sage); color:white; border:none; border-radius:12px; font-weight:700; cursor:pointer; margin-top:12px; transition:all .25s; }
-.tracker-btn:hover { background:var(--forest); }
+/* ═════════════════════════════════════════════════════════
+   ✦ COMPACT ACCORDION LAYOUT
+   ═════════════════════════════════════════════════════════ */
+
+/* Main Features Accordion */
+.features-accordion { padding:60px 64px; background:var(--cream); }
+.accordion-grid { display:grid; grid-template-columns:repeat(2, 1fr); gap:20px; margin-top:40px; }
+.accordion-item { background:white; border-radius:16px; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,.08); border:1px solid var(--border-light); transition:all .3s; }
+.accordion-item:hover { transform:translateY(-2px); box-shadow:0 12px 32px rgba(0,0,0,.12); }
+.accordion-header { padding:24px; background:linear-gradient(135deg, rgba(78,122,82,.05), rgba(200,168,74,.05)); cursor:pointer; display:flex; justify-content:space-between; align-items:center; font-weight:700; color:var(--forest); transition:all .25s; font-size:16px; }
+.accordion-header:hover { background:linear-gradient(135deg, rgba(78,122,82,.1), rgba(200,168,74,.1)); }
+.accordion-icon { font-size:24px; margin-right:12px; }
+.accordion-toggle { font-size:20px; transition:transform .3s; }
+.accordion-item.active .accordion-toggle { transform:rotate(180deg); }
+.accordion-content { max-height:0; overflow:hidden; transition:max-height .3s ease; }
+.accordion-item.active .accordion-content { max-height:800px; }
+.accordion-body { padding:24px; background:rgba(78,122,82,.02); }
+.accordion-body h3 { font-family:'Fraunces',serif; font-size:20px; font-weight:700; color:var(--forest); margin-bottom:12px; }
+.accordion-body p { font-size:14px; color:var(--text-muted); line-height:1.7; margin-bottom:12px; }
+.accordion-body ul { font-size:13px; color:var(--text-muted); margin-left:20px; margin-bottom:12px; }
+.accordion-body li { margin-bottom:8px; }
+.accordion-body button { padding:10px 20px; background:var(--sage); color:white; border:none; border-radius:8px; font-weight:700; cursor:pointer; transition:all .25s; font-size:13px; margin-top:12px; }
+.accordion-body button:hover { background:var(--forest); }
+
+@media (max-width:1024px) {
+  .accordion-grid { grid-template-columns:1fr; }
+  .features-accordion { padding:60px 24px; }
+}
+
+/* Hero Section - Simplified */
+.hero { min-height:80vh; display:flex; align-items:center; justify-content:center; text-align:center; padding:80px 64px; position:relative; overflow:hidden; }
+.hero h1 { font-family:'Fraunces',serif; font-size:clamp(42px,5vw,72px); font-weight:900; color:var(--forest); margin-bottom:20px; letter-spacing:-1px; }
+.hero-sub { font-size:18px; color:var(--text-muted); max-width:700px; margin:0 auto 40px; line-height:1.7; }
+.hero-actions { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
+.cta-primary { background:var(--forest); color:white; padding:14px 32px; border-radius:50px; border:none; font-weight:700; cursor:pointer; transition:all .3s; font-size:14px; }
+.cta-primary:hover { background:var(--sage); transform:translateY(-2px); }
+.cta-secondary { background:white; color:var(--forest); padding:14px 32px; border-radius:50px; border:2px solid var(--forest); font-weight:700; cursor:pointer; transition:all .3s; font-size:14px; }
+.cta-secondary:hover { background:var(--forest); color:white; }
 
 /* FAQ SECTION */
 .faq-section { padding:130px 64px; background:var(--cream); }
@@ -866,6 +894,187 @@ footer { padding:36px 64px; background:var(--dark); display:flex; justify-conten
     <span class="marquee-item">Veterinary Care</span><span class="marquee-item">Grooming Studio</span><span class="marquee-item">Pet Adoption</span><span class="marquee-item">Nutrition Plans</span><span class="marquee-item">Emergency 24/7</span><span class="marquee-item">Pet Marketplace</span><span class="marquee-item">Vaccination</span><span class="marquee-item">Dental Hygiene</span><span class="marquee-item">Exotic Pets</span>
   </div>
 </div>
+
+<!-- FEATURES ACCORDION -->
+<section class="features-accordion" id="features">
+  <div style="text-align:center; margin-bottom:40px;">
+    <h2 style="font-family:'Fraunces',serif; font-size:42px; font-weight:800; color:var(--forest); margin-bottom:12px;">All Our Services & Features</h2>
+    <p style="font-size:16px; color:var(--text-muted); max-width:600px; margin:0 auto;">Click any section below to expand and learn more</p>
+  </div>
+  <div class="accordion-grid">
+    <!-- Services -->
+    <div class="accordion-item" onclick="toggleAccordion(this)">
+      <div class="accordion-header">
+        <span><span class="accordion-icon">🩺</span> Our Services</span>
+        <span class="accordion-toggle">▼</span>
+      </div>
+      <div class="accordion-content">
+        <div class="accordion-body">
+          <h3>Professional Pet Care Services</h3>
+          <p>We offer comprehensive veterinary and pet care solutions:</p>
+          <ul>
+            <li><strong>Health Checkup</strong> - Complete physical exams and wellness assessments</li>
+            <li><strong>Grooming Studio</strong> - Professional grooming with breed-specific techniques</li>
+            <li><strong>Adoption Center</strong> - Find your perfect pet companion</li>
+            <li><strong>Nutrition Plans</strong> - Custom diet planning by certified nutritionists</li>
+            <li><strong>Emergency Care</strong> - 24/7 emergency services with full facilities</li>
+            <li><strong>Pet Store</strong> - Premium pet food, toys, and accessories</li>
+          </ul>
+          <button onclick="openModal()">📅 Book Service Now</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Health Tracker -->
+    <div class="accordion-item" onclick="toggleAccordion(this)">
+      <div class="accordion-header">
+        <span><span class="accordion-icon">📊</span> Health Tracker</span>
+        <span class="accordion-toggle">▼</span>
+      </div>
+      <div class="accordion-content">
+        <div class="accordion-body">
+          <h3>Monitor Your Pet's Health</h3>
+          <p>Keep detailed records of your pet's health and medical history:</p>
+          <ul>
+            <li><strong>Vaccination Tracker</strong> - Schedule and track all vaccinations</li>
+            <li><strong>Weight Monitor</strong> - Track weight changes with growth charts</li>
+            <li><strong>Medicine Reminders</strong> - Set reminders for daily medications</li>
+            <li><strong>Vet Visit History</strong> - Complete records of all veterinary visits</li>
+            <li><strong>Nutrition Tracker</strong> - Monitor diet and calorie intake</li>
+            <li><strong>Health Reports</strong> - Download and share detailed health reports</li>
+          </ul>
+          <button onclick="alert('Health tracker - coming soon')">📊 Start Tracking</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pet Profiles -->
+    <div class="accordion-item" onclick="toggleAccordion(this)">
+      <div class="accordion-header">
+        <span><span class="accordion-icon">🐾</span> Pet Profiles</span>
+        <span class="accordion-toggle">▼</span>
+      </div>
+      <div class="accordion-content">
+        <div class="accordion-body">
+          <h3>Create and Manage Pet Profiles</h3>
+          <p>Store detailed information about all your beloved pets:</p>
+          <ul>
+            <li>Pet name, breed, age, and weight</li>
+            <li>Medical history and health conditions</li>
+            <li>Vaccination and treatment records</li>
+            <li>Dietary preferences and allergies</li>
+            <li>Emergency contact and insurance information</li>
+            <li>Photo gallery and memories</li>
+          </ul>
+          <button onclick="alert('Pet profiles - coming soon')">➕ Add Pet Profile</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="accordion-item" onclick="toggleAccordion(this)">
+      <div class="accordion-header">
+        <span><span class="accordion-icon">❓</span> FAQ</span>
+        <span class="accordion-toggle">▼</span>
+      </div>
+      <div class="accordion-content">
+        <div class="accordion-body">
+          <h3>Frequently Asked Questions</h3>
+          <p><strong>Q: What age should my pet be vaccinated?</strong><br>Most puppies and kittens start at 6-8 weeks with boosters every 3-4 weeks until 16 weeks.</p>
+          <p><strong>Q: How often should I bring my pet for checkups?</strong><br>Healthy adults need annual visits. Senior pets (7+ years) need visits every 6 months.</p>
+          <p><strong>Q: What should I feed my pet?</strong><br>Feed high-quality, age-appropriate food. Consult our nutritionists for breed-specific recommendations.</p>
+          <p><strong>Q: Is pet insurance worth it?</strong><br>Yes! It protects you from high veterinary costs. We can help you find the right plan.</p>
+          <button onclick="toggleChat()">💬 Ask More Questions</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pet Game -->
+    <div class="accordion-item" onclick="toggleAccordion(this)">
+      <div class="accordion-header">
+        <span><span class="accordion-icon">🎮</span> Memory Puzzle Game</span>
+        <span class="accordion-toggle">▼</span>
+      </div>
+      <div class="accordion-content">
+        <div class="accordion-body">
+          <h3>Play & Learn</h3>
+          <p>Test your memory with our fun pet-themed puzzle game!</p>
+          <ul>
+            <li>Match pairs of adorable pet emojis</li>
+            <li>Track your best scores</li>
+            <li>Challenge yourself with different difficulty levels</li>
+            <li>Fun and educational for all ages</li>
+          </ul>
+          <button onclick="document.getElementById('games').scrollIntoView({behavior:'smooth'}); toggleAccordion(event.target.closest('.accordion-item'))">🕹 Play Now</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reviews & Ratings -->
+    <div class="accordion-item" onclick="toggleAccordion(this)">
+      <div class="accordion-header">
+        <span><span class="accordion-icon">⭐</span> Reviews & Ratings</span>
+        <span class="accordion-toggle">▼</span>
+      </div>
+      <div class="accordion-content">
+        <div class="accordion-body">
+          <h3>What Our Customers Say</h3>
+          <p>Over 2,400 five-star reviews from happy pet families. Here's what they love about us:</p>
+          <ul>
+            <li>Expert and caring veterinary services</li>
+            <li>Professional and gentle grooming</li>
+            <li>24/7 emergency support</li>
+            <li>Fast response times</li>
+            <li>Friendly and knowledgeable staff</li>
+          </ul>
+          <button onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'}); alert('Review section ready below');">📝 Write a Review</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Newsletter & Updates -->
+    <div class="accordion-item" onclick="toggleAccordion(this)">
+      <div class="accordion-header">
+        <span><span class="accordion-icon">📧</span> Newsletter</span>
+        <span class="accordion-toggle">▼</span>
+      </div>
+      <div class="accordion-content">
+        <div class="accordion-body">
+          <h3>Stay Updated on Pet Care</h3>
+          <p>Subscribe to get weekly tips, health alerts, and exclusive offers:</p>
+          <ul>
+            <li>Pet health and wellness tips</li>
+            <li>New service announcements</li>
+            <li>Special discounts and promotions</li>
+            <li>Expert advice from our vets</li>
+            <li>Community events and meetups</li>
+          </ul>
+          <input type="email" id="newsletter-email-accordion" placeholder="Enter your email" style="width:100%; padding:10px; border:1px solid var(--border); border-radius:8px; margin-bottom:10px; font-size:13px;">
+          <button onclick="subscribeNewsletter(document.getElementById('newsletter-email-accordion').value)\">✉️ Subscribe</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact & Emergency -->
+    <div class="accordion-item" onclick="toggleAccordion(this)">
+      <div class="accordion-header">
+        <span><span class="accordion-icon">📞</span> Contact & Emergency</span>
+        <span class="accordion-toggle">▼</span>
+      </div>
+      <div class="accordion-content">
+        <div class="accordion-body">
+          <h3>Get in Touch With Us</h3>
+          <p><strong>📧 Email:</strong> info@petcarepro.com</p>
+          <p><strong>📍 Address:</strong> 123 Pet Lane, DHA Phase 6, Karachi</p>
+          <p><strong>📞 Phone:</strong> +92 300 PetCare (738 2273)</p>
+          <p><strong>🕐 Hours:</strong> 24/7 Emergency • Weekdays 9AM–8PM</p>
+          <button onclick="callEmergency()">🚨 Call Emergency</button>
+          <button onclick="openWhatsApp()" style="margin-left:8px;">💬 WhatsApp</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- SERVICES -->
 <section class="services" id="services">

@@ -144,16 +144,22 @@ window.setPuzzleDifficulty = setPuzzleDifficulty;
 
 // ==================== NEW FEATURES ====================
 
-// Newsletter subscription
-function subscribeNewsletter() {
-  const email = document.getElementById('newsletter-email');
-  if (!email.value) {
+// ==================== ACCORDION TOGGLE ====================
+function toggleAccordion(element) {
+  element.classList.toggle('active');
+}
+
+// ==================== NEWSLETTER SUBSCRIPTION ====================
+function subscribeNewsletter(email = null) {
+  const emailInput = email || document.getElementById('newsletter-email')?.value || document.getElementById('newsletter-email-accordion')?.value;
+  if (!emailInput) {
     alert('Please enter your email address');
     return;
   }
-  localStorage.setItem('newsletter-' + email.value, 'subscribed');
+  localStorage.setItem('newsletter-' + emailInput, 'subscribed');
   alert('✅ Welcome to PetCare Pro Newsletter! Check your email for confirmation.');
-  email.value = '';
+  if (document.getElementById('newsletter-email')) document.getElementById('newsletter-email').value = '';
+  if (document.getElementById('newsletter-email-accordion')) document.getElementById('newsletter-email-accordion').value = '';
 }
 
 // Emergency button
